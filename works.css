@@ -102,6 +102,12 @@
   overflow: hidden;
   background: rgba(255, 255, 255, 0.06);
 }
+.cover-wrap.skeleton {
+  background: linear-gradient(90deg, #d0d0d0 25%, #e3e3e3 37%, #d0d0d0 63%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.4s linear infinite;
+}
+.cover-wrap.skeleton .cover-img { opacity: 0; }
 .cover-link { display: block; }
 .cover-img {
   display: block;
@@ -112,6 +118,10 @@
   transition: filter 160ms ease, opacity 160ms ease;
 }
 .work-card:hover .cover-img { filter: grayscale(0); }
+@keyframes skeleton-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
 
 .meta {
   display: flex;

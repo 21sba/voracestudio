@@ -55,7 +55,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Render grid cards and keep references for filtering
   const cards = [];
-  works.forEach((work) => {
+  // Track lazy targets (cards whose covers load on-demand)
+  const lazyMap = new Map();
+  works.forEach((work, idx) => {
     const card = document.createElement('article');
     card.className = 'work-card initial-hide';
 
@@ -69,7 +71,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     img.className = 'cover-img';
     img.loading = 'lazy';
     img.alt = (work && work.title) ? `${work.title} cover` : 'Cover';
-    if (work && work.cover) img.src = work.cover;
+    const coverUrl = (work && work.cover) ? work.cover : '';
+    if (coverUrl && idx < 2) {
+      // Eagerly load the first two covers
+      img.src = coverUrl;
+    } else if (coverUrl) {
+      // Lazy-load subsequent covers using IntersectionObserver
+      coverWrap.classList.add('skeleton');
+      img.style.opacity = '0';
+      img.dataset.src = coverUrl;
+      // Observe the card for on-demand loading
+      // We’ll attach later after DOM insertion
+    }
     coverWrap.appendChild(img);
 
     // Make cover clickable to work page like homepage
@@ -119,6 +132,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     grid.appendChild(card);
     cards.push({ el: card, cats });
+    // Register lazy target if needed
+    if (coverWrap.classList.contains('skeleton')) {
+      lazyMap.set(card, { img, coverWrap });
+    }
   });
 
   // Filtering helpers
@@ -207,7 +224,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (typeof onProgress === 'function') onProgress(1);
   }
 
-  const urls = works.map(w => w && w.cover ? w.cover : null).filter(Boolean);
+  // Preload only the first two covers for faster initial paint
+  const urls = works.slice(0, 2).map(w => (w && w.cover ? w.cover : null)).filter(Boolean);
   await preloadImages(urls, (p) => updateLoaderProgress(p));
   try {
     if (window.Loader) {
@@ -228,6 +246,41 @@ document.addEventListener('DOMContentLoaded', async () => {
         el.classList.remove('initial-hide');
       }, baseDelay * idx);
     });
+  } catch (_) {}
+
+  // Initialize IntersectionObserver for lazy-loading remaining covers
+  try {
+    if (lazyMap.size > 0) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const target = entry.target;
+          const info = lazyMap.get(target);
+          if (!info) return;
+          const { img, coverWrap } = info;
+          const src = img && img.dataset ? img.dataset.src : '';
+          if (!src) {
+            observer.unobserve(target);
+            lazyMap.delete(target);
+            return;
+          }
+          const finalize = () => {
+            try { coverWrap.classList.remove('skeleton'); } catch (_) {}
+            try { img.style.opacity = '1'; } catch (_) {}
+            try { delete img.dataset.src; } catch (_) {}
+            observer.unobserve(target);
+            lazyMap.delete(target);
+          };
+          img.onload = finalize;
+          img.onerror = finalize;
+          img.src = src;
+        });
+      }, { root: null, rootMargin: '200px', threshold: 0.1 });
+      // Observe each lazy card element
+      lazyMap.forEach((_, cardEl) => {
+        observer.observe(cardEl);
+      });
+    }
   } catch (_) {}
 
   // Mobile-only: focus the card closest to the viewport center
