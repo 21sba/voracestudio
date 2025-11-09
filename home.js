@@ -362,6 +362,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     window.addEventListener('pointercancel', onPointerCancel);
     tile.addEventListener('click', onClickCapture, true);
   }
+  const lazyTiles = [];
   orderedWorks.forEach((work, idx) => {
       const size = SIZE;
       const tile = document.createElement('a');
@@ -375,11 +376,26 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       const thumb = document.createElement('div');
       thumb.className = 'thumb';
-      thumb.style.backgroundImage = `url(${work.cover})`;
+      const coverUrl = (typeof work.cover === 'string') ? work.cover : (work.cover && work.cover.src ? work.cover.src : '');
+      if (idx < 2) {
+        // Eagerly load first two covers
+        if (coverUrl) thumb.style.backgroundImage = `url(${coverUrl})`;
+      } else {
+        // Defer loading other covers; show skeleton placeholder
+        thumb.classList.add('skeleton');
+        if (coverUrl) thumb.dataset.cover = String(coverUrl);
+      }
 
       const original = new Image();
       original.className = 'original';
-      original.src = work.cover;
+      original.loading = 'lazy';
+      if (idx < 2 && coverUrl) {
+        original.src = coverUrl;
+        original.onload = () => { thumb.classList.remove('skeleton'); };
+        original.onerror = () => { thumb.classList.remove('skeleton'); };
+      } else if (coverUrl) {
+        original.dataset.cover = String(coverUrl);
+      }
 
       // Date label under the cover image (overlay inside visual)
       const dateLabel = document.createElement('div');
@@ -396,6 +412,11 @@ document.addEventListener('DOMContentLoaded', async () => {
       visual.appendChild(original);
       visual.appendChild(dateLabel);
       tile.appendChild(visual);
+
+      // Collect lazy tiles (beyond the first two) for IntersectionObserver
+      if (idx >= 2 && coverUrl) {
+        lazyTiles.push({ tile, thumb, original, cover: String(coverUrl) });
+      }
 
       const box = { w: size, h: Math.round(size * 1.3) + CAPTION_H };
 
@@ -480,6 +501,35 @@ document.addEventListener('DOMContentLoaded', async () => {
       tile.dataset.idx = String(idx);
       enableDrag(tile);
   });
+
+  // Initialize lazy loading for covers beyond the first two
+  (function initLazyCoverLoading() {
+    if (!lazyTiles.length) return;
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const t = entry.target;
+        const rec = t.__lazyRec;
+        if (!rec || rec.loaded) { io.unobserve(t); return; }
+        // Apply cover and remove skeleton on load
+        try {
+          if (rec.cover) {
+            rec.thumb.style.backgroundImage = `url(${rec.cover})`;
+            rec.original.src = rec.cover;
+            const cleanup = () => { rec.thumb.classList.remove('skeleton'); rec.loaded = true; io.unobserve(t); };
+            rec.original.onload = cleanup;
+            rec.original.onerror = cleanup;
+          }
+        } catch (_) {
+          rec.thumb.classList.remove('skeleton');
+        }
+      });
+    }, { root: null, rootMargin: '200px', threshold: 0.1 });
+    lazyTiles.forEach((rec) => {
+      rec.tile.__lazyRec = rec;
+      io.observe(rec.tile);
+    });
+  })();
 
   // Add top CTA before the first project to jump down by 1 viewport
   (function addTopCTA() {
@@ -1133,8 +1183,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   window.addEventListener('scroll', updateMobileFocus, { passive: true });
   window.addEventListener('resize', () => { setTimeout(updateMobileFocus, 50); });
 
-  // Preload covers before laying out and starting animation
-  const coverUrls = works.map(w => w.cover).filter(Boolean);
+  // Preload only the first two covers before laying out
+  const coverUrls = works.slice(0, 2).map(w => w && w.cover ? w.cover : null).filter(Boolean);
   await preloadImages(coverUrls, updateLoaderProgress);
   await loadStickers();
   layout();
