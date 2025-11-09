@@ -64,29 +64,14 @@
       return { x: r.left - sc.left, y: r.top - sc.top, w: r.width, h: r.height };
     };
 
-    // Sticker asset list
+    // Sticker asset list: use static, known paths to avoid directory listing
     let stickers = [];
     async function loadStickers() {
-      try {
-        const res = await fetch('assets/images/stickers/');
-        const html = await res.text();
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, 'text/html');
-        const links = Array.from(doc.querySelectorAll('a'));
-        const allowExt = ['.png', '.jpg', '.jpeg', '.svg', '.webp'];
-        stickers = links
-          .map(a => a.getAttribute('href'))
-          .map(h => (h || '').replace(/^\.\//, ''))
-          .filter(h => {
-            const lower = h.toLowerCase();
-            const name = lower.split('/').pop() || lower;
-            return allowExt.some(ext => lower.endsWith(ext)) && !name.startsWith('._');
-          })
-          .map(h => 'assets/images/stickers/' + h);
-      } catch (e) {
-        console.warn('Sticker directory listing unavailable; skipping stickers.', e);
-        stickers = [];
-      }
+      stickers = [
+        'assets/images/stickers/vorace-sticker1.png',
+        'assets/images/stickers/vorace-sticker2.png',
+        'assets/images/stickers/vorace-sticker3.png',
+      ];
     }
     await loadStickers();
 
@@ -275,7 +260,10 @@
     }
 
     function spawnBatch() {
-      const urls = randomSample(stickers, BATCH_SIZE);
+      // Pick stickers with replacement so duplicates are possible in a batch.
+      const urls = (stickers && stickers.length > 0)
+        ? Array.from({ length: BATCH_SIZE }, () => stickers[Math.floor(Math.random() * stickers.length)])
+        : [];
       let bandPlan = null;
       if (IS_MOBILE) {
         const topCount = Math.floor(BATCH_SIZE / 2);

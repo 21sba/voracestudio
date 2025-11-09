@@ -119,26 +119,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   async function loadStickers() {
-    try {
-      const res = await fetch('assets/images/stickers/');
-      const html = await res.text();
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(html, 'text/html');
-      const links = Array.from(doc.querySelectorAll('a'));
-      const allowExt = ['.png', '.jpg', '.jpeg', '.svg', '.webp'];
-      stickers = links
-        .map(a => a.getAttribute('href'))
-        .map(h => (h || '').replace(/^\.\//, ''))
-        .filter(h => {
-          const lower = h.toLowerCase();
-          const name = lower.split('/').pop() || lower;
-          return allowExt.some(ext => lower.endsWith(ext)) && !name.startsWith('._');
-        })
-        .map(h => 'assets/images/stickers/' + h);
-    } catch (e) {
-      console.warn('Sticker directory listing unavailable; skipping stickers.', e);
-      stickers = [];
-    }
+    // Use a static, known list of sticker assets to avoid relying on
+    // directory listings (which are not available on GitHub Pages).
+    stickers = [
+      'assets/images/stickers/vorace-sticker1.png',
+      'assets/images/stickers/vorace-sticker2.png',
+      'assets/images/stickers/vorace-sticker3.png',
+    ];
   }
 
   // Preload cover images and update loader progress as assets load
@@ -1058,7 +1045,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     function spawnBatch() {
-      const urls = randomSample(stickers, BATCH_SIZE);
+      // Pick stickers with replacement so duplicates are possible in a batch.
+      const urls = (stickers && stickers.length > 0)
+        ? Array.from({ length: BATCH_SIZE }, () => stickers[Math.floor(Math.random() * stickers.length)])
+        : [];
       let bandPlan = null;
       if (IS_MOBILE) {
         const topCount = Math.floor(BATCH_SIZE / 2);
