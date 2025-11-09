@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>(A)TNM Video</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Doto:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/video-styles.css?v=420">
+    
+    <!-- Components script for reusable HTML elements -->
+    <script src="assets/js/components.js?v=420" defer></script>
+
+</head>
+<body>
+    <!-- Custom cursor element -->
+    <div class="custom-cursor" id="customCursor"></div>
+    
+    <div id="video-container">
+        <!-- YouTube embed code -->
+        <div class="video-wrapper">
+            <div class="video-embed">
+                <iframe src="https://www.youtube.com/embed/K5RlOAykFgE" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                        allowfullscreen
+                        title="(Against) The Noise Machine Video">
+                </iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- Menubar component -->
+    <tnm-menubar></tnm-menubar>
+</body>
+</html>

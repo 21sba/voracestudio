@@ -1,0 +1,96 @@
+/* Corner UI container to unify hover area */
+.corner-ui {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 1000;
+  width: 72px;
+  height: 72px;
+}
+
+.corner-logo {
+  position: relative;
+  z-index: 2;
+  display: inline-block;
+  width: 72px;
+  height: auto;
+  transition: transform 160ms ease;
+}
+.corner-logo img {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: grayscale(1);
+  transition: filter 160ms ease;
+}
+.corner-logo:hover { transform: rotate(6deg); }
+.corner-logo:hover img { filter: grayscale(0); }
+
+/* Keep logo in hovered state while hovering the unified area */
+.corner-ui.menu-open .corner-logo, .corner-ui:hover .corner-logo { transform: rotate(6deg); }
+.corner-ui.menu-open .corner-logo img, .corner-ui:hover .corner-logo img { filter: grayscale(0); }
+
+/* Pop-up menu behind the corner logo */
+.corner-menu {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 72px; /* anchor area around the logo */
+  height: 72px;
+  z-index: 1; /* behind the logo */
+  transition: height 160ms ease;
+  /* Expanded hover area height */
+  --menu-expanded-height: 180px;
+}
+
+/* Expand vertical hover area when hovering logo or menu */
+.corner-ui:hover .corner-menu { height: var(--menu-expanded-height); }
+/* Expanded area when opened via click (mobile) */
+.corner-ui.menu-open .corner-menu { height: var(--menu-expanded-height); }
+
+.corner-menu .menu-button {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  left: auto;
+  transform: translate(0, -50%) scale(0);
+  opacity: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color2);
+  color: var(--color1);
+  border-radius: var(--radius);
+  padding: 2px 8px;
+  text-transform: uppercase;
+  font-size: var(--size-caption);
+  font-weight: var(--weight-bold);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: transform 220ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity 160ms ease;
+}
+
+/* Show and animate when hovering logo OR menu itself */
+.corner-ui:hover .menu-button { opacity: 1; }
+/* Also show when opened via click */
+.corner-ui.menu-open .menu-button { opacity: 1; }
+
+/* Generic transform/animation using per-button variables */
+.corner-ui:hover .corner-menu .menu-button,
+.corner-ui.menu-open .corner-menu .menu-button {
+  transform: translate(0, calc(-50% - var(--offset, 0px))) scale(1);
+  transition-delay: var(--delay, 0ms);
+}
+
+
+.corner-menu .menu-button:hover {
+  transform: translate(0, var(--hover-translate-y, -50%)) scale(1.06);
+}
+
+/* Hover color and current-page color for menu buttons */
+.corner-menu .menu-button:hover { color: var(--color4); }
+.corner-menu .menu-button[aria-current="page"],
+.corner-menu .menu-button.is-current { color: var(--color4); background: var(--color3); }
+.corner-menu .menu-button[aria-current="page"]:hover,
+.corner-menu .menu-button.is-current:hover { color: var(--color1); }
+

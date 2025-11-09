@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>(A)TNM Zine</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Doto:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/zine-styles.css?v=420">
+    
+    <!-- Components script for reusable HTML elements -->
+    <script src="assets/js/components.js?v=420" defer></script>
+
+</head>
+<body>
+    <!-- Custom cursor element -->
+    <div class="custom-cursor" id="customCursor"></div>
+    
+    <div id="viewer-container">
+        <div id="loading">Loading Zine...</div>
+        <canvas id="pdf-canvas" style="display: none;"></canvas>
+        <div id="swipe-hint" class="swipe-hint">
+            <div class="swipe-icon">←</div>
+            <div class="swipe-text">Swipe to navigate</div>
+            <div class="swipe-icon">→</div>
+        </div>
+    </div>
+    
+    <div id="controls">
+        <button id="prev-btn">&lt;</button>
+        <span id="page-info">Page 1 of 1</span>
+        <button id="next-btn">&gt;</button>
+    </div>
+
+    <!-- Menubar component -->
+    <tnm-menubar></tnm-menubar>
+
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        
+        let pdfDoc = null;
+        let currentPage = 1;
+        let totalPages = 0;
+        
+        const canvas = document.getElementById('pdf-canvas');
+        const ctx = canvas.getContext('2d');
+        const loadingDiv = document.getElementById('loading');
+        const pageInfo = document.getElementById('page-info');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        
+        // Load PDF
+        async function loadPDF() {
+            try {
+                pdfDoc = await pdfjsLib.getDocument('assets/pdf/tnm_zine_n1_v2.pdf').promise;
+                totalPages = pdfDoc.numPages;
+                
+                loadingDiv.style.display = 'none';
+                canvas.style.display = 'block';
+                
+                renderPage(currentPage);
+                updateControls();
+                
+                // Show swipe hint on mobile devices
+                if (window.innerWidth <= 768) {
+                    const swipeHint = document.getElementById('swipe-hint');
+                    // Reset animation if it was previously played
+                    swipeHint.style.animation = 'none';
+                    swipeHint.offsetHeight; // Trigger reflow
+                    swipeHint.style.animation = 'fadeOut 3s forwards';
+                    swipeHint.style.animationDelay = '2s';
+                }
+                
+                // Add resize event listener to rerender PDF when window size changes
+                window.addEventListener('resize', debounce(() => {
+                    renderPage(currentPage);
+                }, 250));
+            } catch (error) {
+                loadingDiv.textContent = 'Error loading PDF: ' + error.message;
+                console.error('Error loading PDF:', error);
+            }
+        }
+        
+        // Debounce function to limit how often the resize event fires
+        function debounce(func, wait) {
+            let timeout;
+            return function() {
+                const context = this;
+                const args = arguments;
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(context, args), wait);
+            };
+        }
+        
+        // Render specific page
+        async function renderPage(pageNum) {
+            const page = await pdfDoc.getPage(pageNum);
+            
+            // Calculate scale to fit the viewport
+            const viewport = page.getViewport({ scale: 1 });
+            
+            // Get available dimensions accounting for menubar and controls
+            const menubarHeight = 45; // Height of the menubar
+            const controlsHeight = 45; // Approximate height of controls bar
+            const topMenubarHeight = window.innerWidth <= 768 ? 45 : 0; // Top menubar on mobile only
+            const padding = 60; // Additional padding
+            
+            // Calculate available width and height
+            const containerWidth = document.getElementById('viewer-container').clientWidth - 40;
+            const windowHeight = window.innerHeight;
+            const availableHeight = windowHeight - menubarHeight - controlsHeight - topMenubarHeight - padding;
+            
+            const scaleX = containerWidth / viewport.width;
+            const scaleY = availableHeight / viewport.height;
+            const scale = Math.min(scaleX, scaleY, 2); // Max scale of 2
+            
+            const scaledViewport = page.getViewport({ scale });
+            
+            canvas.width = scaledViewport.width;
+            canvas.height = scaledViewport.height;
+            
+            const renderContext = {
+                canvasContext: ctx,
+                viewport: scaledViewport
+            };
+            
+            await page.render(renderContext).promise;
+        }
+        
+        // Update navigation controls
+        function updateControls() {
+            pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+            prevBtn.disabled = currentPage <= 1;
+            nextBtn.disabled = currentPage >= totalPages;
+        }
+        
+        // Event listeners
+        prevBtn.addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                renderPage(currentPage);
+                updateControls();
+            }
+        });
+        
+        nextBtn.addEventListener('click', () => {
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderPage(currentPage);
+                updateControls();
+            }
+        });
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft' && currentPage > 1) {
+                currentPage--;
+                renderPage(currentPage);
+                updateControls();
+            } else if (e.key === 'ArrowRight' && currentPage < totalPages) {
+                currentPage++;
+                renderPage(currentPage);
+                updateControls();
+            }
+        });
+        
+        // Touch swipe navigation for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+        
+        // Get the viewer container element
+        const viewerContainer = document.getElementById('viewer-container');
+        
+        // Add touch event listeners to both the canvas and the viewer container
+        // This ensures swipes are detected even when touching outside the canvas
+        [canvas, viewerContainer].forEach(element => {
+            element.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+                // Don't prevent default here to allow scrolling if needed
+            }, false);
+            
+            element.addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            }, false);
+            
+            // Add touchmove listener to prevent scrolling when swiping horizontally
+            element.addEventListener('touchmove', (e) => {
+                const currentX = e.changedTouches[0].screenX;
+                const diffX = Math.abs(currentX - touchStartX);
+                
+                // If horizontal movement is significant, prevent default scrolling
+                if (diffX > 10) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
+        });
+        
+        // Function to handle the swipe gesture
+        function handleSwipe() {
+            const swipeThreshold = 50; // Minimum distance required for a swipe
+            const swipeDistance = touchEndX - touchStartX;
+            let pageChanged = false;
+            
+            if (swipeDistance > swipeThreshold && currentPage > 1) {
+                // Swipe right (go to previous page)
+                currentPage--;
+                pageChanged = true;
+            } else if (swipeDistance < -swipeThreshold && currentPage < totalPages) {
+                // Swipe left (go to next page)
+                currentPage++;
+                pageChanged = true;
+            }
+            
+            if (pageChanged) {
+                renderPage(currentPage);
+                updateControls();
+                
+                // Show a brief visual feedback for the page change on mobile
+                if (window.innerWidth <= 768) {
+                    // Flash the page info briefly to indicate page change
+                    pageInfo.style.transition = 'color 0.3s';
+                    pageInfo.style.color = 'var(--color-c)';
+                    setTimeout(() => {
+                        pageInfo.style.color = 'var(--color-b)';
+                    }, 300);
+                }
+            }
+        }
+        
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            if (pdfDoc) {
+                renderPage(currentPage);
+            }
+        });
+        
+        // Initialize
+        loadPDF();
+        
+        // Custom cursor functionality is now handled in components.js
+    </script>
+</body>
+</html>

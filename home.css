@@ -1,0 +1,308 @@
+html, body {
+  background-color: var(--color2);
+}
+
+/* Tunable mobile spacing between bottom CTA and footer */
+:root {
+  --mobile-cta-footer-gap: 200px; /* change this to your desired gap */
+  --mobile-tail-min-vh: 1.30;    /* minimum tail as viewport multiple */
+  --desktop-tail-vh: 0.75;       /* desktop tail as viewport multiple */
+}
+
+
+#app {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.brand-block {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(var(--scale, 1));
+  transform-origin: center center;
+  opacity: var(--opacity, 1);
+  will-change: transform, opacity;
+  text-align: center;
+  z-index: 0;
+  pointer-events: auto; /* allow text selection */
+  user-select: text;
+}
+
+.title {
+  margin: 0 0 var(--spacing-title-bottom);
+}
+
+.title .symbol {
+  color: var(--color3);
+}
+/* Title letter reveal: start hidden and slide up with stagger */
+.title .letter {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: transform 480ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity 480ms ease;
+  will-change: transform, opacity;
+}
+.title.reveal .letter { opacity: 1; transform: translateY(0); }
+
+.bio {
+  margin: 0 auto;
+  width: min(70ch, 70vw);
+  text-align: center;
+  font-size: var(--size-body);
+  line-height: var(--line-height);
+  color: var(--color5);
+  opacity: 0;
+  transform: translateY(-15px);
+  transition: transform 550ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity 550ms ease;
+  will-change: transform, opacity;
+}
+.bio.reveal { opacity: 1; transform: translateY(0); }
+
+.scatter {
+  position: relative;
+  width: 100%;
+  min-height: 200vh;
+  z-index: 1;
+  overflow: visible;
+  pointer-events: none; /* pass through empty areas to brand-block */
+}
+
+/* Mobile: brand block from top and scrolls with content */
+@media (max-width: 768px) {
+  .brand-block {
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: scale(var(--scale, 1));
+    transform-origin: center center;
+    opacity: var(--opacity, 1);
+    margin: 200px auto 0;
+    width: auto;
+  }
+}
+
+.tile {
+  position: absolute;
+  display: block;
+  width: var(--size, 200px);
+  transform: rotate(var(--rot, 0deg)) scale(var(--scale, 0));
+  transition: transform 320ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  text-decoration: none;
+  color: inherit;
+  z-index: 1;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+  will-change: left, top;
+  pointer-events: auto; /* remain interactive despite scatter pass-through */
+}
+
+.tile.popped { --scale: 1; }
+
+.tile.dragging {
+  cursor: grabbing;
+}
+
+.visual {
+  position: relative;
+  width: 100%;
+  height: calc(var(--size, 200px) * 1.3);
+}
+
+.tile:hover .date-label {
+  bottom: -20px;
+}
+
+.thumb {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  transition: opacity 120ms ease;
+  filter: grayscale(1) drop-shadow(0 8px 18px var(--color3));
+  /* SVG mask */
+  -webkit-mask-image: url('assets/images/vorace-matte.svg');
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-type: luminance;
+  mask-image: url('assets/images/vorace-matte.svg');
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+}
+
+.tile:hover {
+  transform: rotate(0deg) scale(1.2);
+}
+
+.original {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 100%;
+  width: auto;
+  display: block;
+  opacity: 0;
+  transition: opacity 120ms ease;
+  filter: none;
+  pointer-events: none;
+  border-radius: var(--radius);
+}
+.tile:hover .original { opacity: 1; }
+
+.caption {
+  display: block;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: -10px;
+  font-size: var(--size-caption);
+  text-align: center;
+  color: var(--color1);
+  text-transform: uppercase;
+  transition: margin-bottom 120ms ease;
+  text-shadow: 0 0 4px var(--color2);
+}
+
+.date-label {
+  position: absolute;
+  left: 50%;
+  bottom: 15px;
+  transform: translateX(-50%);
+  color: var(--color5);
+  font-size: var(--size-caption);
+  line-height: 1;
+  pointer-events: none;
+  transition: bottom 120ms ease;
+  text-shadow: 0 0 4px var(--color2);
+}
+
+.tile:hover .caption {
+  margin-bottom: 5px;
+}
+
+/* CTA button at end of line */
+.tile.cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color3);
+  color: var(--color4);
+  border-radius: var(--radius);
+  padding: 2px 8px;
+  width: auto;
+  height: auto;
+  text-transform: uppercase;
+  font-size: var(--size-caption);
+  font-weight: var(--weight-bold);
+  transform: scale(var(--scale, 0)); /* no rotation */
+  transition: transform 220ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  cursor: pointer; /* override tile grab */
+}
+.tile.cta:hover {
+  background: var(--color4);
+  color: var(--color3);
+  transform: scale(1.06);
+}
+
+/* Mobile: disable hover and use center-focus activation */
+@media (hover: none) {
+  /* Remove hover effects on mobile */
+  .tile:hover { transform: rotate(var(--rot, 0deg)) scale(var(--scale, 1)); }
+  .tile:hover .original { opacity: 0; }
+  .tile:hover .caption { margin-bottom: -10px; }
+  .tile:hover .date-label { bottom: 15px; }
+
+  /* Activate focus when tile is within the center band */
+  .tile.focus-mobile { transform: rotate(0deg) scale(1.2); }
+  .tile.focus-mobile .thumb { filter: grayscale(0) drop-shadow(0 8px 18px var(--color3)); }
+  .tile.focus-mobile .original { opacity: 0; }
+}
+
+/* Width-based mobile fallback (for desktop emulators) */
+@media (max-width: 768px) {
+  .tile:hover { transform: rotate(var(--rot, 0deg)) scale(var(--scale, 1)); }
+  .tile:hover .original { opacity: 0; }
+  .tile:hover .caption { margin-bottom: -10px; }
+  .tile:hover .date-label { bottom: 15px; }
+}
+
+/* Ensure focus-mobile can override hover when both apply */
+.tile.focus-mobile { transform: rotate(0deg) scale(1.2); }
+.tile.focus-mobile .thumb { filter: grayscale(0) drop-shadow(0 8px 18px var(--color3)); }
+.tile.focus-mobile .original { opacity: 0; }
+
+.sticker {
+  position: absolute;
+  width: var(--sticker-size, clamp(70px, 6vw, 80px));
+  height: var(--sticker-size, clamp(70px, 6vw, 80px));
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  transform: rotate(var(--rot, 0deg)) scale(var(--scale, 1));
+  transition: transform 240ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity 240ms ease-out;
+  opacity: 1;
+  pointer-events: auto; /* allow dragging even with scatter pass-through */
+  touch-action: none;   /* prevent scroll during drag */
+  cursor: grab;
+  filter: grayscale(0);
+}
+
+.sticker:hover { --scale: 1.05; }
+.sticker.dragging { --scale: 1.3; cursor: grabbing; }
+
+/* Removed dark-mode background override to keep the home color consistent */
+.tile:hover { text-decoration: none; }
+
+.fullscreen-overlay {
+  position: fixed;
+  top: var(--start-y);
+  left: var(--start-x);
+  width: var(--start-w);
+  height: var(--start-h);
+  background: var(--color1);
+  z-index: 100;
+  transition: all 400ms cubic-bezier(0.86, 0, 0.07, 1);
+  overflow: hidden;
+}
+
+.fullscreen-overlay img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.fullscreen-overlay.zoomed {
+  top: var(--end-y);
+  left: var(--end-x);
+  width: var(--end-w);
+  height: var(--end-h);
+}
+
+/* Spline overlay behind tiles */
+.spline-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+.spline-layer .spline-path {
+  fill: none;
+  stroke: var(--color3);
+  stroke-width: var(--stroke);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+@keyframes draw-line {
+  to { stroke-dashoffset: 0; }
+}

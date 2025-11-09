@@ -1,0 +1,161 @@
+/* Import base styles */
+@import url('base.css');
+
+body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--color-a);
+    color: var(--color-c);
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    cursor: none; /* Hide default cursor */
+}
+
+#viewer-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: auto;
+    padding: 20px;
+    padding-bottom: 100px; /* Add padding to account for fixed controls (45px + 10px padding) and menubar (45px) */
+}
+
+#pdf-canvas {
+    max-width: 100%;
+    max-height: 100%;
+    border: 1px solid var(--color-b);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Adjust viewer container padding for mobile */
+@media (max-width: 768px) {
+    #viewer-container {
+        padding-top: 20px; /* Add some space below the top menubar */
+    }
+}
+
+
+#controls {
+    position: fixed;
+    bottom: 45px; /* Position directly above menubar which is 45px tall */
+    left: 0;
+    right: 0;
+    background: var(--color-a);
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    border-top: 1px solid var(--color-b);
+    z-index: 999; /* Just below menubar's z-index of 1000 */
+}
+
+/* Responsive adjustments for controls */
+@media (max-width: 768px) {
+    #controls {
+        padding: 8px 5px;
+        gap: 10px;
+    }
+    
+    #controls button {
+        padding: 6px 10px;
+        font-size: 14px;
+    }
+    
+    #page-info {
+        font-size: 12px;
+    }
+}
+
+button {
+    background: var(--color-b);
+    border: none;
+    padding: 8px 12px;
+    cursor: none; /* Maintain consistent cursor style */
+    font-size: 16px;
+}
+
+button:hover {
+    background: #f0f0f0;
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+#page-info {
+    font-size: 16px;
+    color: var(--color-b);
+}
+
+#loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 18px;
+}
+
+/* Swipe hint styles */
+.swipe-hint {
+    display: none; /* Hidden by default */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 15px 20px;
+    border-radius: 8px;
+    text-align: center;
+    z-index: 1000;
+    animation: fadeOut 3s forwards;
+    animation-delay: 2s;
+    pointer-events: none; /* Allow interaction with elements below */
+}
+
+.swipe-hint .swipe-icon {
+    font-size: 24px;
+    margin: 0 10px;
+    display: inline-block;
+}
+
+.swipe-hint .swipe-text {
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; visibility: hidden; }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    #controls {
+        padding: 8px;
+        gap: 15px;
+    }
+    
+    button {
+        padding: 6px 10px;
+        font-size: 14px;
+    }
+    
+    #page-info {
+        font-size: 14px;
+    }
+    
+    /* Show swipe hint only on mobile */
+    .swipe-hint {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+/* Menubar styles are now in base.css */
+
+/* Custom cursor styles moved to base.css */

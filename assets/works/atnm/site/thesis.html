@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Noise Machine - Thesis</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Doto:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/base.css">
+    <link rel="stylesheet" href="assets/css/thesis-styles.css?v=420">
+    
+    <!-- Components script for reusable HTML elements -->
+    <script src="assets/js/components.js?v=420" defer></script>
+
+</head>
+<body>
+    <!-- Custom cursor element -->
+    <div class="custom-cursor" id="customCursor"></div>
+    
+    <div class="thesis-container">
+        <h1 class="thesis-title">The Noise Machine</h1>
+        
+        <!-- Introduction section -->
+        <div class="intro-section">
+            <p>
+                This thesis began, first and foremost, as a personal feeling. I've always had a deep relationship with silence. It has fascinated me, comforted me, protected me. As an introvert, I never saw silence as something to avoid. To me, it was natural. Necessary. But as I grew older, I started to feel out of place. Out of sync. As if the way I existed in the world was somehow wrong. Where there are no words, people assume something is missing. So, in order not to fall behind, I too learned to fill the space. To speak, to respond, to share, even when I had nothing to say. This tension between who I am and what the world expects pushed me to dig deeper. At first, I thought it was just something personal, a part of my personality clashing with a world that moves too fast. But the more I explored, the clearer it became that this wasn't just about me. <span class="important">There was something larger at play, something more widespread and deeply rooted: an entire culture that smothers silence, treats it like a flaw, and tries to eliminate it.</span> That's where the need arose, and from it, the idea to dedicate space to this subject. A research project. A story. A manifesto.
+            </p>
+        </div>
+        
+        <!-- Two-column content section -->
+        <div class="content-columns">
+            <div class="column">
+                <div class="section">
+                    <h2>Cultural Context and the Problem</h2>
+                    <p>
+                        We live in a culture that rewards visibility, speeds up communication, and pushes for instant reaction. <span class="important">A culture where speaking has become more important than actually having something to say.</span> Expression is no longer a conscious act. It has become a constant state. We are always connected, always available, always performing. Every space, whether physical, digital, or mental, is saturated with a continuous stream of words, images, notifications, and content. It all becomes noise. <span class="important">Every pause is filled. Every void is seen as failure.</span>
+                    </p>
+                    <p>
+                        In this environment, <span class="important">noise is no longer just a matter of sound. It has turned into a cultural principle. A paradigm.</span> Noise prevents focus, dilutes attention, and blocks deep listening. It is the accumulation of competing signals, overlapping inputs that make it harder to find direction. It has become a systemic condition. Continuous, invasive, internalized. And it manifests not only through sound or speech, but also through excessive visual production, information overload, emotional saturation. It is a kind of noise that is felt not only by the ears, but by the mind, the body, and our relationships.
+                    </p>
+                    <p>
+                        Within this reality, <span class="important">silence has lost its rightful place. It is not expected. It is not protected. It is not considered productive.</span> It does not align with the dominant logic of constant presence. Silence has become a disruption, something that breaks the flow, interrupts the chain of endless participation. And so, it is avoided, sidelined, erased.
+                    </p>
+                    <p>
+                        There is no longer time for silence, and often, no ability to inhabit it. This dynamic affects our psyche, our relationships, our creativity, and our ability to think independently. <span class="important">Without silence, experience becomes flat. Our inner life fades. Listening turns into reacting. Language becomes noise. Words lose their depth. Communication turns into mere transmission.</span>
+                    </p>
+                </div>
+            </div>
+            
+            <div class="column">
+                <div class="section">
+                    <h2>Thesis and Objectives</h2>
+                    <p>
+                        In today's culture, silence is not just overlooked. <span class="important">It is actively dismantled.</span> A culture that eliminates silence is a culture that loses a fundamental part of the human experience. <span class="important">Silence is not just an empty space between words. It is what allows us to hear them, feel them, understand them.</span>
+                    </p>
+                    <p>
+                        <span class="important">Its disappearance is not neutral. It is a symbolic, cognitive, and political loss.</span> And ironically, it often goes unnoticed.
+                    </p>
+                    <p>
+                        With this project, I aim to make that absence visible. To show how noise, especially in its most pervasive modern form — communication — has taken on a role of constant saturation. <span class="important">It blocks reflection, numbs thought, and narrows our sense of freedom.</span>
+                    </p>
+                </div>
+                
+                <div class="section">
+                    <h2>Method and Structure</h2>
+                    <p>
+                        From personal experience to cultural narrative. <span class="important">This thesis takes an interdisciplinary approach, combining theoretical analysis, creative storytelling, and visual design.</span>
+                    </p>
+                    <p>
+                        Silence is explored on multiple levels: as a psychological and cultural phenomenon, as a narrative device, and as a design tool in the field of contemporary communication. <span class="important">The goal is to build an argument that is both critical and engaging. One that shows the issue, not just explains it.</span>
+                    </p>
+                    <p>
+                        <span class="important">I created a dystopian world called The Noise Machine, where silence has been outlawed.</span> Through this fictional lens, I aim to give metaphorical and emotional form to the dynamics explored in the earlier sections.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Menubar component -->
+    <tnm-menubar></tnm-menubar>
+
+    <script>
+        // Custom cursor functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            const customCursor = document.getElementById('customCursor');
+            
+            if (customCursor) {
+                // Update cursor position on mouse move
+                document.addEventListener('mousemove', (e) => {
+                    customCursor.style.left = e.clientX + 'px';
+                    customCursor.style.top = e.clientY + 'px';
+                    
+                    // Show the cursor when the user moves the mouse
+                    if (customCursor.style.opacity !== '1') {
+                        customCursor.style.opacity = '1';
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

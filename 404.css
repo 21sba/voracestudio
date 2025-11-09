@@ -1,0 +1,4 @@
+/* 404 page specific overrides */
+[data-page="404"] .scatter {
+  min-height: 110vh;
+}

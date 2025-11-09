@@ -1,0 +1,123 @@
+/* Thesis page specific styles */
+
+body {
+    margin: 0;
+    padding: 20px;
+    padding-bottom: 80px; /* Space for menubar */
+    background-color: var(--color-a);
+    color: var(--color-b);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 400;
+    overflow-x: hidden;
+    overflow-y: auto;
+    cursor: none;
+}
+
+.thesis-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.thesis-title {
+    font-family: 'Doto', sans-serif;
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 30px;
+    color: var(--color-b);
+    letter-spacing: 1px;
+    -webkit-text-stroke: 2px var(--color-b);
+    text-stroke: 2px var(--color-b);
+}
+
+/* Introduction section */
+.intro-section {
+    margin-bottom: 40px;
+    padding: 20px;
+}
+
+.intro-section p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: var(--color-b);
+    margin-bottom: 20px;
+    text-align: justify;
+}
+
+/* Two-column layout */
+.content-columns {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+.column {
+    flex: 1;
+    min-width: 300px;
+}
+
+.section {
+    margin-bottom: 30px;
+    padding: 20px;
+}
+
+.section h2 {
+    font-family: 'Doto', sans-serif;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: var(--color-b);
+    letter-spacing: 0.5px;
+    -webkit-text-stroke: 2px var(--color-b);
+    text-stroke: 2px var(--color-b);
+}
+
+.section p {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--color-b);
+    margin-bottom: 15px;
+    text-align: justify;
+}
+
+/* Bold styling for important text */
+.important {
+    font-weight: 700;
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+    body {
+        padding-top: 60px; /* Space for top menubar on mobile */
+    }
+    
+    .thesis-container {
+        padding: 20px 15px;
+    }
+    
+    .thesis-title {
+        font-size: 2rem;
+    }
+    
+    .content-columns {
+        flex-direction: column;
+    }
+    
+    .column {
+        width: 100%;
+    }
+
+    .intro-section, .section {
+        padding: 0px;
+    }
+    
+    .intro-section p,
+    .section p {
+        font-size: 0.95rem;
+    }
+    
+    .section h2 {
+        font-size: 1.3rem;
+    }
+}
+
+/* Animation removed as requested */

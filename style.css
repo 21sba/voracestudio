@@ -1,0 +1,99 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+:root {
+  /* Global colors */
+  --color1: #f1eee9;
+  --color2: #0f0f0f;
+  --color3: #EE204C;
+  --color4: #F7B1BD;
+  --color5: #aca6a2;
+  /* Text color */
+  --color-text: var(--color1);
+
+  /* Sizing and fonts */
+  --font-sans: "Space Mono", monospace;
+  /* Typography scale */
+  --size-title: clamp(2rem, 2.6vw, 2.4rem);
+  --size-title-h2: clamp(1rem, 2vw, 1.2rem);
+  --size-body: clamp(0.8rem, 1.3vw, 1rem);
+  --size-caption: clamp(0.8rem, 1.3vw, 0.9rem);
+  --line-height: 1.35;
+  --weight-regular: 400;
+  --weight-bold: 700;
+  --spacing-title-bottom: 8px;
+
+  /* Global border radius */
+  --radius: 5px;
+  --stroke: 3px;
+}
+
+* { box-sizing: border-box; }
+html, body {
+  background-color: var(--color2);
+}
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  color: var(--color-text);
+  position: relative;
+}
+
+/* Prevent scrolling while loader is visible */
+html.no-scroll, body.no-scroll {
+  overflow: hidden !important;
+  height: 100%;
+}
+
+/* Menu styles moved to components/menu.css */
+
+/* Repeating grid overlay */
+body::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-image: url('assets/images/grid-module.png');
+  background-repeat: repeat;
+  background-position: top left;
+  opacity: 0.05;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.title {
+  margin: 0 0 var(--spacing-title-bottom);
+  font-size: var(--size-title);
+  line-height: 1;
+  color: var(--color1);
+  font-weight: var(--weight-bold);
+  text-transform: uppercase;
+}
+
+/* Ensure app content sits above the overlay */
+#app { position: relative; z-index: 1; }
+
+.space-mono-regular {
+  font-family: "Space Mono", monospace;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.space-mono-bold {
+  font-family: "Space Mono", monospace;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.space-mono-regular-italic {
+  font-family: "Space Mono", monospace;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.space-mono-bold-italic {
+  font-family: "Space Mono", monospace;
+  font-weight: 700;
+  font-style: italic;
+}

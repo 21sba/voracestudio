@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vorace Studio — 404</title>
+    <link rel="icon" type="image/png" href="assets/images/vorace-doodle-grey-favicon.png" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="home.css" />
+    <link rel="stylesheet" href="404.css" />
+  </head>
+  <body data-page="404">
+    <div id="app">
+      <!-- Hero/brand block just like homepage first section -->
+      <section class="brand-block" aria-label="404 message">
+        <h1 class="title">Nothing to see here!</h1>
+        <p class="bio">404 Error</p>
+      </section>
+
+      <!-- Sticker scatter canvas (no projects) -->
+      <section id="scatter" class="scatter" aria-hidden="true"></section>
+    </div>
+
+    <!-- Corner menu and footer for consistency across pages -->
+    <script src="components/menu.js" defer></script>
+    <script src="components/footer.js" defer></script>
+
+    <!-- 404-specific script to place stickers around the hero -->
+    <script src="404.js"></script>
+  </body>
+</html>

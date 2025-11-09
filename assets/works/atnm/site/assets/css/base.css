@@ -1,0 +1,185 @@
+/* Base styles for The Noise Machine project */
+
+/* Reset and box model */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Color variables */
+:root {
+    --color-a: #000;
+    --color-b: #fa5650;
+    --color-c: #f4f4f4;
+}
+
+/* Base HTML elements */
+html, body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    cursor: none; /* Hide default cursor */
+}
+
+/* Custom cursor styles */
+.custom-cursor {
+    position: fixed;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid white;
+    background-color: rgba(255, 255, 255, 0.3);
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: width 0.2s, height 0.2s, background-color 0.2s, opacity 0.3s, transform 0.3s ease;
+    opacity: 0; /* Initially hidden until user moves mouse */
+}
+
+/* Menubar styles - common across all pages */
+#menubar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 45px;
+    background-color: var(--color-a);
+    border-top: 1px solid var(--color-b);
+    display: flex;
+    font-family: 'DM Sans';
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    z-index: 1000;
+    cursor: none;
+}
+
+#menubar-logo {
+    height: 15px;
+    width: auto;
+}
+
+#menubar-logo a {
+    display: block;
+    height: 100%;
+    cursor: none;
+}
+
+#menubar-logo img {
+    height: 100%;
+    width: auto;
+}
+
+#menubar-nav {
+    display: flex;
+    gap: 30px;
+}
+
+#menubar-nav a {
+    color: var(--color-b);
+    text-decoration: none;
+    font-family: 'DM Sans', monospace;
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+    transition: opacity 0.3s ease;
+    cursor: none;
+}
+
+#menubar-nav a:hover {
+    opacity: 0.7;
+}
+
+/* Top menubar for mobile */
+#menubar-top {
+    display: none; /* Hidden by default on desktop */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 45px;
+    background-color: var(--color-a);
+    cursor: none;
+    border-bottom: 1px solid var(--color-b);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 15px;
+    z-index: 1000;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    /* Show top menubar on mobile */
+    #menubar-top {
+        display: flex;
+    }
+    
+    /* Adjust bottom menubar for mobile */
+    #menubar {
+        padding: 0;
+        justify-content: center; /* Center the navigation links */
+        cursor: auto; /* Restore default cursor on mobile */
+    }
+    
+    /* Hide logo in bottom menubar on mobile as it's now in the top bar */
+    #menubar #menubar-logo {
+        display: none;
+    }
+    
+    /* Adjust logo size in top menubar */
+    #menubar-top #menubar-logo {
+        height: 25px;
+    }
+    
+    #menubar-nav {
+        width: 100%;
+        justify-content: space-between;
+        gap: 0;
+        display: flex;
+    }
+    
+    #menubar-nav a {
+        font-size: 12px;
+        cursor: auto; /* Restore default cursor on mobile */
+        position: relative;
+        padding: 0;
+        flex: 1;
+        text-align: center;
+        border-top: 1px solid var(--color-b);
+        height: 45px;
+        line-height: 45px;
+    }
+    
+    /* Add right border to all menu items except the last one */
+    #menubar-nav a:not(:last-child)::after {
+        content: '';
+        position: absolute;
+        right: 0;
+        top: 0;
+        height: 100%;
+        width: 1px;
+        background-color: var(--color-b);
+    }
+    
+    /* Add padding to body to account for top menubar */
+    body {
+        padding-top: 45px;
+        cursor: auto; /* Restore default cursor on mobile */
+    }
+    
+    /* Hide custom cursor on mobile */
+    .custom-cursor {
+        display: none;
+    }
+    
+    /* Restore default cursor for menubar elements on mobile */
+    #menubar-top {
+        cursor: auto;
+    }
+    
+    #menubar-logo a {
+        cursor: auto;
+    }
+}

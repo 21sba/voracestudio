@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Noise Machine</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Doto:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/home-styles.css">
+    
+    <!-- Components script for reusable HTML elements -->
+    <script src="assets/js/components.js" defer></script>
+
+</head>
+
+<body>
+    <div id="container">
+        <div class="custom-cursor" id="customCursor"></div>
+        <div id="title">
+            <img src="assets/img/TNM - Text.svg" alt="The Noise Machine" />
+        </div>
+        <div id="content-spacer"></div>
+        <svg id="connections"></svg>
+    </div>
+
+    <!-- Menubar component -->
+    <tnm-menubar></tnm-menubar>
+
+    <script>
+        // ============================================================================
+        // CONFIGURATION
+        // ============================================================================
+        const CONFIG = {
+            // Animation settings
+            animation: {
+                orbitSpeedMin: 0.01,
+                orbitSpeedMax: 0.03,
+                orbitRadiusMin: 50,
+                orbitRadiusMax: 100,
+                initialRadiusMax: 400,
+                fixedWordTransitionSpeed: 0.1,
+                damping: 0.95,
+                randomForce: 0.5,
+                orbitAttraction: 0.01
+            },
+
+            // Mouse interaction
+            mouse: {
+                proximityRadius: 80,
+                attractionRadius: 150,
+                attractionStrength: 0.25,
+                activationRadius: 30
+            },
+
+            // Title repulsion
+            title: {
+                repulsionRadius: 300,
+                repulsionStrength: 15
+            },
+
+            // Word collision
+            collision: {
+                minDistance: 100,
+                force: 0.01
+            },
+
+            // Layout settings
+            layout: {
+                fontSize: 16,
+                fontFamily: 'Special Elite',
+                fontWeight: '500',
+                maxWidth: 700,
+                lineHeight: 1.2,
+                wordSpacing: '0.5em',
+                topOffset: '10%',
+                bottomPadding: 100
+            },
+
+            // Font loading
+            font: {
+                loadTimeout: 500,
+                postLoadDelay: 100
+            }
+        };
+
+        // ============================================================================
+        // CONTENT
+        // ============================================================================
+        const CONTENT = {
+            text: "They've made silence illegal.\n\nThey flood your mind with distractions, your mouth with empty words, your ears with noise. Constant, deafening noise. A relentless barrage that never lets up. Because in the noise, you don't think. In the noise, you don't stop. In the noise, you never meet yourself.\n\nIt's called The Noise Machine. It turns you into a word-spewing engine, a cog that never powers down, a robot that talks without listening, consumes without questioning, obeys without understanding.\n\nBecause that's what the noise is for: to keep you distracted. To stop you from realizing you're not living, you're just reacting. Like a machine. It's there to keep you busy while they steal your time, your focus, your will to resist. So away with it all: away with boredom, away with silence, and especially with dead time, because in dead time, people dream. And when people dream, they wake up.\n\nThey built this sonic cage well. It's all stained glass and neon. It looks like freedom. It feels like expression. But no one ever stops to ask why they can't sit in silence anymore.\n\nIf you don't speak, if you don't comment, if you don't share, you're weird. Cold. Wrong.\nSo you've got to talk. Right now. About everything. Even stuff you don't understand. Even if you never asked yourself the question in the first place.\nAnd no, the problem today isn't that \"you can't say anything anymore.\" The real problem is that we're forced to say everything. Always. Immediately.\n\nIf you say nothing, you don't exist. If you don't show up, you don't matter. If you're not talking, you're not part of it.\nSo talk. Say something. Anything. As long as it makes noise.\nBecause apparently, silence is a problem.\nQuick, fix it. Talk, talk, talk.\nAbout what? Doesn't matter. Just say something. Spit out words. Just don't stop.\n\nAnd here they are: the new royalty. The noise-makers. The opinion-peddlers. The content professionals. The champions of the pointless. Praised, celebrated, rewarded.\n\nThey taught us to talk. Endlessly. To have an opinion, a take, a caption ready for everything.\nBut no one taught us how to be quiet. How to stay still in the void. How to actually listen.\n\nAnd so, a new movement is born. One that chooses silence. One that still knows its worth.\n\nSilence is scary. Scary because they can't control it. Can't track it. Can't monetize it.\nBecause in silence, you can think. And if you think, you might start asking questions. And if you ask questions, you might realize they've stolen your freedom to think. Your ability to choose.\n\nBut let's be clear: speaking isn't the enemy. Expression isn't the enemy.\nOn the contrary. I fight for silence because I want us to truly speak again.\nBecause only from silence can a word emerge that matters. A word that's real. A word that isn't noise.\n\nAnd if you call me crazy for proposing silence as a revolution, know this:\nSilence isn't a luxury. It's a right. And if you can't find it anymore, it's because you traded it away, bit by bit, for convenience and distraction.\nTake it back. Take back your silence. Because without it, speaking just isn't worth it.\n\nI want silence. I want to make peace with it. I want to protect it. I want to make it seen."
+        };
+
+        // ============================================================================
+        // GLOBAL STATE
+        // ============================================================================
+        let wordData = [];
+        let paragraphWordIndices = [];
+        let paragraphEndWordIndices = [];
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
+        let animationId;
+
+        // DOM elements
+        const elements = {
+            customCursor: document.getElementById('customCursor'),
+            title: document.getElementById('title'),
+            container: document.getElementById('container'),
+            svg: document.getElementById('connections'),
+            contentSpacer: document.getElementById('content-spacer')
+        };
+
+        // ============================================================================
+        // UTILITY FUNCTIONS
+        // ============================================================================
+        const Utils = {
+            async waitForFont() {
+                try {
+                    await document.fonts.load(`${CONFIG.layout.fontWeight} ${CONFIG.layout.fontSize}px "${CONFIG.layout.fontFamily}"`);
+                    await new Promise(resolve => setTimeout(resolve, CONFIG.font.postLoadDelay));
+                    return true;
+                } catch (error) {
+                    console.warn('Font loading failed, continuing anyway:', error);
+                    await new Promise(resolve => setTimeout(resolve, CONFIG.font.loadTimeout));
+                    return false;
+                }
+            },
+
+            getCenterX() {
+                return window.innerWidth / 2 - 30;
+            },
+
+            getCenterY() {
+                return window.innerHeight / 2 - 10;
+            },
+
+            getDistance(x1, y1, x2, y2) {
+                return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+            },
+
+            clamp(value, min, max) {
+                return Math.max(min, Math.min(max, value));
+            },
+
+            random(min, max) {
+                return Math.random() * (max - min) + min;
+            },
+
+            updateSVGDimensions() {
+                const container = elements.container;
+                const containerRect = container.getBoundingClientRect();
+                const scrollHeight = Math.max(
+                    document.body.scrollHeight,
+                    document.documentElement.scrollHeight,
+                    container.scrollHeight
+                );
+
+                elements.svg.style.height = scrollHeight + 'px';
+                elements.svg.setAttribute('height', scrollHeight);
+                elements.svg.setAttribute('width', '100%');
+            }
+        };
+
+        // ============================================================================
+        // TEXT PROCESSING
+        // ============================================================================
+        const TextProcessor = {
+            processText() {
+                const words = CONTENT.text.split(/\s+/);
+                this.calculateParagraphIndices(words);
+                return words;
+            },
+
+            calculateParagraphIndices(words) {
+                paragraphWordIndices = [];
+                paragraphEndWordIndices = [];
+
+                let currentIndex = 0;
+                CONTENT.text.split(/\n{2,}/).forEach(paragraph => {
+                    const wordsInParagraph = paragraph.trim().split(/\s+/).filter(w => w.length > 0);
+                    const indices = [];
+
+                    for (let i = 0; i < wordsInParagraph.length; i++) {
+                        indices.push(currentIndex++);
+                    }
+
+                    paragraphWordIndices.push(indices);
+                    if (indices.length > 0) {
+                        paragraphEndWordIndices.push(indices[indices.length - 1]);
+                    }
+                });
+            },
+
+            calculateTextLayout() {
+                const tempDiv = this.createTempLayoutDiv();
+                const positions = this.getWordPositions(tempDiv);
+                const maxBottom = this.updateContentSpacer(tempDiv);
+
+                document.body.removeChild(tempDiv);
+
+                // Update SVG dimensions after calculating layout
+                Utils.updateSVGDimensions();
+
+                return positions;
+            },
+
+            createTempLayoutDiv() {
+                const tempDiv = document.createElement('div');
+                Object.assign(tempDiv.style, {
+                    position: 'absolute',
+                    visibility: 'hidden',
+                    fontSize: CONFIG.layout.fontSize + 'px',
+                    fontFamily: `"${CONFIG.layout.fontFamily}", monospace`,
+                    fontWeight: CONFIG.layout.fontWeight,
+                    maxWidth: CONFIG.layout.maxWidth + 'px',
+                    width: '100%',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    top: CONFIG.layout.topOffset,
+                    lineHeight: CONFIG.layout.lineHeight,
+                    color: 'white',
+                    whiteSpace: 'pre-wrap',
+                    wordSpacing: CONFIG.layout.wordSpacing
+                });
+
+                document.body.appendChild(tempDiv);
+                return tempDiv;
+            },
+
+            getWordPositions(tempDiv) {
+                const positions = [];
+                let wordIndex = 0;
+
+                const textParts = CONTENT.text.split(/(\n+)/);
+                textParts.forEach(part => {
+                    if (part.match(/\n+/)) {
+                        const br = document.createElement('br');
+                        tempDiv.appendChild(br);
+                        if (part.length > 1) {
+                            const extraBr = document.createElement('br');
+                            tempDiv.appendChild(extraBr);
+                        }
+                    } else {
+                        const wordsInPart = part.split(/\s+/).filter(w => w.length > 0);
+                        wordsInPart.forEach(word => {
+                            const span = document.createElement('span');
+                            Object.assign(span, {
+                                textContent: word,
+                                id: `temp-word-${wordIndex}`
+                            });
+                            Object.assign(span.style, {
+                                marginRight: CONFIG.layout.wordSpacing,
+                                display: 'inline-block',
+                                fontFamily: `"${CONFIG.layout.fontFamily}", monospace`,
+                                fontWeight: CONFIG.layout.fontWeight
+                            });
+                            tempDiv.appendChild(span);
+                            wordIndex++;
+                        });
+                    }
+                });
+
+                // Get positions for all words
+                const words = CONTENT.text.split(/\s+/);
+                words.forEach((word, index) => {
+                    const span = document.getElementById(`temp-word-${index}`);
+                    if (span) {
+                        const rect = span.getBoundingClientRect();
+                        positions.push({ x: rect.left, y: rect.top });
+                    }
+                });
+
+                return positions;
+            },
+
+            updateContentSpacer(tempDiv) {
+                const rect = tempDiv.getBoundingClientRect();
+                const maxBottom = rect.bottom;
+                elements.contentSpacer.style.top = (maxBottom + CONFIG.layout.bottomPadding) + 'px';
+                return maxBottom;
+            }
+        };
+
+        // ============================================================================
+        // WORD MANAGEMENT
+        // ============================================================================
+        const WordManager = {
+            createWords(words, targetPositions) {
+                wordData = [];
+
+                words.forEach((word, index) => {
+                    const element = this.createWordElement(word);
+                    const data = this.createWordData(element, targetPositions[index]);
+
+                    this.setupWordEvents(element, data);
+                    wordData.push(data);
+                });
+            },
+
+            createWordElement(word) {
+                const element = document.createElement('div');
+                element.className = 'word';
+                element.textContent = word;
+
+                const { x: startX, y: startY } = this.getRandomStartPosition();
+                element.style.left = startX + 'px';
+                element.style.top = startY + 'px';
+
+                elements.container.appendChild(element);
+                return element;
+            },
+
+            getRandomStartPosition() {
+                const angle = Math.random() * Math.PI * 2;
+                const radius = Math.random() * CONFIG.animation.initialRadiusMax;
+                return {
+                    x: Utils.getCenterX() + Math.cos(angle) * radius,
+                    y: Utils.getCenterY() + Math.sin(angle) * radius
+                };
+            },
+
+            createWordData(element, targetPosition) {
+                const startPos = this.getRandomStartPosition();
+                return {
+                    element,
+                    x: startPos.x,
+                    y: startPos.y,
+                    vx: Utils.random(-1, 1),
+                    vy: Utils.random(-1, 1),
+                    targetX: targetPosition.x,
+                    targetY: targetPosition.y,
+                    fixed: false,
+                    angle: Math.random() * Math.PI * 2,
+                    orbitRadius: Utils.random(CONFIG.animation.orbitRadiusMin, CONFIG.animation.orbitRadiusMax),
+                    orbitSpeed: Utils.random(CONFIG.animation.orbitSpeedMin, CONFIG.animation.orbitSpeedMax)
+                };
+            },
+
+            setupWordEvents(element, data) {
+                element.addEventListener('mouseenter', () => {
+                    this.fixWord(data);
+                });
+
+                element.addEventListener('mousemove', (e) => {
+                    if (!data.fixed) {
+                        const rect = element.getBoundingClientRect();
+                        const centerX = rect.left + rect.width / 2;
+                        const centerY = rect.top + rect.height / 2;
+                        const distance = Utils.getDistance(e.clientX, e.clientY, centerX, centerY);
+
+                        if (distance < CONFIG.mouse.activationRadius) {
+                            this.fixWord(data);
+                        }
+                    }
+                });
+            },
+
+            fixWord(data) {
+                if (!data.fixed) {
+                    data.fixed = true;
+                    data.element.classList.add('fixed');
+                }
+            }
+        };
+
+        // ============================================================================
+        // PHYSICS ENGINE
+        // ============================================================================
+        const Physics = {
+            updateWordPositions() {
+                wordData.forEach((data, index) => {
+                    if (!data.fixed) {
+                        this.updateFloatingWord(data);
+                        this.handleCollisions(data, index);
+                        this.keepInBounds(data);
+                    } else {
+                        this.updateFixedWord(data);
+                    }
+                    this.updateElementPosition(data);
+                });
+            },
+
+            updateFloatingWord(data) {
+                // Orbital movement
+                data.angle += data.orbitSpeed;
+                const orbitX = Utils.getCenterX() + Math.cos(data.angle) * data.orbitRadius;
+                const orbitY = Utils.getCenterY() + Math.sin(data.angle) * data.orbitRadius;
+
+                // Random movement
+                data.vx += Utils.random(-CONFIG.animation.randomForce, CONFIG.animation.randomForce);
+                data.vy += Utils.random(-CONFIG.animation.randomForce, CONFIG.animation.randomForce);
+
+                // Orbit attraction
+                data.vx += (orbitX - data.x) * CONFIG.animation.orbitAttraction;
+                data.vy += (orbitY - data.y) * CONFIG.animation.orbitAttraction;
+
+                // Mouse attraction
+                this.applyMouseAttraction(data);
+
+                // Title repulsion
+                this.applyTitleRepulsion(data);
+
+                // Apply damping
+                data.vx *= CONFIG.animation.damping;
+                data.vy *= CONFIG.animation.damping;
+
+                // Update position
+                data.x += data.vx;
+                data.y += data.vy;
+            },
+
+            applyMouseAttraction(data) {
+                const distanceToMouse = Utils.getDistance(mouseX, mouseY, data.x, data.y);
+
+                if (distanceToMouse < CONFIG.mouse.attractionRadius) {
+                    const attractionStrength = (CONFIG.mouse.attractionRadius - distanceToMouse) / CONFIG.mouse.attractionRadius * -CONFIG.mouse.attractionStrength;
+                    data.vx += (mouseX - data.x) * attractionStrength;
+                    data.vy += (mouseY - data.y) * attractionStrength;
+                }
+            },
+
+            applyTitleRepulsion(data) {
+                if (!elements.title.classList.contains('hidden')) {
+                    const titleCenterX = Utils.getCenterX();
+                    const titleCenterY = Utils.getCenterY();
+                    const distanceToTitle = Utils.getDistance(data.x, data.y, titleCenterX, titleCenterY);
+
+                    if (distanceToTitle < CONFIG.title.repulsionRadius) {
+                        const repulsionStrength = (CONFIG.title.repulsionRadius - distanceToTitle) / CONFIG.title.repulsionRadius * CONFIG.title.repulsionStrength;
+                        const angle = Math.atan2(data.y - titleCenterY, data.x - titleCenterX);
+                        data.vx += Math.cos(angle) * repulsionStrength;
+                        data.vy += Math.sin(angle) * repulsionStrength;
+                    }
+                }
+            },
+
+            handleCollisions(data, index) {
+                wordData.forEach((other, otherIndex) => {
+                    if (index !== otherIndex && !other.fixed) {
+                        const distance = Utils.getDistance(data.x, data.y, other.x, other.y);
+
+                        if (distance < CONFIG.collision.minDistance) {
+                            const angle = Math.atan2(other.y - data.y, other.x - data.x);
+                            const force = (CONFIG.collision.minDistance - distance) * CONFIG.collision.force;
+
+                            data.vx -= Math.cos(angle) * force;
+                            data.vy -= Math.sin(angle) * force;
+                            other.vx += Math.cos(angle) * force;
+                            other.vy += Math.sin(angle) * force;
+                        }
+                    }
+                });
+            },
+
+            keepInBounds(data) {
+                if (data.x < 0 || data.x > window.innerWidth) data.vx *= -0.5;
+                if (data.y < 0 || data.y > window.innerHeight) data.vy *= -0.5;
+
+                data.x = Utils.clamp(data.x, 0, window.innerWidth);
+                data.y = Utils.clamp(data.y, 0, window.innerHeight);
+            },
+
+            updateFixedWord(data) {
+                const dx = data.targetX - data.x;
+                const dy = data.targetY - data.y;
+                data.x += dx * CONFIG.animation.fixedWordTransitionSpeed;
+                data.y += dy * CONFIG.animation.fixedWordTransitionSpeed;
+            },
+
+            updateElementPosition(data) {
+                data.element.style.left = data.x + 'px';
+                data.element.style.top = data.y + 'px';
+            }
+        };
+
+        // ============================================================================
+        // RENDERING
+        // ============================================================================
+        const Renderer = {
+            drawConnections() {
+                elements.svg.innerHTML = '';
+
+                const unfixedInParagraph = paragraphWordIndices.map(indices =>
+                    indices.some(i => !wordData[i].fixed)
+                );
+
+                for (let i = 0; i < wordData.length - 1; i++) {
+                    if (paragraphEndWordIndices.includes(i)) continue;
+
+                    const paraIndex = paragraphWordIndices.findIndex(indices => indices.includes(i));
+                    if (!unfixedInParagraph[paraIndex]) continue;
+
+                    this.drawConnectionLine(wordData[i], wordData[i + 1]);
+                }
+            },
+
+            drawConnectionLine(current, next) {
+                const currentRect = current.element.getBoundingClientRect();
+                const nextRect = next.element.getBoundingClientRect();
+
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', current.x + currentRect.width / 2);
+                line.setAttribute('y1', current.y + currentRect.height / 2);
+                line.setAttribute('x2', next.x + nextRect.width / 2);
+                line.setAttribute('y2', next.y + nextRect.height / 2);
+                line.setAttribute('class', 'connection-line');
+
+                elements.svg.appendChild(line);
+            }
+        };
+
+        // ============================================================================
+        // EVENT HANDLERS
+        // ============================================================================
+        const EventHandlers = {
+            setupMouseEvents() {
+                document.addEventListener('mousemove', (e) => {
+                    // Custom cursor movement is now handled in components.js
+                    this.updateMousePosition(e);
+                    this.handleTitleInteraction(e);
+                    this.handleWordProximity(e);
+                });
+            },
+
+            updateMousePosition(e) {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+            },
+
+            handleTitleInteraction(e) {
+                const titleRect = elements.title.getBoundingClientRect();
+                const isOverTitle = e.clientX >= titleRect.left &&
+                    e.clientX <= titleRect.right &&
+                    e.clientY >= titleRect.top &&
+                    e.clientY <= titleRect.bottom;
+
+                if (isOverTitle && !elements.title.classList.contains('hidden')) {
+                    elements.title.classList.add('hidden');
+                }
+            },
+
+            handleWordProximity(e) {
+                if (wordData.length > 0) {
+                    wordData.forEach(data => {
+                        if (!data.fixed) {
+                            const rect = data.element.getBoundingClientRect();
+                            const centerX = rect.left + rect.width / 2;
+                            const centerY = rect.top + rect.height / 2;
+                            const distance = Utils.getDistance(e.clientX, e.clientY, centerX, centerY);
+
+                            if (distance < CONFIG.mouse.proximityRadius) {
+                                WordManager.fixWord(data);
+                            }
+                        }
+                    });
+                }
+            },
+
+            setupResizeHandler() {
+                window.addEventListener('resize', async () => {
+                    await Utils.waitForFont();
+                    const newTargetPositions = TextProcessor.calculateTextLayout();
+                    wordData.forEach((data, index) => {
+                        data.targetX = newTargetPositions[index].x;
+                        data.targetY = newTargetPositions[index].y;
+                    });
+                });
+            }
+        };
+
+        // ============================================================================
+        // ANIMATION LOOP
+        // ============================================================================
+        const AnimationLoop = {
+            start() {
+                this.animate();
+            },
+
+            animate() {
+                Physics.updateWordPositions();
+                Renderer.drawConnections();
+                animationId = requestAnimationFrame(() => this.animate());
+            },
+
+            stop() {
+                if (animationId) {
+                    cancelAnimationFrame(animationId);
+                }
+            }
+        };
+
+        // ============================================================================
+        // MAIN APPLICATION
+        // ============================================================================
+        const App = {
+            async initialize() {
+                await Utils.waitForFont();
+
+                const words = TextProcessor.processText();
+                const targetPositions = TextProcessor.calculateTextLayout();
+
+                WordManager.createWords(words, targetPositions);
+                EventHandlers.setupMouseEvents();
+                EventHandlers.setupResizeHandler();
+                AnimationLoop.start();
+            }
+        };
+
+        // ============================================================================
+        // START APPLICATION
+        // ============================================================================
+        App.initialize();
+    </script>
+</body>
+
+</html>

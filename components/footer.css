@@ -1,0 +1,95 @@
+/* Footer component styles */
+.site-footer {
+  position: relative;
+  width: 100%;
+  z-index: 1;
+  color: var(--color1);
+  margin-top: 240px;
+}
+@media (max-width: 860px) {
+  .site-footer { margin-top: 80px; }
+}
+
+.site-footer .footer-band {
+  position: relative;
+  width: 100%;
+  background: var(--color3);
+  padding: clamp(90px, 12vw, 180px) 16px;
+  overflow: visible;
+}
+
+.site-footer .footer-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(10px, 2.5vw, 22px);
+  text-align: center;
+}
+
+.site-footer .footer-cta {
+  display: inline-block;
+  font-size: clamp(1.2rem, 6.6vw, 4.8rem);
+  line-height: 1.05;
+  font-weight: var(--weight-bold);
+  text-transform: uppercase;
+  color: var(--color1);
+  text-decoration: none;
+  letter-spacing: 0.01em;
+  transition: transform 200ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity 160ms ease;
+}
+.site-footer .footer-cta:hover { transform: scale(1.03); }
+.site-footer .footer-cta:active { transform: scale(0.98); }
+
+.site-footer .arrow {
+  position: absolute;
+  top: 0;
+  transform: translateY(calc(-100% - 10px));
+  left: clamp(15px, 20vw, 240px);
+  width: clamp(28px, 5vw, 60px);
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+  opacity: 0.95;
+}
+
+@media (max-width: 500px) {
+  .site-footer .arrow { left: clamp(15px, 10vw, 50px); }
+}
+
+.site-footer .id-card-link {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translate(-50%, -60%) rotate(-8deg);
+  transform-origin: center;
+  transition: transform 220ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  will-change: transform;
+  z-index: 1; /* default below hover state, above normal flow */
+}
+.site-footer .id-card-link:hover {
+  transform: translate(-50%, -60%) rotate(0deg) scale(1.2);
+  z-index: 10; /* bring card above arrow and footer text */
+}
+.site-footer .id-card {
+  width: clamp(220px, 40vw, 340px);
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 10px 30px rgba(0,0,0,0.35));
+}
+
+.site-footer .footer-bottom {
+  position: absolute;
+  left: 0; right: 0; bottom: 14px;
+  margin: 0;
+  text-align: center;
+  color: var(--color4);
+  font-size: var(--size-caption);
+}
+
+@media (max-width: 860px) {
+  .site-footer .id-card-link { transform: translate(-50%, -50%) rotate(-6deg); }
+  .site-footer .footer-band { padding: clamp(110px, 16vw, 200px) 16px; }
+}
