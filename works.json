@@ -178,13 +178,25 @@
         "date": "2024",
         "categories": ["Motion Design", "Graphic Design"],
         "origin": "University",
-        "type": "single-video",
+        "type": "case-study-video",
         "cover": "assets/images/previews/preview-creativity.gif",
         "description": "A short video featuring a talking character. I was given complete creative freedom in choosing the style, and I decided to use John Cleese’s speech on creativity as the basis for my project.",
         "video": {
             "source": "youtube",
             "embedId": "8JdebfquR-4"
         },
+        "blocks": [
+            {
+                "type": "project",
+                "title": "Made with this script:",
+                "from": "goodies",
+                "id": "mouthiverse"
+            },
+            {
+                "type": "text",
+                "content": "The mouth, eyes and hands in this video are animated using the Mouthiverse script."
+            }
+        ],
         "credits": {
             "Everything Made By": "Tommaso Tabacchi"
         }

@@ -10,6 +10,23 @@
 
   const isPublic = (item) => String((item && item.visibility) ? item.visibility : 'public').toLowerCase() === 'public';
 
+  // Lightweight dataset cache (works/goodies) to resolve cross-references
+  const datasetCache = Object.create(null);
+  async function getDataset(name) {
+    const key = String(name || 'works').toLowerCase();
+    if (datasetCache[key]) return datasetCache[key];
+    const url = key === 'goodies' ? 'goodies.json' : 'works.json';
+    try {
+      const res = await fetch(String(url));
+      const json = await res.json();
+      datasetCache[key] = Array.isArray(json) ? json : [];
+      return datasetCache[key];
+    } catch (_) {
+      datasetCache[key] = [];
+      return datasetCache[key];
+    }
+  }
+
   // Loader progress hook: update global Loader if available
   function updateLoaderProgress(p) {
     try {
@@ -596,6 +613,29 @@
           return s;
         });
 
+        // Dynamically match container aspect ratio to the active image
+        const applyAspect = (i) => {
+          const img = images[i];
+          const w = img.naturalWidth;
+          const h = img.naturalHeight;
+          if (w && h) {
+            media.style.aspectRatio = `${w} / ${h}`;
+          } else {
+            // Fallback while image hasn’t loaded
+            media.style.aspectRatio = '16 / 9';
+          }
+        };
+        // Update ratios once images load
+        images.forEach((img, i) => {
+          if (img.complete) {
+            applyAspect(i);
+          } else {
+            img.addEventListener('load', () => {
+              if (i === index) applyAspect(i);
+            }, { once: true });
+          }
+        });
+
         const prev = document.createElement('button');
         prev.type = 'button';
         prev.className = 'arrow prev';
@@ -625,6 +665,7 @@
         const setActive = (i) => {
           index = i;
           slides.style.transform = `translateX(-${index * 100}%)`;
+          applyAspect(i);
           dots.forEach((d, di) => {
             d.classList.toggle('active', di === index);
             if (di === index) {
@@ -737,6 +778,116 @@
           caption.textContent = String(b.content);
           blockEl.appendChild(caption);
         }
+
+      } else if (type === 'project') {
+        // Cross-reference a project from works or goodies and render a two-column card
+        const refFrom = String(b.from || 'works').toLowerCase();
+        const refId = String(b.id || '').trim();
+        const grid = document.createElement('div');
+        grid.className = 'project-grid';
+        const left = document.createElement('div');
+        left.className = 'cover-wrap';
+        const right = document.createElement('div');
+        right.className = 'info';
+
+        // Append early; populate asynchronously once data is fetched
+        grid.appendChild(left);
+        grid.appendChild(right);
+        blockEl.appendChild(grid);
+
+        const showNotFound = () => {
+          right.innerHTML = '';
+          const p = document.createElement('p');
+          p.className = 'caption';
+          p.textContent = 'Referenced project not found.';
+          right.appendChild(p);
+        };
+
+        getDataset(refFrom).then((list) => {
+          const item = list.find((it) => String(it.id) === refId);
+          if (!item) { showNotFound(); return; }
+
+          // Left: cover image (no inner link; whole grid will be clickable)
+          const coverSrc = (typeof item.cover === 'string') ? item.cover : (item.cover && item.cover.src ? item.cover.src : '');
+          if (coverSrc) {
+            const img = document.createElement('img');
+            img.src = String(coverSrc);
+            img.alt = item.title ? `${item.title} cover` : 'Cover image';
+            img.loading = 'lazy';
+            left.innerHTML = '';
+            left.appendChild(img);
+          }
+
+          // Right: title, description, meta (tags + origin/date)
+          right.innerHTML = '';
+          const t = document.createElement('h3');
+          t.className = 'title';
+          t.textContent = String(item.title || refId);
+          right.appendChild(t);
+
+          if (item.description) {
+            const d = document.createElement('p');
+            d.className = 'description';
+            d.textContent = String(item.description);
+            right.appendChild(d);
+          }
+
+          const meta = document.createElement('div');
+          meta.className = 'meta';
+
+          const tags = document.createElement('div');
+          tags.className = 'tags';
+          const cats = Array.isArray(item.categories) ? item.categories : [];
+          cats.forEach((c) => {
+            const tag = document.createElement('span');
+            tag.className = 'tag';
+            tag.textContent = String(c);
+            tags.appendChild(tag);
+          });
+
+          const originDate = document.createElement('div');
+          originDate.className = 'origin-date';
+          const originLine = document.createElement('span');
+          originLine.className = 'origin';
+          originLine.textContent = dash(item.origin);
+          const dateLine = document.createElement('span');
+          dateLine.className = 'date';
+          dateLine.textContent = dash(item.date);
+          originDate.appendChild(originLine);
+          originDate.appendChild(dateLine);
+
+          meta.appendChild(tags);
+          meta.appendChild(originDate);
+          right.appendChild(meta);
+
+          // Make the whole project grid clickable
+          const detailsPage = refFrom === 'goodies' ? 'goodie.html' : 'work.html';
+          const link = document.createElement('a');
+          link.className = 'project-link';
+          link.href = `${detailsPage}?id=${encodeURIComponent(item.id)}`;
+          link.setAttribute('aria-label', `View Project: ${dash(item.title || refId)}`);
+          // Move existing grid inside the link
+          if (grid.parentNode === blockEl) {
+            blockEl.replaceChild(link, grid);
+          }
+          link.appendChild(grid);
+        }).catch(() => showNotFound());
+
+      } else if (type === 'spacer') {
+        const size = String(b.size || 'medium').toLowerCase();
+        const normalized = (size === 'small' || size === 'large') ? size : 'medium';
+        blockEl.classList.add(`size-${normalized}`);
+        blockEl.setAttribute('aria-hidden', 'true');
+        // No inner content; this block only provides vertical space
+
+      } else if (type === 'separator') {
+        const size = String(b.size || 'medium').toLowerCase();
+        const normalized = (size === 'small' || size === 'large') ? size : 'medium';
+        blockEl.classList.add(`size-${normalized}`);
+        blockEl.setAttribute('aria-hidden', 'true');
+        const line = document.createElement('div');
+        line.className = 'line';
+        blockEl.appendChild(line);
 
       } else if (type === 'text' && b.content) {
         const caption = document.createElement('p');

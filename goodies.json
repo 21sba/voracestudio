@@ -17,6 +17,24 @@
                 "content": "Mouthiverse makes it easier to switch between the various states of an object by using labeled buttons in a dockable panel, avoiding the need to manually adjust a Slider Control.\n\nIt allows you to create and manage Mouthiverses: compositions containing multiple layers, each representing a different state of a visual element (e.g., mouth shapes for lip-syncing or other visual states).\n\nIt controls the visibility of each state through Opacity instead of Time Remapping for better performance and reliability."
             },
             {
+                "type": "image",
+                "src": "assets/goodies/mouthiverse/mouthiverse-timeline.jpg"
+            },
+            {
+                "type": "spacer",
+                "size": "small"
+            },
+            {
+                "type": "project",
+                "title": "Used in this project:",
+                "from": "works",
+                "id": "creativity"
+            },
+            {
+                "type": "separator",
+                "size": "medium"
+            },
+            {
                 "type": "tabs",
                 "title": "Documentation",
                 "tabs": [
@@ -30,19 +48,19 @@
                     },
                     {
                         "title": "Keyframes and Markers",
-                        "content": "In the script panel, select the desired Mouthiverse and then click any of the buttons to place a keyframe corresponding to the selected state at the current time.\n\nA marker will also be placed in correspondence with the keyframe. The marker will be colored as the layer that represent it inside the Mouthiverse.\n\nTo hide markers and prevent their creation, uncheck “Show Markers”.\n\nRendering logic:\n⌂ → ⬗ Markers follow keyframes: move the keyframes, then press “↻” to update markers positions.\n⬗ → ⌂ Keyframes follow markers: move the markers, then press “↻” to update the keyframes positions.\n\nYou can alternatively use the Slider Control named ⁘ Mouthiverse ⁘ and place keyframes traditionally."
+                        "content": "In the script panel, select the desired Mouthiverse and then click any of the buttons to place a keyframe corresponding to the selected state at the current time.\n\nA marker will also be placed in correspondence with the keyframe. The marker will be colored as the layer that represent it inside the Mouthiverse.\n\nTo hide markers and prevent their creation, uncheck “Show Markers”.\n\nRENDERING LOGIC:\n\n⌂ → ⬗ Markers follow keyframes: move the keyframes, then press “↻” to update markers positions.\n\n⬗ → ⌂ Keyframes follow markers: move the markers, then press “↻” to update the keyframes positions.\n\nYou can alternatively use the Slider Control named ⁘ Mouthiverse ⁘ and place keyframes traditionally."
                     },
                     {
                         "title": "Edit a Mouthiverse",
-                        "content": "CHANGING NAMES\nYou can freely change the name of a Mouthiverse composition and its layers inside as you wish.\nDO NOT change the name of the effects applied by the script.\n\nADDING NEW LAYERS/STATES\nYou can add new layers to the Mouthiverse, just make sure to put them at the bottom to avoid problems. Refresh “↻” when you are done adding layers.\n\nEDIT EXISTING LAYERS/STATES\nEditing layers inside a Mouthiverse can be tricky because of the expression applied to the opacity of each layer’s opacity. To work around this, check the “⁘ Show All States ⁘” checkbox in the composition effects."
+                        "content": "CHANGING NAMES:\nYou can freely change the name of a Mouthiverse composition and its layers inside as you wish.\nDO NOT change the name of the effects applied by the script.\n\nADDING NEW LAYERS/STATES:\nYou can add new layers to the Mouthiverse, just make sure to put them at the bottom to avoid problems. Refresh “↻” when you are done adding layers.\n\nEDIT EXISTING LAYERS/STATES:\nEditing layers inside a Mouthiverse can be tricky because of the expression applied to the opacity of each layer’s opacity. To work around this, check the “⁘ Show All States ⁘” checkbox in the composition effects."
                     },
                     {
                         "title": "Important Notes",
-                        "content": "REFRESHING\nThe Refresh button (“↻”) is a helpful tool to update all the Mouthiverses and the UI panel. Use it after making any major changes to Mouthiverses, its layers, keyframes or markers.\n\nLAYERS ORDER MATTERS\nThe top layer is the first state, the second layer is the second state, etc. Do not change the layer order after setting keyframes.\n\nLAYERS LIMITATIONS\nThe panel UI will display up to 24 buttons, so this is the maximum number of layers that can be inside a Mouthiverse.\n\nLAYER VISIBILITY\nOnly visible layers are included in state switching."
+                        "content": "REFRESHING:\nThe Refresh button (“↻”) is a helpful tool to update all the Mouthiverses and the UI panel. Use it after making any major changes to Mouthiverses, its layers, keyframes or markers.\n\nLAYERS ORDER MATTERS:\nThe top layer is the first state, the second layer is the second state, etc. Do not change the layer order after setting keyframes.\n\nLAYERS LIMITATIONS:\nThe panel UI will display up to 24 buttons, so this is the maximum number of layers that can be inside a Mouthiverse.\n\nLAYER VISIBILITY:\nOnly visible layers are included in state switching."
                     },
                     {
                         "title": "Troubleshooting",
-                        "content": "NO LAYERS VISIBLE IN THE UI\nEnsure that you are in an active composition and that it contains a Mouthiverse, then click \"↻\".\nIf the problem persists, check if there is a Slider Control named \"⁘ Mouthiverse ⁘\" applied to the composition.\n\nUNEXPECTED BEHAVIOR\nTry refreshing by clicking \"↻\".\nAvoid rearranging layers after setting keyframes and ensure all layers are visible.\n\nIf you have any other problem, feel free to contact me at tommasotabacchi7@gmail.com"
+                        "content": "NO LAYERS VISIBLE IN THE UI:\nEnsure that you are in an active composition and that it contains a Mouthiverse, then click \"↻\".\nIf the problem persists, check if there is a Slider Control named \"⁘ Mouthiverse ⁘\" applied to the composition.\n\nUNEXPECTED BEHAVIOR:\nTry refreshing by clicking \"↻\".\nAvoid rearranging layers after setting keyframes and ensure all layers are visible.\n\nIf you have any other problem, feel free to contact me at tommasotabacchi7@gmail.com"
                     }
                 ]
             },
