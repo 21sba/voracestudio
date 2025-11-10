@@ -768,4 +768,53 @@ document.addEventListener('DOMContentLoaded', async () => {
       }, baseDelay * idx);
     });
   } catch (_) {}
+
+  // Bottom CTA: only for case-study and case-study-video
+  try {
+    const eligible = type === 'case-study' || type === 'case-study-video';
+    if (eligible) {
+      const CTA_TEXT = '↓ WATCH MORE ↓';
+      const TOP_THRESHOLD = Math.max(0, Math.min(20, Math.round((window.innerHeight || 800) * 0.01)));
+      const atTop = () => {
+        const y = (window.scrollY || window.pageYOffset || 0);
+        return y <= TOP_THRESHOLD;
+      };
+      const maybeCreateAndShowCTA = () => {
+        if (!atTop()) return;
+        const cta = document.createElement('button');
+        cta.type = 'button';
+        cta.className = 'work-cta';
+        cta.textContent = CTA_TEXT;
+        cta.setAttribute('aria-label', 'Scroll to more of this project');
+        let removed = false;
+        const removeCTA = () => {
+          if (removed) return;
+          removed = true;
+          try {
+            cta.classList.remove('show');
+            setTimeout(() => { try { cta.remove(); } catch (_) {} }, 220);
+          } catch (_) { try { cta.remove(); } catch (_) {} }
+        };
+        const onUserScroll = () => {
+          removeCTA();
+          window.removeEventListener('scroll', onUserScroll);
+        };
+        cta.addEventListener('click', () => {
+          try { window.scrollBy({ top: window.innerHeight, behavior: 'smooth' }); }
+          catch (_) { window.scrollBy(0, window.innerHeight); }
+          removeCTA();
+          window.removeEventListener('scroll', onUserScroll);
+        });
+        document.body.appendChild(cta);
+        // Ensure the browser computes initial styles before toggling to .show
+        requestAnimationFrame(() => {
+          try { void cta.offsetWidth; } catch (_) {}
+          cta.classList.add('show');
+        });
+        window.addEventListener('scroll', onUserScroll, { passive: true });
+      };
+      const delayMs = 1000;
+      setTimeout(maybeCreateAndShowCTA, delayMs);
+    }
+  } catch (_) {}
 });

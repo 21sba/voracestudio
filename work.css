@@ -321,3 +321,38 @@
   .work-pager .pager-inner { padding: 0 12px; }
   .work-pager .pager-btn { padding: 6px 8px; }
 }
+
+/* Bottom CTA for case-study pages */
+.work-cta {
+  position: fixed;
+  left: 50%;
+  bottom: 25px;
+  transform: translateX(-50%) translateY(100%);
+  opacity: 0;
+  background: var(--color5);
+  color: var(--color2);
+  font-family: var(--font-sans);
+  border: 0;
+  border-radius: var(--radius);
+  padding: 6px 12px;
+  font-size: var(--size-caption);
+  font-weight: var(--weight-bold);
+  text-transform: uppercase;
+  cursor: pointer;
+  z-index: 1000;
+  transition: transform 220ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity 160ms ease;
+}
+.work-cta.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+.work-cta:hover {
+  background: var(--color4);
+  color: var(--color3);
+}
+@media (hover: none) {
+  .work-cta:hover {
+    background: var(--color3);
+    color: var(--color4);
+  }
+}

@@ -184,10 +184,12 @@ html, body {
   margin-bottom: -10px;
   font-size: var(--size-caption);
   text-align: center;
+  background: var(--color2);
   color: var(--color1);
+  border-radius: var(--radius);
+  padding: 2px 8px;
   text-transform: uppercase;
   transition: margin-bottom 120ms ease;
-  text-shadow: 0 0 4px var(--color2);
 }
 
 .date-label {
@@ -195,7 +197,10 @@ html, body {
   left: 50%;
   bottom: 15px;
   transform: translateX(-50%);
+  background: var(--color2);
   color: var(--color5);
+  border-radius: var(--radius);
+  padding: 2px 8px;
   font-size: var(--size-caption);
   line-height: 1;
   pointer-events: none;

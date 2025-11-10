@@ -6,7 +6,7 @@
         "categories": ["Motion Design"],
         "origin": "Client Work",
         "type": "single-video",
-        "cover": "/assets/images/previews/preview-football-society.gif",
+        "cover": "assets/images/previews/preview-football-society.gif",
         "description": "E507 Studio commissioned me to create an intro for Football Society, a podcast dedicated to a romantic vision of football, including passion, anecdotes, and football culture. The style had to stand out from typical football shows and reflect the podcast’s unique character.\nI worked on bringing the client’s core idea to life (a mug being hit by a football) as well as adding sound effects and selecting the music.",
         "video": {
             "source": "youtube",
@@ -23,13 +23,20 @@
         "date": "2025",
         "categories": ["Motion Design", "Illustration"],
         "origin": "Client Work",
-        "type": "single-video",
-        "cover": "/assets/images/previews/preview-growermetal.gif",
+        "type": "case-study-video",
+        "cover": "assets/images/previews/preview-growermetal.gif",
         "description": "E507 Studio commissioned me to create a short video for Growermetal, a major company producing washers. The video was made for an Open Day, when the workers’ families were invited to visit the factory. It’s a fun and easy explanation of what Growermetal does and how washers are made.\nI took care of the illustrations and animations, while the client provided the script.",
         "video": {
             "source": "youtube",
             "embedId": "_DqZCZb2Lys"
         },
+        "blocks": [
+            {
+                "type": "image",
+                "title": "Storyboard",
+                "src": "assets/works/growermetal/growermetal-storyboard.jpg"
+            }
+        ],
         "credits": {
             "Client": "Growermetal",
             "Agency": ["E507 Studio", "https://e507.it/"],
@@ -43,7 +50,7 @@
         "categories": ["Motion Design", "Illustration"],
         "origin": "Intership",
         "type": "single-video",
-        "cover": "/assets/images/previews/preview-billy-bruco.gif",
+        "cover": "assets/images/previews/preview-billy-bruco.gif",
         "description": "During my university internship at Watermelon, I created a series of three animated video loops as a playful symbol of our collaboration. Designed for Instagram, the project features Billy Bruco, a cheerful little caterpillar with a big appetite.\nI developed the concept, illustrations, motion design, and sound design independently, with valuable feedback and support from the studio.",
         "video": {
             "source": "youtube",
@@ -61,7 +68,7 @@
         "categories": ["Motion Design", "Graphic Design"],
         "origin": "University",
         "type": "case-study-video",
-        "cover": "/assets/images/previews/preview-atnm.gif",
+        "cover": "assets/images/previews/preview-atnm.gif",
         "description": "A conceptual design project exploring the cultural suppression of silence through a speculative dystopia.\n(Against) The Noise Machine blends video, editorial design, web and audio to question the normalization of constant noise.",
         "video": {
             "source": "youtube",
@@ -76,12 +83,12 @@
             {
                 "type": "image",
                 "title": "Zine",
-                "src": "/assets/works/atnm/atnm-zine-mockup.jpg"
+                "src": "assets/works/atnm/atnm-zine-mockup.jpg"
             },
             {
                 "type": "iframe",
                 "title": "Website",
-                "src": "/assets/works/atnm/site/index.html"
+                "src": "assets/works/atnm/site/index.html"
             }
         ],
         "credits": {
@@ -95,7 +102,7 @@
         "categories": ["Graphic Design"],
         "origin": "University",
         "type": "case-study",
-        "cover": "/assets/images/previews/preview-flores.jpg",
+        "cover": "assets/images/previews/preview-flores.jpg",
         "description": "Visual identity and UI/UX design for Flor.es, an app that allows users to remotely monitor and control indoor cultivation systems of any scale.\nDeveloped a complete design system, including a custom icon set and a friendly mascot named Florenzio, who guides users through the app with helpful tips and a touch of personality.",
         "blocks": [
             {
@@ -124,7 +131,7 @@
         "categories": ["Video Production"],
         "origin": "University",
         "type": "single-video",
-        "cover": "/assets/images/previews/preview-apatia.gif",
+        "cover": "assets/images/previews/preview-apatia.gif",
         "description": "This video was part of a group project structured around four emotional states: euphoria, anger, despair, and apathy.\nI was in charge of the final segment, \"Apatia\", which served as the closing chapter. Through a slow, dreamlike pace and abstract sound, I aimed to convey a sense of emotional numbness and detachment. I pictured a character who is physically present but mentally adrift.",
         "video": {
             "source": "youtube",
@@ -144,7 +151,7 @@
         "categories": ["Illustration"],
         "origin": "University",
         "type": "case-study",
-        "cover": "/assets/images/previews/preview-momo.jpg",
+        "cover": "assets/images/previews/preview-momo.jpg",
         "description": "An illustrated book adaptation of Momo by Michael Ende. Aimed at children and young readers, the book explores the concept of time through the story of a girl who listens deeply and helps others reclaim their stolen moments from the mysterious \"Grey Men.\"\nThe visual approach reflects the story’s dual nature, both playful and profound, combining imperfect, childlike forms with more detailed focal elements. Text and illustration are tightly integrated across the layout, with dynamic interactions and occasional double-page spreads designed to enhance immersion and emotional resonance.",
         "blocks": [
             {
@@ -164,7 +171,7 @@
         "categories": ["Motion Design", "Graphic Design"],
         "origin": "University",
         "type": "single-video",
-        "cover": "/assets/images/previews/preview-creativity.gif",
+        "cover": "assets/images/previews/preview-creativity.gif",
         "description": "A short video featuring a talking character. I was given complete creative freedom in choosing the style, and I decided to use John Cleese’s speech on creativity as the basis for my project.",
         "video": {
             "source": "youtube",
@@ -181,7 +188,7 @@
         "categories": ["Motion Design", "Graphic Design"],
         "origin": "Client Work",
         "type": "single-video",
-        "cover": "/assets/images/previews/preview-quinoa.gif",
+        "cover": "assets/images/previews/preview-quinoa.gif",
         "description": "E507 Studio commissioned me to create the presentation video for Quinoa, an AI chatbot tool developed by Sesamo Srl.\nThe client provided the base audio and a general storyline.",
         "video": {
             "source": "youtube",
@@ -200,7 +207,7 @@
         "categories": ["Motion Design"],
         "origin": "Client Work",
         "type": "case-study-video",
-        "cover": "/assets/images/previews/preview-scenario.gif",
+        "cover": "assets/images/previews/preview-scenario.gif",
         "description": "A conceptual design project exploring the cultural suppression of silence through a speculative dystopia.\n(Against) The Noise Machine blends video, editorial design, web and audio to question the normalization of constant noise.",
         "video": {
             "source": "youtube",
@@ -225,7 +232,7 @@
         "categories": ["Motion Design", "Graphic Design"],
         "origin": "University",
         "type": "single-video",
-        "cover": "/assets/images/previews/preview-weread.gif",
+        "cover": "assets/images/previews/preview-weread.gif",
         "description": "Visual identity of a reading app called \"WeRead\" and a 30-second promotional video for it.\nI was given complete creative freedom.",
         "video": {
             "source": "youtube",
@@ -242,7 +249,7 @@
         "categories": ["Motion Design"],
         "origin": "Intership",
         "type": "single-video",
-        "cover": "/assets/images/previews/preview-mentalisti.gif",
+        "cover": "assets/images/previews/preview-mentalisti.gif",
         "description": "E507 Studio commissioned me to create motion videos for the second and third episodes of ‘Mentalisti,’ an event series hosted by the studio.\nEach video highlights a distinct element inspired by the evening’s featured artist, with the studio providing the base promotional poster design and general graphic style.",
         "video": {
             "source": "youtube",
