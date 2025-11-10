@@ -103,7 +103,7 @@
   background: rgba(255, 255, 255, 0.06);
 }
 .cover-wrap.skeleton {
-  background: linear-gradient(90deg, #d0d0d0 25%, #e3e3e3 37%, #d0d0d0 63%);
+  background: linear-gradient(105deg, #d0d0d0 25%, #e3e3e3 30%, #e3e3e3 35%, #d0d0d0 40%);
   background-size: 200% 100%;
   animation: skeleton-shimmer 1.4s linear infinite;
 }

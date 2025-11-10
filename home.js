@@ -514,11 +514,22 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Apply cover and remove skeleton on load
         try {
           if (rec.cover) {
-            rec.thumb.style.backgroundImage = `url(${rec.cover})`;
+            // Do not replace skeleton background until the image has fully loaded.
+            // This ensures the shimmer is visible during network fetch.
             rec.original.src = rec.cover;
-            const cleanup = () => { rec.thumb.classList.remove('skeleton'); rec.loaded = true; io.unobserve(t); };
-            rec.original.onload = cleanup;
-            rec.original.onerror = cleanup;
+            const applyImage = () => {
+              rec.thumb.style.backgroundImage = `url(${rec.cover})`;
+              rec.thumb.classList.remove('skeleton');
+              rec.loaded = true;
+              io.unobserve(t);
+            };
+            rec.original.onload = applyImage;
+            rec.original.onerror = () => {
+              // On error, at least clear the skeleton to avoid permanent shimmer.
+              rec.thumb.classList.remove('skeleton');
+              rec.loaded = true;
+              io.unobserve(t);
+            };
           }
         } catch (_) {
           rec.thumb.classList.remove('skeleton');
