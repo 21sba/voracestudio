@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vorace — About</title>
+  <link rel="icon" type="image/png" href="assets/images/vorace-doodle-grey-favicon.png" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="about.css" />
+  <meta name="description" content="About Vorace — Motion & Graphic Designer. Bio, education, and experience." />
+</head>
+<body data-page="about">
+  <div id="app">
+    <div class="about-wrap">
+      <div class="about-grid">
+        <!-- Portrait column -->
+        <section class="about-block" aria-label="Portrait">
+          <div class="photo-wrap skeleton" id="photo-wrap">
+            <img id="portrait-img" class="photo-img" alt="Portrait of Tommaso Tabacchi" />
+          </div>
+        </section>
+        <!-- Text column -->
+        <section class="about-block" aria-label="About Content">
+          <h1 class="title">Tommaso Tabacchi</h1>
+          <div class="bio-text">
+            <p>I make visual stuff.</p>
+            <p>I like learning things, all sort of things. I like understanding how things work and how to make them work.</p>
+            <p>I enjoy messing around with After Effects and expressions.</p>
+            <p>I loooove keeping (digital) things in order. My project files are neat as hell (unless I’m rushing).</p>
+            <p>I don’t do soulless, cookie-cutter work. If you’re looking for something with personality, we’ll probably get along.</p>
+          </div>
+
+          <div class="about-sections">
+            <section class="about-section" aria-label="Education">
+              <h2 class="section-title">Education</h2>
+              <ul class="entries">
+                <li class="entry">
+                  <span class="period">2022–2025</span>
+                  <span class="role">ISGMD Design Academy</span>
+                  <span class="details">Certificate of Competence in Creative Communication — 110/110 with honors</span>
+                </li>
+              </ul>
+            </section>
+            <section class="about-section" aria-label="Experience">
+              <h2 class="section-title">Experience</h2>
+              <ul class="entries">
+                <li class="entry">
+                  <span class="period">2023–Present</span>
+                  <span class="role">Freelance Motion & Graphic Designer</span>
+                  <span class="details">Occasional collaborations with clients on motion design, branding, social content, and visual communication.</span>
+                </li>
+                <li class="entry">
+                  <span class="period">May–Jun 2025</span>
+                  <span class="role">Motion & Graphic Designer — Watermelon, Morbegno (Internship)</span>
+                  <span class="details">Studio specialized in animation and high‑impact video content. 2D animation, compositing, and graphic support.</span>
+                </li>
+                <li class="entry">
+                  <span class="period">Feb–Mar 2024</span>
+                  <span class="role">Motion & Graphic Designer — E507 Studio, Lecco (Internship)</span>
+                  <span class="details">Multidisciplinary studio (art direction, events, visual identity). Contributed to video and graphic materials for events and social communication.</span>
+                </li>
+              </ul>
+            </section>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+  <script src="components/menu.js" defer></script>
+  <script src="components/loader.js" defer></script>
+  <script src="components/footer.js" defer></script>
+  <script src="about.js" defer></script>
+  <script>
+    // Register service worker for consistency
+    if ('serviceWorker' in navigator) {
+      try { navigator.serviceWorker.register('sw.js'); } catch (_) {}
+    }
+  </script>
+</body>
+</html>

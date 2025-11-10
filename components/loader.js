@@ -1,8 +1,8 @@
 // Loader component: injects overlay, runs Lottie animation, and exposes a simple API
 (function () {
   const pageName = (document.body && document.body.dataset && document.body.dataset.page) || '';
-  // Auto-show on home and works pages
-  const shouldAutoShow = (pageName === 'home' || pageName === 'works' || pageName === 'work');
+  // Auto-show on core pages (include About as requested)
+  const shouldAutoShow = (pageName === 'home' || pageName === 'works' || pageName === 'work' || pageName === 'about');
 
   const state = {
     loader: null,
