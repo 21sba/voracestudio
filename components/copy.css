@@ -1,0 +1,25 @@
+/* Copy-to-clipboard toast styles */
+.copy-email {
+  cursor: pointer;
+}
+
+.copy-toast {
+  position: fixed;
+  left: 0; top: 0;
+  transform: translate(0, 0) scale(0.92);
+  opacity: 0;
+  z-index: 1000;
+  background: var(--color4);
+  color: var(--color3);
+  border-radius: var(--radius);
+  padding: 4px 10px;
+  text-transform: uppercase;
+  font-size: var(--size-caption);
+  font-weight: var(--weight-bold);
+  pointer-events: none;
+  transition: opacity 160ms ease, transform 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.copy-toast.show {
+  opacity: 1;
+  transform: translate(0, 0) scale(1);
+}
