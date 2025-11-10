@@ -61,6 +61,8 @@
     }
 
     const visibleItems = items.filter(isPublic);
+    // If only one visible item, use single column grid
+    try { if (grid) grid.classList.toggle('single-col', visibleItems.length === 1); } catch (_) {}
 
     // Build categories
     const categorySet = new Set();
@@ -178,8 +180,10 @@
     const applyFilter = (value) => {
       currentFilter = value || '';
       if (filterBar) setActiveFilterItem(currentFilter);
+      let matchCount = 0;
       cards.forEach(({ el, cats }) => {
         const match = !currentFilter || cats.includes(currentFilter);
+        if (match) matchCount++;
         if (match) {
           if (el.classList.contains('hidden')) {
             el.classList.remove('hidden');
@@ -206,6 +210,8 @@
           }
         }
       });
+      // Toggle single column when filter leaves only one visible card
+      try { if (grid) grid.classList.toggle('single-col', matchCount === 1); } catch (_) {}
       if (typeof updateFocus === 'function') {
         try { updateFocus(); } catch (_) {}
       }
@@ -321,5 +327,41 @@
     })();
   }
 
+  // Auto-boot on listing pages to eliminate per-page initializers
+  function autoBoot() {
+    try {
+      if (window.GridBuilderConfig && window.GridBuilderConfig.disableAutoBoot) return;
+      const page = String(document.body && document.body.dataset ? document.body.dataset.page : '').toLowerCase();
+      let dataUrl = '';
+      let detailsPage = '';
+      let gridSelector = '';
+      let filterBarSelector = '#filter-bar';
+      if (page === 'works') {
+        dataUrl = 'works.json';
+        detailsPage = 'work.html';
+        gridSelector = '#works-grid';
+      } else if (page === 'goodies') {
+        dataUrl = 'goodies.json';
+        detailsPage = 'goodie.html';
+        gridSelector = '#goodies-grid';
+      } else {
+        return;
+      }
+      const gridEl = document.querySelector(gridSelector);
+      if (!gridEl) return;
+      // Register service worker (safe to call multiple times)
+      try { if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js'); } catch (_) {}
+      renderGrid({ dataUrl, detailsPage, gridSelector, filterBarSelector });
+    } catch (err) {
+      try { console.error('GridBuilder auto-boot failed', err); } catch (_) {}
+    }
+  }
+  if (!window.GridBuilderConfig || !window.GridBuilderConfig.disableAutoBoot) {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', autoBoot);
+    } else {
+      autoBoot();
+    }
+  }
   window.GridBuilder = { renderGrid };
 })();

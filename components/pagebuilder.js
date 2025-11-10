@@ -881,7 +881,7 @@
 
     try {
       const t = dash(item.title);
-      if (t) document.title = `Vorace — ${t}`;
+      if (t) document.title = `Vorace - ${t}`;
     } catch (_) {}
 
     // Preload hero cover (for case-study) and first image(s) from blocks

@@ -98,3 +98,7 @@ body::before {
   font-weight: 700;
   font-style: italic;
 }
+/* Single-column grid when only one item (works/goodies indexes) */
+.works-grid.single-col {
+  grid-template-columns: 1fr;
+}
