@@ -32,60 +32,83 @@
     }, 900);
   }
 
-  function attachCopyHandlers() {
-    var elements = document.querySelectorAll('.copy-email');
-    if (!elements.length) return;
+  function enhance(el) {
+    if (!el) return;
+    if (!el.hasAttribute('tabindex')) el.setAttribute('tabindex', '0');
+    if (!el.hasAttribute('role')) el.setAttribute('role', 'button');
+  }
 
-    elements.forEach(function (el) {
-      // Enhance accessibility
-      if (!el.hasAttribute('tabindex')) el.setAttribute('tabindex', '0');
-      if (!el.hasAttribute('role')) el.setAttribute('role', 'button');
-      var email = el.getAttribute('data-email') || (el.textContent || '').trim();
+  function getEmailFrom(el) {
+    if (!el) return '';
+    return el.getAttribute('data-email') || (el.textContent || '').trim();
+  }
 
-      function copyAndToast(evt) {
-        if (evt) {
-          evt.preventDefault();
-          evt.stopPropagation();
-        }
-        var text = email;
-        if (!text) return;
-        var x = (evt && typeof evt.clientX === 'number') ? evt.clientX : (window.innerWidth / 2);
-        var y = (evt && typeof evt.clientY === 'number') ? evt.clientY : (window.innerHeight / 2);
+  function copyFrom(el, evt) {
+    if (!el) return;
+    if (evt) { evt.preventDefault(); evt.stopPropagation(); }
+    var text = getEmailFrom(el);
+    if (!text) return;
+    var x = (evt && typeof evt.clientX === 'number') ? evt.clientX : (window.innerWidth / 2);
+    var y = (evt && typeof evt.clientY === 'number') ? evt.clientY : (window.innerHeight / 2);
 
-        // Prefer modern clipboard API
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(text)
-            .then(function () { showToastAt(x, y, 'COPIED!'); })
-            .catch(function () { showToastAt(x, y, 'COPIED!'); });
-        } else {
-          // Fallback: temporary textarea
-          var ta = document.createElement('textarea');
-          ta.value = text;
-          ta.style.position = 'fixed';
-          ta.style.left = '-9999px';
-          document.body.appendChild(ta);
-          ta.focus(); ta.select();
-          try { document.execCommand('copy'); } catch (_) {}
-          document.body.removeChild(ta);
-          showToastAt(x, y, 'COPIED!');
-        }
-      }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text)
+        .then(function () { showToastAt(x, y, 'COPIED!'); })
+        .catch(function () { showToastAt(x, y, 'COPIED!'); });
+    } else {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.left = '-9999px';
+      document.body.appendChild(ta);
+      ta.focus(); ta.select();
+      try { document.execCommand('copy'); } catch (_) {}
+      document.body.removeChild(ta);
+      showToastAt(x, y, 'COPIED!');
+    }
+  }
 
-      el.addEventListener('click', copyAndToast);
-      el.addEventListener('keydown', function (evt) {
-        if (evt.key === 'Enter' || evt.key === ' ') copyAndToast(evt);
-      });
+  function attachDelegatedHandlers() {
+    // Initial accessibility enhancement for existing elements
+    document.querySelectorAll('.copy-email').forEach(enhance);
+
+    // Delegate clicks
+    document.addEventListener('click', function (evt) {
+      var el = evt.target && evt.target.closest && evt.target.closest('.copy-email');
+      if (!el) return;
+      copyFrom(el, evt);
     });
+
+    // Delegate keyboard activation
+    document.addEventListener('keydown', function (evt) {
+      var el = evt.target && evt.target.closest && evt.target.closest('.copy-email');
+      if (!el) return;
+      if (evt.key === 'Enter' || evt.key === ' ') copyFrom(el, evt);
+    });
+
+    // Observe future DOM insertions to enhance accessibility
+    try {
+      var mo = new MutationObserver(function (mutations) {
+        mutations.forEach(function (m) {
+          m.addedNodes && m.addedNodes.forEach(function (node) {
+            if (!(node instanceof Element)) return;
+            if (node.matches && node.matches('.copy-email')) enhance(node);
+            node.querySelectorAll && node.querySelectorAll('.copy-email').forEach(enhance);
+          });
+        });
+      });
+      mo.observe(document.body, { childList: true, subtree: true });
+    } catch (_) {}
   }
 
   // Initialize after DOM is ready
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function () {
       injectCopyCss();
-      attachCopyHandlers();
+      attachDelegatedHandlers();
     });
   } else {
     injectCopyCss();
-    attachCopyHandlers();
+    attachDelegatedHandlers();
   }
 })();
