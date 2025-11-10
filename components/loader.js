@@ -2,7 +2,14 @@
 (function () {
   const pageName = (document.body && document.body.dataset && document.body.dataset.page) || '';
   // Auto-show on core pages (include About as requested)
-  const shouldAutoShow = (pageName === 'home' || pageName === 'works' || pageName === 'work' || pageName === 'about');
+  const shouldAutoShow = (
+    pageName === 'home' ||
+    pageName === 'works' ||
+    pageName === 'work' ||
+    pageName === 'about' ||
+    pageName === 'goodies' ||
+    pageName === 'goodie'
+  );
 
   const state = {
     loader: null,

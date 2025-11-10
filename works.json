@@ -1,6 +1,7 @@
 [
     {
         "id": "football-society-intro",
+        "visibility": "public",
         "title": "Football Society Intro",
         "date": "2025",
         "categories": ["Motion Design"],
@@ -19,6 +20,7 @@
     },
     {
         "id": "growermetal-open-day",
+        "visibility": "public",
         "title": "Growermetal Open Day",
         "date": "2025",
         "categories": ["Motion Design", "Illustration"],
@@ -45,6 +47,7 @@
     },
     {
         "id": "billy-bruco",
+        "visibility": "public",
         "title": "Billy Bruco",
         "date": "2025",
         "categories": ["Motion Design", "Illustration"],
@@ -57,12 +60,13 @@
             "embedId": "Upd_ukY_oxE"
         },
         "credits": {
-            "Intership @": ["Watermelon Film & Animation", "https://watermelon.it/"],
+            "Intership @": ["Watermelon", "https://watermelon.it/"],
             "Motion Design, Illustrations": "Tommaso Tabacchi"
         }
     },
     {
         "id": "against-the-noise-machine",
+        "visibility": "public",
         "title": "(Against) The Noise Machine",
         "date": "2025",
         "categories": ["Motion Design", "Graphic Design"],
@@ -97,6 +101,7 @@
     },
     {
         "id": "flores",
+        "visibility": "public",
         "title": "Flor.es",
         "date": "2025",
         "categories": ["Graphic Design"],
@@ -126,6 +131,7 @@
     },
     {
         "id": "apatia",
+        "visibility": "public",
         "title": "Apatia",
         "date": "2025",
         "categories": ["Video Production"],
@@ -145,7 +151,8 @@
         }
     },
     {
-        "id": "momo",
+        "id": "momo",   
+        "visibility": "public",
         "title": "Momo",
         "date": "2025",
         "categories": ["Illustration"],
@@ -166,6 +173,7 @@
     },
     {
         "id": "creativity",
+        "visibility": "public",
         "title": "Creativity",
         "date": "2024",
         "categories": ["Motion Design", "Graphic Design"],
@@ -183,6 +191,7 @@
     },
     {
         "id": "quinoa-promo",
+        "visibility": "public",
         "title": "Quinoa Promo",
         "date": "2024",
         "categories": ["Motion Design", "Graphic Design"],
@@ -201,7 +210,8 @@
         }
     },
     {
-        "id": "scenario",
+        "id": "scenario",   
+        "visibility": "public",
         "title": "Scenario Festival",
         "date": "2024",
         "categories": ["Motion Design"],
@@ -226,7 +236,8 @@
         }
     },
     {
-        "id": "weread",
+        "id": "weread",   
+        "visibility": "public",
         "title": "WeRead Promo",
         "date": "2024",
         "categories": ["Motion Design", "Graphic Design"],
@@ -243,7 +254,8 @@
         }
     },
     {
-        "id": "mentalisti",
+        "id": "mentalisti",   
+        "visibility": "public",
         "title": "Mentalisti",
         "date": "2024",
         "categories": ["Motion Design"],

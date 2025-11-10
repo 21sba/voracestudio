@@ -41,9 +41,26 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Fixed Prev/Next pager at the bottom for quick project navigation
   try {
     const currentIndex = works.findIndex(w => String(w.id) === String(workId));
-    if (currentIndex >= 0 && works.length > 1) {
-      const prevWork = works[(currentIndex - 1 + works.length) % works.length];
-      const nextWork = works[(currentIndex + 1) % works.length];
+    // Only navigate among 'public' works; unlisted are excluded from pager
+    const isPublic = (w) => String((w && w.visibility) ? w.visibility : 'public').toLowerCase() === 'public';
+    const visibleIndexes = works.map((w, i) => isPublic(w) ? i : -1).filter(i => i >= 0);
+    if (currentIndex >= 0 && visibleIndexes.length > 1) {
+      // Find nearest previous and next public works relative to the current index, wrapping around
+      const prevVisibleIndex = (() => {
+        for (let i = visibleIndexes.length - 1; i >= 0; i--) {
+          if (visibleIndexes[i] < currentIndex) return visibleIndexes[i];
+        }
+        return visibleIndexes[visibleIndexes.length - 1];
+      })();
+      const nextVisibleIndex = (() => {
+        for (let i = 0; i < visibleIndexes.length; i++) {
+          if (visibleIndexes[i] > currentIndex) return visibleIndexes[i];
+        }
+        return visibleIndexes[0];
+      })();
+
+      const prevWork = works[prevVisibleIndex];
+      const nextWork = works[nextVisibleIndex];
 
       const pager = document.createElement('nav');
       pager.className = 'work-pager';

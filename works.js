@@ -28,9 +28,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     return;
   }
 
+  // Visibility filter: only show 'public' works in the grid
+  const isPublic = (w) => String((w && w.visibility) ? w.visibility : 'public').toLowerCase() === 'public';
+  const visibleWorks = works.filter(isPublic);
+
   // Build category set for filter bar
   const categorySet = new Set();
-  works.forEach(w => {
+  visibleWorks.forEach(w => {
     const cats = Array.isArray(w && w.categories) ? w.categories : [];
     cats.forEach(c => categorySet.add(String(c)));
   });
@@ -57,7 +61,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const cards = [];
   // Track lazy targets (cards whose covers load on-demand)
   const lazyMap = new Map();
-  works.forEach((work, idx) => {
+  visibleWorks.forEach((work, idx) => {
     const card = document.createElement('article');
     card.className = 'work-card initial-hide';
 
@@ -225,7 +229,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   // Preload only the first two covers for faster initial paint
-  const urls = works.slice(0, 2).map(w => (w && w.cover ? w.cover : null)).filter(Boolean);
+  const urls = visibleWorks.slice(0, 2).map(w => (w && w.cover ? w.cover : null)).filter(Boolean);
   await preloadImages(urls, (p) => updateLoaderProgress(p));
   try {
     if (window.Loader) {
