@@ -8,11 +8,6 @@
     loader: null,
     loaderLottie: null,
     loaderAnim: null,
-    latestProgress: 0,
-    displayProgress: 0,
-    tickerActive: false,
-    resolveLoaderComplete: null,
-    loaderCompletePromise: null,
     scrollBlocked: false,
   };
 
@@ -41,7 +36,7 @@
       state.loaderLottie = overlay.querySelector('#loader-lottie');
       // Random rotation for lottie container
       if (state.loaderLottie) {
-        state.loaderLottie.style.setProperty('--rot', `${Math.round(rand(-20, 20))}deg`);
+        state.loaderLottie.style.setProperty('--rot', `${Math.round(rand(0, 0))}deg`);
       }
       return overlay;
     } catch (err) {
@@ -116,35 +111,7 @@
   };
 
   const startLoaderTicker = () => {
-    if (state.tickerActive || !state.loaderAnim) return;
-    state.tickerActive = true;
-    const SMOOTH = 0.18;
-    const tick = () => {
-      state.displayProgress += (state.latestProgress - state.displayProgress) * SMOOTH;
-      if (Math.abs(state.latestProgress - state.displayProgress) < 0.001) {
-        state.displayProgress = state.latestProgress;
-      }
-      try {
-        const frames = (typeof state.loaderAnim.getDuration === 'function') ? state.loaderAnim.getDuration(true) : (state.loaderAnim.totalFrames || 0);
-        if (frames && frames > 1) {
-          const targetFrame = Math.floor(state.displayProgress * (frames - 1));
-          state.loaderAnim.goToAndStop(targetFrame, true);
-        }
-      } catch (_) {}
-
-      if (state.displayProgress >= 0.999 && state.latestProgress >= 1 && state.resolveLoaderComplete) {
-        const done = state.resolveLoaderComplete;
-        state.resolveLoaderComplete = null;
-        done();
-      }
-
-      if (state.displayProgress < 1) {
-        requestAnimationFrame(tick);
-      } else {
-        state.tickerActive = false;
-      }
-    };
-    requestAnimationFrame(tick);
+    // Progress-driven playback disabled; animation now loops via Lottie.
   };
 
   const initLottie = async () => {
@@ -173,33 +140,28 @@
 
     const colorRGBA = getCssVarRGBA('--color2');
     try {
-      const res = await fetch('assets/lotties/vorace-logo-loading-animation.json');
+      const res = await fetch('assets/lotties/vorace-logo-loading-animation-v2.json');
       const json = await res.json();
       patchBlackFills(json, colorRGBA);
       state.loaderAnim = lottieLib.loadAnimation({
         container: state.loaderLottie,
         renderer: 'svg',
-        loop: false,
-        autoplay: false,
+        loop: true,
+        autoplay: true,
         animationData: json,
-        name: 'vorace-loader'
+        name: 'vorace-loader-v2'
       });
     } catch (err) {
-      console.warn('Failed to fetch or patch Lottie JSON, using original file.', err);
+      console.warn('Failed to fetch or patch Lottie JSON v2; loading file directly.', err);
       state.loaderAnim = lottieLib.loadAnimation({
         container: state.loaderLottie,
         renderer: 'svg',
-        loop: false,
-        autoplay: false,
-        path: 'assets/lotties/vorace-logo-loading-animation.json',
-        name: 'vorace-loader'
+        loop: true,
+        autoplay: true,
+        path: 'assets/lotties/vorace-logo-loading-animation-v2.json',
+        name: 'vorace-loader-v2'
       });
     }
-
-    // Start ticker once animation DOM is ready; also add a small fallback
-    const start = () => { startLoaderTicker(); };
-    try { state.loaderAnim.addEventListener('DOMLoaded', start); } catch (_) {}
-    setTimeout(start, 300);
   };
 
   const showOverlay = async () => {
@@ -207,26 +169,16 @@
     await ensureOverlay();
     if (!state.loader) return;
     blockScroll();
-    // Reset progress state
-    state.latestProgress = 0;
-    state.displayProgress = 0;
-    state.tickerActive = false;
-    state.resolveLoaderComplete = null;
-    state.loaderCompletePromise = new Promise((res) => { state.resolveLoaderComplete = res; });
     await initLottie();
   };
 
   const api = {
     setProgress(p) {
-      const v = Math.max(0, Math.min(1, p || 0));
-      state.latestProgress = v;
+      // No-op: animation is no longer tied to progress.
     },
     waitUntilComplete(fallbackMs = 1200) {
-      if (!state.loaderCompletePromise) return new Promise((r) => setTimeout(r, fallbackMs));
-      return Promise.race([
-        state.loaderCompletePromise,
-        new Promise((r) => setTimeout(r, fallbackMs)),
-      ]);
+      // Progress-independent wait; caller controls fallback duration.
+      return new Promise((r) => setTimeout(r, fallbackMs));
     },
     async hide() {
       try {

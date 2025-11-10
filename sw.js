@@ -6,46 +6,6 @@ self.addEventListener('activate', (event) => {
   event.waitUntil(self.clients.claim());
 });
 
-// Disable HTML injection now that scripts are referenced directly in pages
-const shouldInject = (html) => false;
-
-const injectAssets = (html) => {
-  let out = html;
-  // Inject menu stylesheet into head
-  if (!out.includes('components/menu.css')) {
-    if (out.includes('</head>')) {
-      out = out.replace('</head>', '<link rel="stylesheet" href="components/menu.css"></head>');
-    } else {
-      out = '<link rel="stylesheet" href="components/menu.css">' + out;
-    }
-  }
-  // Inject loader stylesheet into head
-  if (!out.includes('components/loader.css')) {
-    if (out.includes('</head>')) {
-      out = out.replace('</head>', '<link rel="stylesheet" href="components/loader.css"></head>');
-    } else {
-      out = '<link rel="stylesheet" href="components/loader.css">' + out;
-    }
-  }
-  // Inject menu script before closing body
-  if (!out.includes('components/menu.js')) {
-    if (out.includes('</body>')) {
-      out = out.replace('</body>', '<script src="components/menu.js" defer></script></body>');
-    } else {
-      out += '<script src="components/menu.js" defer></script>';
-    }
-  }
-  // Inject loader script before closing body
-  if (!out.includes('components/loader.js')) {
-    if (out.includes('</body>')) {
-      out = out.replace('</body>', '<script src="components/loader.js" defer></script></body>');
-    } else {
-      out += '<script src="components/loader.js" defer></script>';
-    }
-  }
-  return out;
-};
-
 self.addEventListener('fetch', (event) => {
   const req = event.request;
   if (req.method !== 'GET') return;
@@ -68,19 +28,6 @@ self.addEventListener('fetch', (event) => {
         return res;
       }
     }
-    const ct = res.headers.get('content-type') || '';
-    if (!ct.includes('text/html')) return res;
-    try {
-      const html = await res.clone().text();
-      if (!shouldInject(html)) return res;
-      const injected = injectAssets(html);
-      return new Response(injected, {
-        status: res.status,
-        statusText: res.statusText,
-        headers: { 'Content-Type': 'text/html; charset=UTF-8' }
-      });
-    } catch (_) {
-      return res;
-    }
+    return res;
   })());
 });
