@@ -24,25 +24,38 @@
 
   const ensureOverlay = async () => {
     if (state.loader && document.contains(state.loader)) return state.loader;
-    try {
-      const res = await fetch('components/loader.html', { cache: 'no-cache' });
-      const html = await res.text();
-      const wrapper = document.createElement('div');
-      wrapper.innerHTML = html;
-      const overlay = wrapper.firstElementChild;
-      if (!overlay) return null;
-      document.body.appendChild(overlay);
-      state.loader = overlay;
-      state.loaderLottie = overlay.querySelector('#loader-lottie');
-      // Random rotation for lottie container
-      if (state.loaderLottie) {
-        state.loaderLottie.style.setProperty('--rot', `${Math.round(rand(0, 0))}deg`);
-      }
-      return overlay;
-    } catch (err) {
-      console.warn('Failed to load loader component', err);
-      return null;
+    // Create overlay synchronously to avoid fetch latency causing a visual flash
+    const overlay = document.createElement('div');
+    overlay.className = 'loading-overlay';
+    overlay.setAttribute('aria-hidden', 'true');
+    // Minimal inline styles to ensure instant full-screen cover before CSS loads
+    overlay.style.position = 'fixed';
+    overlay.style.inset = '0';
+    overlay.style.zIndex = '2001';
+    overlay.style.background = getComputedStyle(document.documentElement).getPropertyValue('--color2') || '#000';
+    overlay.style.opacity = '1';
+    overlay.style.display = 'flex';
+    overlay.style.alignItems = 'center';
+    overlay.style.justifyContent = 'center';
+    overlay.style.gap = '12px';
+
+    const lottie = document.createElement('div');
+    lottie.id = 'loader-lottie';
+    lottie.className = 'loader-lottie';
+    overlay.appendChild(lottie);
+
+    const text = document.createElement('div');
+    text.className = 'loading-text';
+    text.textContent = 'loading...';
+    overlay.appendChild(text);
+
+    document.body.appendChild(overlay);
+    state.loader = overlay;
+    state.loaderLottie = lottie;
+    if (state.loaderLottie) {
+      state.loaderLottie.style.setProperty('--rot', `${Math.round(rand(0, 0))}deg`);
     }
+    return overlay;
   };
 
   const preventScroll = (e) => { e.preventDefault(); };
