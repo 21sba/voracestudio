@@ -39,11 +39,23 @@ document.addEventListener('DOMContentLoaded', async () => {
       img.onload = finalize; img.onerror = finalize;
       img.src = portraitUrl;
     }
-    // Hide loader and reveal text blocks
+    // Hide loader and reveal text blocks (wait for Loader if it loads late)
     try {
+      if (!window.Loader) {
+        await new Promise((resolve) => {
+          const start = Date.now();
+          const t = setInterval(() => {
+            if (window.Loader || Date.now() - start > 800) { clearInterval(t); resolve(); }
+          }, 20);
+        });
+      }
       if (window.Loader) {
         await window.Loader.waitUntilComplete(600);
         await window.Loader.hide();
+      } else {
+        const ov = document.querySelector('.loading-overlay');
+        if (ov) ov.remove();
+        try { document.documentElement.classList.remove('no-scroll'); document.body.classList.remove('no-scroll'); } catch (_) {}
       }
     } catch (_) {}
     const baseDelay = 80;

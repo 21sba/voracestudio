@@ -95,11 +95,14 @@
       section.appendChild(videoWrap);
     }
 
+    // Description + meta panel
+    const infoPanel = document.createElement('div');
+    infoPanel.className = 'info-panel bubble-box';
     if (dash(item.description)) {
       const p = document.createElement('p');
       p.className = 'description';
       p.textContent = dash(item.description);
-      section.appendChild(p);
+      infoPanel.appendChild(p);
     }
 
     const meta = document.createElement('div');
@@ -125,7 +128,8 @@
     originDate.appendChild(dateLine);
     meta.appendChild(tags);
     meta.appendChild(originDate);
-    section.appendChild(meta);
+    infoPanel.appendChild(meta);
+    section.appendChild(infoPanel);
 
     if (item.credits && typeof item.credits === 'object' && Object.keys(item.credits).length) {
       const credits = document.createElement('div');
@@ -197,11 +201,14 @@
       section.appendChild(videoWrap);
     }
 
+    // Description + meta panel
+    const infoPanel2 = document.createElement('div');
+    infoPanel2.className = 'info-panel bubble-box';
     if (dash(item.description)) {
       const p = document.createElement('p');
       p.className = 'description';
       p.textContent = dash(item.description);
-      section.appendChild(p);
+      infoPanel2.appendChild(p);
     }
 
     const meta = document.createElement('div');
@@ -227,7 +234,8 @@
     originDate.appendChild(dateLine);
     meta.appendChild(tags);
     meta.appendChild(originDate);
-    section.appendChild(meta);
+    infoPanel2.appendChild(meta);
+    section.appendChild(infoPanel2);
 
     if (item.credits && typeof item.credits === 'object' && Object.keys(item.credits).length) {
       const credits = document.createElement('div');
@@ -303,11 +311,14 @@
       section.appendChild(coverWrap);
     }
 
+    // Description + meta panel
+    const infoPanel3 = document.createElement('div');
+    infoPanel3.className = 'info-panel bubble-box';
     if (dash(item.description)) {
       const p = document.createElement('p');
       p.className = 'description';
       p.textContent = dash(item.description);
-      section.appendChild(p);
+      infoPanel3.appendChild(p);
     }
 
     const meta = document.createElement('div');
@@ -333,7 +344,8 @@
     originDate.appendChild(dateLine);
     meta.appendChild(tags);
     meta.appendChild(originDate);
-    section.appendChild(meta);
+    infoPanel3.appendChild(meta);
+    section.appendChild(infoPanel3);
 
     if (item.credits && typeof item.credits === 'object' && Object.keys(item.credits).length) {
       const credits = document.createElement('div');
@@ -555,7 +567,7 @@
 
       } else if (type === 'image-text' && b.src) {
         const grid = document.createElement('div');
-        grid.className = 'image-text-grid';
+        grid.className = 'image-text-grid bubble-box';
         const media = document.createElement('div');
         media.className = 'media-wrap';
         const img = document.createElement('img');
@@ -577,7 +589,7 @@
 
       } else if (type === 'gallery' && Array.isArray(b.src)) {
         const grid = document.createElement('div');
-        grid.className = 'gallery-grid';
+        grid.className = 'gallery-grid bubble-box';
         b.src.forEach((url) => {
           const media = document.createElement('div');
           media.className = 'media-wrap';
@@ -784,7 +796,7 @@
         const refFrom = String(b.from || 'works').toLowerCase();
         const refId = String(b.id || '').trim();
         const grid = document.createElement('div');
-        grid.className = 'project-grid';
+        grid.className = 'project-grid bubble-box';
         const left = document.createElement('div');
         left.className = 'cover-wrap';
         const right = document.createElement('div');
@@ -825,11 +837,14 @@
           t.textContent = String(item.title || refId);
           right.appendChild(t);
 
+          // Description panel in right column (no bubble-box for project info panel)
+          const infoPanel = document.createElement('div');
+          infoPanel.className = 'info-panel';
           if (item.description) {
             const d = document.createElement('p');
             d.className = 'description';
             d.textContent = String(item.description);
-            right.appendChild(d);
+            infoPanel.appendChild(d);
           }
 
           const meta = document.createElement('div');
@@ -858,6 +873,8 @@
 
           meta.appendChild(tags);
           meta.appendChild(originDate);
+          // Append description panel first, then meta separately to sit at bottom
+          right.appendChild(infoPanel);
           right.appendChild(meta);
 
           // Make the whole project grid clickable
@@ -891,13 +908,13 @@
 
       } else if (type === 'text' && b.content) {
         const caption = document.createElement('p');
-        caption.className = 'caption';
+        caption.className = 'caption bubble-box';
         caption.textContent = String(b.content);
         blockEl.appendChild(caption);
 
       } else if (type === 'tabs' && Array.isArray(b.tabs)) {
         const wrapTabs = document.createElement('div');
-        wrapTabs.className = 'tabs-wrap';
+        wrapTabs.className = 'tabs-wrap bubble-box';
         const header = document.createElement('div');
         header.className = 'tabs-header';
         const panel = document.createElement('div');

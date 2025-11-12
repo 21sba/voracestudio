@@ -8,7 +8,7 @@
 .about-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 48px 70px;
+  gap: calc(var(--gap) * 2);
 }
 
 .about-block { 
@@ -54,7 +54,7 @@
   color: var(--color1);
 }
 
-.about-sections { margin-top: 16px; }
+.about-sections { margin-top: calc(var(--gap) * 2); }
 .section-title {
   margin: 16px 0 var(--spacing-title-bottom);
   font-size: var(--size-title-h2);
@@ -68,13 +68,9 @@
   padding: 0; 
   margin: 0; 
   display: grid; 
-  gap: 12px; 
+  gap: var(--gap); 
 }
-.entry {
-  background: var(--color6);
-  border-radius: var(--radius);
-  padding: 10px 12px;
-}
+
 .entry .period {
   display: inline-block;
   margin-right: 8px;

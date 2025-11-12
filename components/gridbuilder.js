@@ -61,8 +61,6 @@
     }
 
     const visibleItems = items.filter(isPublic);
-    // If only one visible item, use single column grid
-    try { if (grid) grid.classList.toggle('single-col', visibleItems.length === 1); } catch (_) {}
 
     // Build categories
     const categorySet = new Set();
@@ -95,7 +93,7 @@
     const lazyMap = new Map();
     visibleItems.forEach((work, idx) => {
       const card = document.createElement('article');
-      card.className = 'work-card initial-hide';
+      card.className = 'work-card bubble-box initial-hide';
 
       const title = document.createElement('h2');
       title.className = 'title';
@@ -166,6 +164,12 @@
       }
     });
 
+    // Append end-of-grid note
+    const endNote = document.createElement('div');
+    endNote.className = 'grid-end-note';
+    endNote.textContent = "That's all for now!";
+    grid.appendChild(endNote);
+
     // Filtering
     let currentFilter = '';
     const setActiveFilterItem = (value) => {
@@ -210,8 +214,7 @@
           }
         }
       });
-      // Toggle single column when filter leaves only one visible card
-      try { if (grid) grid.classList.toggle('single-col', matchCount === 1); } catch (_) {}
+      // Keep two columns on desktop; mobile single-column handled by CSS media queries
       if (typeof updateFocus === 'function') {
         try { updateFocus(); } catch (_) {}
       }
