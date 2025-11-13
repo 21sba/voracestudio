@@ -37,12 +37,20 @@
       dataUrl,
       detailsPage,
       gridSelector = '#works-grid',
-      filterBarSelector = '#filter-bar'
+      filterBarSelector = '#filter-bar',
+      layout: rawLayout = 'grid'
     } = opts || {};
+
+    const layout = String(rawLayout || 'grid').toLowerCase();
 
     const grid = document.querySelector(gridSelector);
     const filterBar = document.querySelector(filterBarSelector);
     if (!grid) return;
+
+    // Mark layout on container for styling overrides
+    try {
+      grid.classList.toggle('list', layout === 'list');
+    } catch (_) {}
 
     // Keep filter bar hidden for reveal-in animation
     if (filterBar) filterBar.classList.add('initial-hide');
@@ -92,75 +100,163 @@
     const cards = [];
     const lazyMap = new Map();
     visibleItems.forEach((work, idx) => {
-      const card = document.createElement('article');
-      card.className = 'work-card bubble-box initial-hide';
-
-      const title = document.createElement('h2');
-      title.className = 'title';
-      title.textContent = dash(work && work.title, '--');
-
-      const coverWrap = document.createElement('div');
-      coverWrap.className = 'cover-wrap';
-      const img = document.createElement('img');
-      img.className = 'cover-img';
-      img.loading = 'lazy';
-      img.alt = (work && work.title) ? `${work.title} cover` : 'Cover';
-      const coverUrl = (work && work.cover) ? work.cover : '';
-      if (coverUrl && idx < 2) {
-        img.src = coverUrl;
-      } else if (coverUrl) {
-        coverWrap.classList.add('skeleton');
-        img.style.opacity = '0';
-        img.dataset.src = coverUrl;
-      }
-      coverWrap.appendChild(img);
-
-      let coverLink = null;
-      if (work && work.id) {
-        coverLink = document.createElement('a');
-        coverLink.className = 'cover-link';
-        coverLink.href = `${detailsPage}?id=${encodeURIComponent(work.id)}`;
-        coverLink.setAttribute('aria-label', (work && work.title) ? `Open ${work.title}` : 'Open item');
-        coverLink.appendChild(coverWrap);
-      }
-
-      const meta = document.createElement('div');
-      meta.className = 'meta';
-
-      const tags = document.createElement('div');
-      tags.className = 'tags';
       const cats = Array.isArray(work && work.categories) ? work.categories : [];
-      cats.forEach((c) => {
-        const tag = document.createElement('span');
-        tag.className = 'tag';
-        tag.textContent = String(c);
-        tag.dataset.category = String(c);
-        tag.addEventListener('click', () => applyFilterRef.fn && applyFilterRef.fn(String(c)));
-        tags.appendChild(tag);
-      });
+      const coverUrl = (work && work.cover) ? work.cover : '';
 
-      const originDate = document.createElement('div');
-      originDate.className = 'origin-date';
-      const originLine = document.createElement('span');
-      originLine.className = 'origin';
-      originLine.textContent = dash(work && work.origin);
-      const dateLine = document.createElement('span');
-      dateLine.className = 'date';
-      dateLine.textContent = dash(work && work.date);
-      originDate.appendChild(originLine);
-      originDate.appendChild(dateLine);
+      if (layout === 'list') {
+        // Project-like two-column list item
+        const outer = document.createElement('article');
+        outer.className = 'list-card initial-hide';
 
-      meta.appendChild(tags);
-      meta.appendChild(originDate);
+        const link = document.createElement('a');
+        link.className = 'project-link';
+        if (work && work.id) {
+          link.href = `${detailsPage}?id=${encodeURIComponent(work.id)}`;
+          link.setAttribute('aria-label', (work && work.title) ? `Open ${work.title}` : 'Open item');
+        }
 
-      card.appendChild(title);
-      card.appendChild(coverLink || coverWrap);
-      card.appendChild(meta);
+        const proj = document.createElement('div');
+        proj.className = 'project-grid bubble-box';
+        const left = document.createElement('div');
+        left.className = 'cover-wrap';
+        const right = document.createElement('div');
+        right.className = 'info';
 
-      grid.appendChild(card);
-      cards.push({ el: card, cats });
-      if (coverWrap.classList.contains('skeleton')) {
-        lazyMap.set(card, { img, coverWrap });
+        const img = document.createElement('img');
+        img.className = 'cover-img';
+        img.loading = 'lazy';
+        img.alt = (work && work.title) ? `${work.title} cover` : 'Cover image';
+        if (coverUrl && idx < 2) {
+          img.src = coverUrl;
+        } else if (coverUrl) {
+          left.classList.add('skeleton');
+          img.style.opacity = '0';
+          img.dataset.src = coverUrl;
+        }
+        left.appendChild(img);
+
+        const title = document.createElement('h3');
+        title.className = 'title';
+        title.textContent = dash(work && work.title, '--');
+        right.appendChild(title);
+
+        const infoPanel = document.createElement('div');
+        infoPanel.className = 'info-panel';
+        const dText = dash(work && work.description);
+        if (dText) {
+          const d = document.createElement('p');
+          d.className = 'description';
+          d.textContent = dText;
+          infoPanel.appendChild(d);
+        }
+        right.appendChild(infoPanel);
+
+        const meta = document.createElement('div');
+        meta.className = 'meta';
+        const tags = document.createElement('div');
+        tags.className = 'tags';
+        cats.forEach((c) => {
+          const tag = document.createElement('span');
+          tag.className = 'tag';
+          tag.textContent = String(c);
+          tag.dataset.category = String(c);
+          tag.addEventListener('click', () => applyFilterRef.fn && applyFilterRef.fn(String(c)));
+          tags.appendChild(tag);
+        });
+        const originDate = document.createElement('div');
+        originDate.className = 'origin-date';
+        const originLine = document.createElement('span');
+        originLine.className = 'origin';
+        originLine.textContent = dash(work && work.origin);
+        const dateLine = document.createElement('span');
+        dateLine.className = 'date';
+        dateLine.textContent = dash(work && work.date);
+        originDate.appendChild(originLine);
+        originDate.appendChild(dateLine);
+        meta.appendChild(tags);
+        meta.appendChild(originDate);
+
+        proj.appendChild(left);
+        proj.appendChild(right);
+        right.appendChild(meta);
+        link.appendChild(proj);
+        outer.appendChild(link);
+        grid.appendChild(outer);
+
+        cards.push({ el: outer, cats });
+        if (left.classList.contains('skeleton')) {
+          lazyMap.set(outer, { img, coverWrap: left });
+        }
+      } else {
+        // Default grid card
+        const card = document.createElement('article');
+        card.className = 'work-card bubble-box initial-hide';
+
+        const title = document.createElement('h2');
+        title.className = 'title';
+        title.textContent = dash(work && work.title, '--');
+
+        const coverWrap = document.createElement('div');
+        coverWrap.className = 'cover-wrap';
+        const img = document.createElement('img');
+        img.className = 'cover-img';
+        img.loading = 'lazy';
+        img.alt = (work && work.title) ? `${work.title} cover` : 'Cover';
+        if (coverUrl && idx < 2) {
+          img.src = coverUrl;
+        } else if (coverUrl) {
+          coverWrap.classList.add('skeleton');
+          img.style.opacity = '0';
+          img.dataset.src = coverUrl;
+        }
+        coverWrap.appendChild(img);
+
+        let coverLink = null;
+        if (work && work.id) {
+          coverLink = document.createElement('a');
+          coverLink.className = 'cover-link';
+          coverLink.href = `${detailsPage}?id=${encodeURIComponent(work.id)}`;
+          coverLink.setAttribute('aria-label', (work && work.title) ? `Open ${work.title}` : 'Open item');
+          coverLink.appendChild(coverWrap);
+        }
+
+        const meta = document.createElement('div');
+        meta.className = 'meta';
+
+        const tags = document.createElement('div');
+        tags.className = 'tags';
+        cats.forEach((c) => {
+          const tag = document.createElement('span');
+          tag.className = 'tag';
+          tag.textContent = String(c);
+          tag.dataset.category = String(c);
+          tag.addEventListener('click', () => applyFilterRef.fn && applyFilterRef.fn(String(c)));
+          tags.appendChild(tag);
+        });
+
+        const originDate = document.createElement('div');
+        originDate.className = 'origin-date';
+        const originLine = document.createElement('span');
+        originLine.className = 'origin';
+        originLine.textContent = dash(work && work.origin);
+        const dateLine = document.createElement('span');
+        dateLine.className = 'date';
+        dateLine.textContent = dash(work && work.date);
+        originDate.appendChild(originLine);
+        originDate.appendChild(dateLine);
+
+        meta.appendChild(tags);
+        meta.appendChild(originDate);
+
+        card.appendChild(title);
+        card.appendChild(coverLink || coverWrap);
+        card.appendChild(meta);
+
+        grid.appendChild(card);
+        cards.push({ el: card, cats });
+        if (coverWrap.classList.contains('skeleton')) {
+          lazyMap.set(card, { img, coverWrap });
+        }
       }
     });
 
@@ -339,14 +435,17 @@
       let detailsPage = '';
       let gridSelector = '';
       let filterBarSelector = '#filter-bar';
+      let layout = 'grid';
       if (page === 'works') {
         dataUrl = 'works.json';
         detailsPage = 'work.html';
         gridSelector = '#works-grid';
+        layout = 'grid';
       } else if (page === 'goodies') {
         dataUrl = 'goodies.json';
         detailsPage = 'goodie.html';
         gridSelector = '#goodies-grid';
+        layout = 'list';
       } else {
         return;
       }
@@ -354,7 +453,12 @@
       if (!gridEl) return;
       // Register service worker (safe to call multiple times)
       try { if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js'); } catch (_) {}
-      renderGrid({ dataUrl, detailsPage, gridSelector, filterBarSelector });
+      // Allow simple code-based override via GridBuilderConfig.layout[page]
+      try {
+        const cfgLayout = window.GridBuilderConfig && window.GridBuilderConfig.layout ? window.GridBuilderConfig.layout[page] : null;
+        if (cfgLayout) layout = String(cfgLayout).toLowerCase();
+      } catch (_) {}
+      renderGrid({ dataUrl, detailsPage, gridSelector, filterBarSelector, layout });
     } catch (err) {
       try { console.error('GridBuilder auto-boot failed', err); } catch (_) {}
     }

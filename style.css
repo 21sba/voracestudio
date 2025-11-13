@@ -9,7 +9,7 @@
   --color5: #aca6a2;
   --color6: #181818;
   /* Text color */
-  --color-text: var(--color1);
+  --color-text: var(--color5);
 
   /* Sizing and fonts */
   --font-sans: "Space Mono", monospace;

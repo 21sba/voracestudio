@@ -17,7 +17,7 @@
   display: flex;
   align-items: center;
   gap: var(--gap);
-  margin-bottom: calc(var(--gap) * 2);
+  margin-bottom: calc(var(--gap) * 1.5);
   /* Reveal-in animation properties (mirror work-card transitions) */
   transform: translateY(0) scale(1);
   transition: transform 220ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity 160ms ease;
@@ -189,3 +189,67 @@
   color: var(--color5);
   font-size: var(--size-caption);
 }
+
+/* List layout (project-style) */
+.works-grid.list {
+  grid-template-columns: 1fr;
+}
+
+.list-card {
+  position: relative;
+  transform: scale(1);
+  transition: transform 220ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity 160ms ease;
+  will-change: transform, opacity;
+  transform-origin: center center;
+}
+.list-card.initial-hide {
+  opacity: 0;
+  transform: translateY(70px) scale(0.98);
+  pointer-events: none;
+}
+.list-card.animating-out,
+.list-card.animating-in {
+  opacity: 0;
+  transform: translateY(70px) scale(0.98);
+  pointer-events: none;
+}
+
+.list-card .project-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  align-items: stretch;
+  overflow: hidden;
+  transform: scale(1);
+  transform-origin: center center;
+  transition: transform 220ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  will-change: transform;
+}
+.list-card .project-link { display: block; text-decoration: none; color: inherit; }
+.list-card .project-link:hover .project-grid { transform: scale(1.02); }
+.list-card .info { display: flex; flex-direction: column; gap: 8px; }
+.list-card .title { font-size: var(--size-title-h2); margin-bottom: 0; }
+.list-card .info .meta { margin-top: auto; }
+
+.list-card .cover-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: auto;
+  border-radius: var(--radius);
+  overflow: visible;
+  background: var(--color5);
+}
+.list-card .cover-wrap img {
+  position: static;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  border-radius: var(--radius);
+  filter: grayscale(1);
+  transition: filter 160ms ease;
+}
+.list-card .project-link:hover .cover-wrap img { filter: grayscale(0); }
+
+/* Hide list cards when filtered out */
+.list-card.hidden { display: none; }

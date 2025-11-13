@@ -8,7 +8,7 @@
 .about-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: calc(var(--gap) * 2);
+  gap: calc(var(--gap) * 1.5);
 }
 
 .about-block { 
@@ -26,7 +26,7 @@
 .photo-wrap {
   width: 100%;
   aspect-ratio: 3 / 4;
-  border-radius: var(--radius);
+  border-radius: var(--outer-radius);
   overflow: hidden;
   background: var(--color1);
 }
@@ -51,10 +51,10 @@
   margin: 0 0 10px;
   font-size: var(--size-body);
   line-height: var(--line-height);
-  color: var(--color1);
+  color: var(--color-text);
 }
 
-.about-sections { margin-top: calc(var(--gap) * 2); }
+.about-sections { margin-top: calc(var(--gap) * 1.5); }
 .section-title {
   margin: 16px 0 var(--spacing-title-bottom);
   font-size: var(--size-title-h2);

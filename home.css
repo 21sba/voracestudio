@@ -183,6 +183,7 @@ html, body {
   margin-right: auto;
   margin-bottom: -10px;
   font-size: var(--size-caption);
+  font-weight: var(--weight-bold);
   text-align: center;
   background: var(--color2);
   color: var(--color1);

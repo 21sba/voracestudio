@@ -48,7 +48,7 @@
 }
 .description {
   font-size: var(--size-body);
-  color: var(--color1);
+  color: var(--color-text);
   margin-bottom: 8px; /* reduce spacing before meta */
   margin-top: 0; /* remove default paragraph top margin */
 }
@@ -147,10 +147,12 @@
   width: 100%;
   height: 100%;
 }
-.block .media-wrap img { object-fit: cover; }
+.block .media-wrap img {
+  object-fit: cover;
+}
 .block .caption {
-  margin-top: 12px;
-  color: var(--color1);
+  margin: 0;
+  color: var(--color-text);
   font-size: var(--size-body);
   line-height: 1.6;
   white-space: pre-line; /* honor \n in JSON content */
@@ -159,6 +161,7 @@
   margin-bottom: 12px;
   font-size: var(--size-title-h2);
   text-transform: uppercase;
+  color: var(--color1);
 }
 
 /* Image-Text block: two-column layout, preserve image aspect ratio */
@@ -181,7 +184,7 @@
   border-radius: var(--radius);
 }
 .block.image-text .text-wrap p {
-  color: var(--color1);
+  color: var(--color-text);
   font-size: var(--size-body);
   line-height: 1.6;
 }
@@ -248,7 +251,7 @@
 }
 .block.project .info .description {
   font-size: var(--size-body);
-  color: var(--color1);
+  color: var(--color-text);
   line-height: 1.6;
 }
 @media (max-width: 768px) {
@@ -445,8 +448,8 @@
   bottom: 25px;
   transform: translateX(-50%) translateY(100%);
   opacity: 0;
-  background: var(--color5);
-  color: var(--color2);
+  background: var(--color6);
+  color: var(--color5);
   font-family: var(--font-sans);
   border: 0;
   border-radius: var(--radius);
@@ -491,8 +494,8 @@
 }
 .block.tabs .tab-btn {
   width: 100%;
-  background: var(--color2); /* unselected tabs stand out from --color6 wrap */
-  color: var(--color6);
+  background: var(--color2);
+  color: var(--color5);
   border: 0;
   border-radius: var(--radius);
   padding: 6px 10px;
@@ -502,17 +505,28 @@
   cursor: pointer;
   font-family: var(--font-sans);
 }
-.block.tabs .tab-btn.active { background: var(--color1); color: var(--color2); }
+
+.block.tabs .tab-btn:hover {
+  background: var(--color5);
+  color: var(--color2);
+}
+
+.block.tabs .tab-btn.active {
+  background: var(--color1);
+  color: var(--color2);
+}
+
 .block.tabs .tabs-panel {
   font-size: var(--size-body);
-  color: var(--color1);
+  color: var(--color-text);
   line-height: 1.6;
-  padding: var(--padding);
+  padding: 0 var(--padding);
 }
 @media (max-width: 768px) {
   .block.tabs .tabs-wrap { grid-template-columns: 1fr; }
   .block.tabs .tabs-header { flex-direction: row; flex-wrap: wrap; }
   .block.tabs .tab-btn { width: auto; }
+  .block.tabs .tabs-panel { padding: var(--padding) 0; }
 }
 
 /* Download block */
