@@ -1,0 +1,7 @@
+body.use-safe-area {
+    background: black !important;
+}
+
+#playScreen {
+    background-image: url('https://voracestudio.com/assets/works/meomao/meomao-background-image.jpg') !important;
+}

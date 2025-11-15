@@ -1,0 +1,1 @@
+PubViewer.Document.Settings = {"appIdentifier":"D53F762FCCD848DF9E3ACA3869C5F764","appName":"Meow Maow","backgroundColor":"#EFEEE8","facingPagesInLandscape":false,"lockOrientation":true,"restoreLatestPage":false};

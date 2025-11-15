@@ -540,6 +540,18 @@
       } else if (type === 'iframe' && b.src) {
         const media = document.createElement('div');
         media.className = 'media-wrap';
+        // Optional aspect ratio override from data (e.g., "3/4")
+        try {
+          const ar = (b['aspect-ratio'] !== undefined ? b['aspect-ratio'] : b.aspectRatio);
+          if (ar) {
+            media.style.aspectRatio = String(ar);
+          }
+        } catch (_) {
+          try {
+            const ar = (b['aspect-ratio'] !== undefined ? b['aspect-ratio'] : b.aspectRatio);
+            if (ar) media.style.setProperty('aspect-ratio', String(ar));
+          } catch (_) {}
+        }
         const iframe = document.createElement('iframe');
         iframe.src = String(b.src);
         iframe.className = 'video-frame';
