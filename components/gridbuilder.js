@@ -32,6 +32,13 @@
     return String((item && item.visibility) ? item.visibility : 'public').toLowerCase() === 'public';
   }
 
+  // Keep track of current render subscriptions to clean up on re-render
+  let currentCleanup = null;
+  function cleanupRender() {
+    try { if (typeof currentCleanup === 'function') currentCleanup(); } catch (_) {}
+    currentCleanup = null;
+  }
+
   async function renderGrid(opts) {
     const {
       dataUrl,
@@ -40,12 +47,27 @@
       filterBarSelector = '#filter-bar',
       layout: rawLayout = 'grid'
     } = opts || {};
-
-    const layout = String(rawLayout || 'grid').toLowerCase();
+    // Resolve effective layout with a mobile fallback:
+    // If a page requests 'list', use 'grid' on mobile-like viewports where list is cramped.
+    const requestedLayout = String(rawLayout || 'grid').toLowerCase();
+    const isMobileLike = (() => {
+      try {
+        const mm = !!window.matchMedia;
+        const narrow = mm ? window.matchMedia('(max-width: 860px)').matches : false;
+        const noHover = mm ? window.matchMedia('(hover: none)').matches : false;
+        return narrow || noHover;
+      } catch (_) { return false; }
+    })();
+    const layout = (isMobileLike && requestedLayout === 'list') ? 'grid' : requestedLayout;
 
     const grid = document.querySelector(gridSelector);
     const filterBar = document.querySelector(filterBarSelector);
     if (!grid) return;
+
+    // Clean up previous render (event listeners, observers) and clear DOM
+    cleanupRender();
+    try { grid.innerHTML = ''; } catch (_) {}
+    try { if (filterBar) filterBar.innerHTML = ''; } catch (_) {}
 
     // Mark layout on container for styling overrides
     try {
@@ -346,10 +368,13 @@
       });
     } catch (_) {}
 
+    // Track subscriptions for cleanup on re-render
+    const cleanupFns = [];
+
     // Lazy load remaining covers
     try {
       if (lazyMap.size > 0) {
-        const observer = new IntersectionObserver((entries) => {
+        let observer = new IntersectionObserver((entries) => {
           entries.forEach((entry) => {
             if (!entry.isIntersecting) return;
             const target = entry.target;
@@ -375,6 +400,7 @@
           });
         }, { root: null, rootMargin: '200px', threshold: 0.1 });
         lazyMap.forEach((_, cardEl) => observer.observe(cardEl));
+        cleanupFns.push(() => { try { observer.disconnect(); } catch (_) {} });
       }
     } catch (_) {}
 
@@ -422,8 +448,13 @@
       };
       window.addEventListener('scroll', onScroll, { passive: true });
       window.addEventListener('resize', onScroll);
+      cleanupFns.push(() => { try { window.removeEventListener('scroll', onScroll); } catch (_) {} });
+      cleanupFns.push(() => { try { window.removeEventListener('resize', onScroll); } catch (_) {} });
       setTimeout(onScroll, 200);
     })();
+
+    // Register cleanup for this render
+    currentCleanup = () => { try { cleanupFns.forEach(fn => fn()); } catch (_) {} };
   }
 
   // Auto-boot on listing pages to eliminate per-page initializers
@@ -459,6 +490,26 @@
         if (cfgLayout) layout = String(cfgLayout).toLowerCase();
       } catch (_) {}
       renderGrid({ dataUrl, detailsPage, gridSelector, filterBarSelector, layout });
+
+      // Re-render on viewport changes when requested layout is 'list'
+      try {
+        const requestedLayout = layout;
+        if (requestedLayout === 'list' && window.matchMedia) {
+          const mmNarrow = window.matchMedia('(max-width: 860px)');
+          const mmHoverNone = window.matchMedia('(hover: none)');
+          const onChange = () => {
+            // Render with the original requested layout; renderGrid will compute effective layout
+            renderGrid({ dataUrl, detailsPage, gridSelector, filterBarSelector, layout: requestedLayout });
+          };
+          // Use addEventListener if available; otherwise fallback to onchange
+          if (typeof mmNarrow.addEventListener === 'function') {
+            mmNarrow.addEventListener('change', onChange);
+          } else { mmNarrow.onchange = onChange; }
+          if (typeof mmHoverNone.addEventListener === 'function') {
+            mmHoverNone.addEventListener('change', onChange);
+          } else { mmHoverNone.onchange = onChange; }
+        }
+      } catch (_) {}
     } catch (err) {
       try { console.error('GridBuilder auto-boot failed', err); } catch (_) {}
     }

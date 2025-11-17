@@ -65,6 +65,33 @@
     try { if (typeof onProgress === 'function') onProgress(1); } catch (_) {}
   }
 
+  // --- Social meta helpers ---
+  function setOgMeta(property, content) {
+    try {
+      if (!property || content === undefined || content === null) return;
+      const sel = `meta[property="${property}"]`;
+      let m = document.head.querySelector(sel);
+      if (!m) {
+        m = document.createElement('meta');
+        m.setAttribute('property', property);
+        document.head.appendChild(m);
+      }
+      m.setAttribute('content', String(content));
+    } catch (_) {}
+  }
+  function toAbsoluteUrl(u) {
+    try { return String(new URL(String(u), window.location.origin)); }
+    catch (_) { return String(u || ''); }
+  }
+  function getCoverSrc(item) {
+    try {
+      const c = item && item.cover;
+      if (typeof c === 'string') return String(c);
+      if (c && typeof c.src === 'string') return String(c.src);
+      return '';
+    } catch (_) { return ''; }
+  }
+
   function createYouTubeIframe(embedId, title) {
     const iframe = document.createElement('iframe');
     iframe.src = `https://www.youtube.com/embed/${encodeURIComponent(embedId)}?rel=0`;
@@ -1062,6 +1089,14 @@
     try {
       const t = dash(item.title);
       if (t) document.title = `Vorace - ${t}`;
+      // Update OG tags for detail pages (work/goodie)
+      if (t) setOgMeta('og:title', t);
+      const d = dash(item.description);
+      if (d) setOgMeta('og:description', d);
+      setOgMeta('og:type', 'website');
+      try { setOgMeta('og:url', window.location.href); } catch (_) {}
+      const cover = getCoverSrc(item);
+      if (cover) setOgMeta('og:image', toAbsoluteUrl(cover));
     } catch (_) {}
 
     // Preload hero cover (for case-study) and first image(s) from blocks
