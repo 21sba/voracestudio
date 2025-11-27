@@ -1,10 +1,12 @@
 [
     {
         "id": "football-society-intro",
-        "visibility": "public",
+        "visibility": "visible",
         "title": "Football Society Intro",
         "date": "2025",
-        "categories": ["Motion Design"],
+        "categories": [
+            "Motion Design"
+        ],
         "origin": "Client Work",
         "type": "single-video",
         "cover": "assets/images/previews/preview-football-society.gif",
@@ -14,16 +16,22 @@
             "embedId": "W7KQruFRnEc"
         },
         "credits": {
-            "Client": ["E507 Studio", "https://e507.it/"],
+            "Client": [
+                "E507 Studio",
+                "https://e507.it/"
+            ],
             "Motion Design, Sound Design": "Tommaso Tabacchi"
         }
     },
     {
         "id": "growermetal-open-day",
-        "visibility": "public",
+        "visibility": "visible",
         "title": "Growermetal Open Day",
         "date": "2025",
-        "categories": ["Motion Design", "Illustration"],
+        "categories": [
+            "Motion Design",
+            "Illustration"
+        ],
         "origin": "Client Work",
         "type": "case-study-video",
         "cover": "assets/images/previews/preview-growermetal.gif",
@@ -41,16 +49,22 @@
         ],
         "credits": {
             "Client": "Growermetal",
-            "Agency": ["E507 Studio", "https://e507.it/"],
+            "Agency": [
+                "E507 Studio",
+                "https://e507.it/"
+            ],
             "Motion Design, Illustrations": "Tommaso Tabacchi"
         }
     },
     {
         "id": "billy-bruco",
-        "visibility": "public",
+        "visibility": "visible",
         "title": "Billy Bruco",
         "date": "2025",
-        "categories": ["Motion Design", "Illustration"],
+        "categories": [
+            "Motion Design",
+            "Illustration"
+        ],
         "origin": "Intership",
         "type": "single-video",
         "cover": "assets/images/previews/preview-billy-bruco.gif",
@@ -60,16 +74,23 @@
             "embedId": "Upd_ukY_oxE"
         },
         "credits": {
-            "Intership @": ["Watermelon", "https://watermelon.it/"],
+            "Intership @": [
+                "Watermelon",
+                "https://watermelon.it/"
+            ],
             "Motion Design, Illustrations, Sound Design": "Tommaso Tabacchi"
         }
     },
     {
         "id": "against-the-noise-machine",
-        "visibility": "public",
+        "visibility": "visible",
         "title": "(Against) The Noise Machine",
         "date": "2025",
-        "categories": ["Motion Design", "Graphic Design", "Editorial"],
+        "categories": [
+            "Motion Design",
+            "Graphic Design",
+            "Editorial"
+        ],
         "origin": "University",
         "type": "case-study-video",
         "cover": "assets/images/previews/preview-atnm.gif",
@@ -101,10 +122,12 @@
     },
     {
         "id": "flores",
-        "visibility": "public",
+        "visibility": "visible",
         "title": "Flor.es",
         "date": "2025",
-        "categories": ["Graphic Design"],
+        "categories": [
+            "Graphic Design"
+        ],
         "origin": "University",
         "type": "case-study",
         "cover": "assets/images/previews/preview-flores.jpg",
@@ -113,15 +136,22 @@
             {
                 "type": "slideshow",
                 "title": "App Showcase",
-                "src": ["assets/works/flores/flores-gallery1.jpeg", "assets/works/flores/flores-gallery2.jpeg", "assets/works/flores/flores-gallery3.jpeg", "assets/works/flores/flores-gallery4.jpeg", "assets/works/flores/flores-gallery5.jpeg"]
+                "src": [
+                    "assets/works/flores/flores-gallery1.jpeg",
+                    "assets/works/flores/flores-gallery2.jpeg",
+                    "assets/works/flores/flores-gallery3.jpeg",
+                    "assets/works/flores/flores-gallery4.jpeg",
+                    "assets/works/flores/flores-gallery5.jpeg"
+                ]
             },
             {
                 "type": "image",
                 "src": "assets/works/flores/flores-icons.jpeg"
             },
             {
-                "type": "youtube",
-                "embedId": "6kh7xMDcCD8"
+                "type": "video",
+                "source": "youtube",
+                "src": "6kh7xMDcCD8"
             }
         ],
         "credits": {
@@ -131,10 +161,12 @@
     },
     {
         "id": "apatia",
-        "visibility": "public",
+        "visibility": "visible",
         "title": "Apatia",
         "date": "2025",
-        "categories": ["Video Production"],
+        "categories": [
+            "Video Production"
+        ],
         "origin": "University",
         "type": "single-video",
         "cover": "assets/images/previews/preview-apatia.gif",
@@ -151,11 +183,14 @@
         }
     },
     {
-        "id": "momo",   
-        "visibility": "public",
+        "id": "momo",
+        "visibility": "visible",
         "title": "Momo",
         "date": "2025",
-        "categories": ["Illustration", "Editorial"],
+        "categories": [
+            "Illustration",
+            "Editorial"
+        ],
         "origin": "University",
         "type": "case-study",
         "cover": "assets/images/previews/preview-momo.jpg",
@@ -164,7 +199,18 @@
             {
                 "type": "slideshow",
                 "title": "Illustrated Book",
-                "src": ["assets/works/momo/momo-image1.jpeg", "assets/works/momo/momo-image2.jpeg", "assets/works/momo/momo-image3.jpeg", "assets/works/momo/momo-image4.jpeg", "assets/works/momo/momo-image5.jpeg", "assets/works/momo/momo-image6.jpeg", "assets/works/momo/momo-image7.jpeg", "assets/works/momo/momo-image8.jpeg", "assets/works/momo/momo-image9.jpeg", "assets/works/momo/momo-image10.jpeg"]
+                "src": [
+                    "assets/works/momo/momo-image1.jpeg",
+                    "assets/works/momo/momo-image2.jpeg",
+                    "assets/works/momo/momo-image3.jpeg",
+                    "assets/works/momo/momo-image4.jpeg",
+                    "assets/works/momo/momo-image5.jpeg",
+                    "assets/works/momo/momo-image6.jpeg",
+                    "assets/works/momo/momo-image7.jpeg",
+                    "assets/works/momo/momo-image8.jpeg",
+                    "assets/works/momo/momo-image9.jpeg",
+                    "assets/works/momo/momo-image10.jpeg"
+                ]
             }
         ],
         "credits": {
@@ -172,11 +218,14 @@
         }
     },
     {
-        "id": "meomao",   
-        "visibility": "public",
+        "id": "meomao",
+        "visibility": "hidden",
         "title": "Meomao",
         "date": "2025",
-        "categories": ["Illustration", "Editorial"],
+        "categories": [
+            "Illustration",
+            "Editorial"
+        ],
         "origin": "University",
         "type": "case-study",
         "cover": "assets/images/previews/preview-meomao.gif",
@@ -195,10 +244,13 @@
     },
     {
         "id": "creativity",
-        "visibility": "public",
+        "visibility": "visible",
         "title": "Creativity",
         "date": "2024",
-        "categories": ["Motion Design", "Graphic Design"],
+        "categories": [
+            "Motion Design",
+            "Graphic Design"
+        ],
         "origin": "University",
         "type": "case-study-video",
         "cover": "assets/images/previews/preview-creativity.gif",
@@ -225,10 +277,13 @@
     },
     {
         "id": "quinoa-promo",
-        "visibility": "public",
+        "visibility": "visible",
         "title": "Quinoa Promo",
         "date": "2024",
-        "categories": ["Motion Design", "Graphic Design"],
+        "categories": [
+            "Motion Design",
+            "Graphic Design"
+        ],
         "origin": "Client Work",
         "type": "single-video",
         "cover": "assets/images/previews/preview-quinoa.gif",
@@ -239,16 +294,21 @@
         },
         "credits": {
             "Client": "Quinoa",
-            "Agency": ["E507 Studio", "https://e507.it/"],
+            "Agency": [
+                "E507 Studio",
+                "https://e507.it/"
+            ],
             "Motion Design": "Tommaso Tabacchi"
         }
     },
     {
-        "id": "scenario",   
-        "visibility": "public",
+        "id": "scenario",
+        "visibility": "visible",
         "title": "Scenario Festival",
         "date": "2024",
-        "categories": ["Motion Design"],
+        "categories": [
+            "Motion Design"
+        ],
         "origin": "Client Work",
         "type": "case-study-video",
         "cover": "assets/images/previews/preview-scenario.gif",
@@ -259,22 +319,29 @@
         },
         "blocks": [
             {
-                "type": "youtube",
+                "type": "video",
                 "title": "Festival Lineup",
-                "embedId": "8xzuzuFRBa0"
+                "source": "youtube",
+                "src": "8xzuzuFRBa0"
             }
         ],
         "credits": {
-            "Client": ["E507 Studio", "https://e507.it/"],
+            "Client": [
+                "E507 Studio",
+                "https://e507.it/"
+            ],
             "Motion Design": "Tommaso Tabacchi"
         }
     },
     {
-        "id": "weread",   
-        "visibility": "public",
+        "id": "weread",
+        "visibility": "visible",
         "title": "WeRead Promo",
         "date": "2024",
-        "categories": ["Motion Design", "Graphic Design"],
+        "categories": [
+            "Motion Design",
+            "Graphic Design"
+        ],
         "origin": "University",
         "type": "single-video",
         "cover": "assets/images/previews/preview-weread.gif",
@@ -288,11 +355,13 @@
         }
     },
     {
-        "id": "mentalisti",   
-        "visibility": "public",
+        "id": "mentalisti",
+        "visibility": "visible",
         "title": "Mentalisti",
         "date": "2024",
-        "categories": ["Motion Design"],
+        "categories": [
+            "Motion Design"
+        ],
         "origin": "Intership",
         "type": "single-video",
         "cover": "assets/images/previews/preview-mentalisti.gif",
@@ -302,10 +371,11 @@
             "embedId": "NDLiKlkz9ac"
         },
         "credits": {
-            "Intership @": ["E507 Studio", "https://e507.it/"],
+            "Intership @": [
+                "E507 Studio",
+                "https://e507.it/"
+            ],
             "Motion Design": "Tommaso Tabacchi"
         }
     }
 ]
-
-  

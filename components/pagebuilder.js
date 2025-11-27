@@ -8,14 +8,14 @@
     return s ? s : (fallback !== undefined ? fallback : '');
   }
 
-  const isPublic = (item) => String((item && item.visibility) ? item.visibility : 'public').toLowerCase() === 'public';
+  const isVisible = (item) => String((item && item.visibility) ? item.visibility : 'visible').toLowerCase() === 'visible';
 
   // Lightweight dataset cache (works/goodies) to resolve cross-references
   const datasetCache = Object.create(null);
   async function getDataset(name) {
     const key = String(name || 'works').toLowerCase();
     if (datasetCache[key]) return datasetCache[key];
-    const url = key === 'goodies' ? 'goodies.json' : 'works.json';
+    const url = key === 'goodies' ? 'goodies_list.json' : 'works_list.json';
     try {
       const res = await fetch(String(url));
       const json = await res.json();
@@ -33,7 +33,7 @@
       if (window.Loader && typeof window.Loader.setProgress === 'function') {
         window.Loader.setProgress(p || 0);
       }
-    } catch (_) {}
+    } catch (_) { }
   }
 
   // Lightweight image preloader with progress reporting
@@ -46,7 +46,7 @@
         if (typeof onProgress === 'function' && total > 0) {
           onProgress(loaded / total);
         }
-      } catch (_) {}
+      } catch (_) { }
     };
     report();
     const tasks = list.map((url) => new Promise((resolve) => {
@@ -60,9 +60,9 @@
     try {
       await Promise.allSettled(tasks);
     } catch (_) {
-      try { await Promise.all(tasks); } catch (_) {}
+      try { await Promise.all(tasks); } catch (_) { }
     }
-    try { if (typeof onProgress === 'function') onProgress(1); } catch (_) {}
+    try { if (typeof onProgress === 'function') onProgress(1); } catch (_) { }
   }
 
   // --- Social meta helpers ---
@@ -77,7 +77,7 @@
         document.head.appendChild(m);
       }
       m.setAttribute('content', String(content));
-    } catch (_) {}
+    } catch (_) { }
   }
   function toAbsoluteUrl(u) {
     try { return String(new URL(String(u), window.location.origin)); }
@@ -92,6 +92,36 @@
     } catch (_) { return ''; }
   }
 
+  function extractYouTubeId(src) {
+    try {
+      const s = String(src || '').trim();
+      // Already an ID (11 chars, alphanumeric + - and _)
+      if (/^[a-zA-Z0-9_-]{11}$/.test(s)) return s;
+      // Extract from various YouTube URL formats
+      const patterns = [
+        /(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/,
+        /youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/,
+        /youtube\.com\/v\/([a-zA-Z0-9_-]{11})/
+      ];
+      for (const pattern of patterns) {
+        const match = s.match(pattern);
+        if (match) return match[1];
+      }
+      return '';
+    } catch (_) { return ''; }
+  }
+
+  function extractVimeoId(src) {
+    try {
+      const s = String(src || '').trim();
+      // Already an ID (all digits)
+      if (/^\d+$/.test(s)) return s;
+      // Extract from Vimeo URL
+      const match = s.match(/vimeo\.com\/(\d+)/);
+      return match ? match[1] : '';
+    } catch (_) { return ''; }
+  }
+
   function createYouTubeIframe(embedId, title) {
     const iframe = document.createElement('iframe');
     iframe.src = `https://www.youtube.com/embed/${encodeURIComponent(embedId)}?rel=0`;
@@ -102,6 +132,28 @@
     iframe.referrerPolicy = 'strict-origin-when-cross-origin';
     iframe.allowFullscreen = true;
     return iframe;
+  }
+
+  function createVimeoIframe(videoId, title) {
+    const iframe = document.createElement('iframe');
+    iframe.src = `https://player.vimeo.com/video/${encodeURIComponent(videoId)}`;
+    iframe.className = 'video-frame';
+    iframe.setAttribute('loading', 'lazy');
+    iframe.title = dash(title) || 'Vimeo video';
+    iframe.allow = 'autoplay; fullscreen; picture-in-picture';
+    iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+    iframe.allowFullscreen = true;
+    return iframe;
+  }
+
+  function createLocalVideo(src, title) {
+    const video = document.createElement('video');
+    video.src = String(src);
+    video.className = 'video-frame';
+    video.setAttribute('controls', '');
+    video.setAttribute('preload', 'metadata');
+    if (title) video.setAttribute('title', dash(title));
+    return video;
   }
 
   // Hero for single-video items with YouTube embed and meta
@@ -553,31 +605,51 @@
     };
 
     blocks.forEach((b) => {
+      // Skip hidden blocks
+      const blockVisibility = String(b.visibility || 'visible').toLowerCase();
+      if (blockVisibility === 'hidden') return;
+
       const type = String(b.type || '').toLowerCase();
       const blockEl = document.createElement('div');
       blockEl.className = `block ${type}`;
       addTitle(blockEl, b.title);
 
-      if (type === 'youtube' && b.embedId) {
+      if (type === 'video' && b.src) {
         const media = document.createElement('div');
         media.className = 'media-wrap';
-        media.appendChild(createYouTubeIframe(b.embedId, itemTitle));
-        blockEl.appendChild(media);
+        const source = String(b.source || 'youtube').toLowerCase();
+        let videoEl = null;
+
+        if (source === 'youtube') {
+          const videoId = extractYouTubeId(b.src);
+          if (videoId) {
+            videoEl = createYouTubeIframe(videoId, b.title || itemTitle);
+          }
+        } else if (source === 'vimeo') {
+          const videoId = extractVimeoId(b.src);
+          if (videoId) {
+            videoEl = createVimeoIframe(videoId, b.title || itemTitle);
+          }
+        } else if (source === 'local') {
+          videoEl = createLocalVideo(b.src, b.title || itemTitle);
+        }
+
+        if (videoEl) {
+          media.appendChild(videoEl);
+          blockEl.appendChild(media);
+        }
 
       } else if (type === 'iframe' && b.src) {
         const media = document.createElement('div');
         media.className = 'media-wrap';
-        // Optional aspect ratio override from data (e.g., "3/4")
-        try {
-          const ar = (b['aspect-ratio'] !== undefined ? b['aspect-ratio'] : b.aspectRatio);
-          if (ar) {
-            media.style.aspectRatio = String(ar);
-          }
-        } catch (_) {
+        // Optional aspect ratio override from data (kebab-case only)
+        const ar = b['aspect-ratio'];
+        if (ar) {
           try {
-            const ar = (b['aspect-ratio'] !== undefined ? b['aspect-ratio'] : b.aspectRatio);
-            if (ar) media.style.setProperty('aspect-ratio', String(ar));
-          } catch (_) {}
+            media.style.aspectRatio = String(ar);
+          } catch (_) {
+            try { media.style.setProperty('aspect-ratio', String(ar)); } catch (_) { }
+          }
         }
         const iframe = document.createElement('iframe');
         iframe.src = String(b.src);
@@ -946,9 +1018,14 @@
         blockEl.appendChild(line);
 
       } else if (type === 'text' && b.content) {
-        const caption = document.createElement('p');
+        const caption = document.createElement('div');
         caption.className = 'caption bubble-box';
-        caption.textContent = String(b.content);
+        const content = String(b.content || '');
+        content.split('\n\n').forEach((para) => {
+          const p = document.createElement('p');
+          p.textContent = para;
+          caption.appendChild(p);
+        });
         blockEl.appendChild(caption);
 
       } else if (type === 'tabs' && Array.isArray(b.tabs)) {
@@ -992,7 +1069,7 @@
       } else if (type === 'download') {
         const dl = document.createElement('div');
         dl.className = 'download-wrap';
-        const buttons = Array.isArray(b.button) ? b.button : [];
+        const buttons = Array.isArray(b.buttons) ? b.buttons : [];
         if (buttons.length) {
           buttons.forEach((btn) => {
             const a = document.createElement('a');
@@ -1021,7 +1098,7 @@
 
   function renderPager(items, currentId, detailsPage) {
     const currentIndex = items.findIndex(w => String(w.id) === String(currentId));
-    const visibleIndexes = items.map((w, i) => isPublic(w) ? i : -1).filter(i => i >= 0);
+    const visibleIndexes = items.map((w, i) => isVisible(w) ? i : -1).filter(i => i >= 0);
     if (currentIndex < 0 || visibleIndexes.length <= 1) return null;
     const prevVisibleIndex = (() => {
       for (let i = visibleIndexes.length - 1; i >= 0; i--) {
@@ -1094,10 +1171,10 @@
       const d = dash(item.description);
       if (d) setOgMeta('og:description', d);
       setOgMeta('og:type', 'website');
-      try { setOgMeta('og:url', window.location.href); } catch (_) {}
+      try { setOgMeta('og:url', window.location.href); } catch (_) { }
       const cover = getCoverSrc(item);
       if (cover) setOgMeta('og:image', toAbsoluteUrl(cover));
-    } catch (_) {}
+    } catch (_) { }
 
     // Preload hero cover (for case-study) and first image(s) from blocks
     try {
@@ -1117,7 +1194,7 @@
         }
       });
       await preloadImages(preloadUrls, updateLoaderProgress);
-    } catch (_) {}
+    } catch (_) { }
 
     // Hero: dispatch based on type for parity with work.js
     const type = String(item.type || '').toLowerCase();
@@ -1152,7 +1229,7 @@
       targets.forEach((el) => {
         el.classList.add('reveal-item', 'initial-hide');
       });
-    } catch (_) {}
+    } catch (_) { }
 
     // Loader handling: wait ~1000ms then hide
     try {
@@ -1160,7 +1237,7 @@
         await window.Loader.waitUntilComplete(1000);
         await window.Loader.hide();
       }
-    } catch (_) {}
+    } catch (_) { }
 
     // Staggered initial reveal of hero children and blocks
     try {
@@ -1168,11 +1245,11 @@
       const els = Array.from(document.querySelectorAll('.reveal-item.initial-hide'));
       els.forEach((el, idx) => {
         setTimeout(() => {
-          try { void el.offsetWidth; } catch (_) {}
+          try { void el.offsetWidth; } catch (_) { }
           el.classList.remove('initial-hide');
         }, baseDelay * idx);
       });
-    } catch (_) {}
+    } catch (_) { }
 
     // Bottom CTA: show "WATCH MORE" prompt when user is at the top
     try {
@@ -1198,8 +1275,8 @@
             removed = true;
             try {
               cta.classList.remove('show');
-              setTimeout(() => { try { cta.remove(); } catch (_) {} }, 220);
-            } catch (_) { try { cta.remove(); } catch (_) {} }
+              setTimeout(() => { try { cta.remove(); } catch (_) { } }, 220);
+            } catch (_) { try { cta.remove(); } catch (_) { } }
           };
           const onUserScroll = () => {
             removeCTA();
@@ -1214,7 +1291,7 @@
           document.body.appendChild(cta);
           // Ensure initial styles computed before toggling to .show
           requestAnimationFrame(() => {
-            try { void cta.offsetWidth; } catch (_) {}
+            try { void cta.offsetWidth; } catch (_) { }
             cta.classList.add('show');
           });
           window.addEventListener('scroll', onUserScroll, { passive: true });
@@ -1222,7 +1299,7 @@
         const delayMs = 1000;
         setTimeout(maybeCreateAndShowCTA, delayMs);
       }
-    } catch (_) {}
+    } catch (_) { }
   }
 
   // Auto-boot on appropriate pages (work/goodie) to eliminate per-page initializers
@@ -1243,16 +1320,16 @@
       let dataUrl = '';
       let detailsPage = '';
       if (page === 'work') {
-        dataUrl = 'works.json';
+        dataUrl = 'works_list.json';
         detailsPage = 'work.html';
       } else if (page === 'goodie') {
-        dataUrl = 'goodies.json';
+        dataUrl = 'goodies_list.json';
         detailsPage = 'goodie.html';
       } else {
         return;
       }
       // Register service worker (safe to call multiple times)
-      try { if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js'); } catch (_) {}
+      try { if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js'); } catch (_) { }
       renderPage({
         dataUrl,
         getId: getIdFromQuery,
@@ -1261,7 +1338,7 @@
         cta: null
       });
     } catch (err) {
-      try { console.error('PageBuilder auto-boot failed', err); } catch (_) {}
+      try { console.error('PageBuilder auto-boot failed', err); } catch (_) { }
     }
   }
   if (!window.PageBuilderConfig || !window.PageBuilderConfig.disableAutoBoot) {

@@ -28,14 +28,15 @@
     if (typeof onProgress === 'function') onProgress(1);
   }
 
-  function isPublic(item) {
-    return String((item && item.visibility) ? item.visibility : 'public').toLowerCase() === 'public';
+  function isVisible(item) {
+    const vis = String((item && item.visibility) ? item.visibility : 'visible').toLowerCase();
+    return vis === 'visible';
   }
 
   // Keep track of current render subscriptions to clean up on re-render
   let currentCleanup = null;
   function cleanupRender() {
-    try { if (typeof currentCleanup === 'function') currentCleanup(); } catch (_) {}
+    try { if (typeof currentCleanup === 'function') currentCleanup(); } catch (_) { }
     currentCleanup = null;
   }
 
@@ -66,13 +67,13 @@
 
     // Clean up previous render (event listeners, observers) and clear DOM
     cleanupRender();
-    try { grid.innerHTML = ''; } catch (_) {}
-    try { if (filterBar) filterBar.innerHTML = ''; } catch (_) {}
+    try { grid.innerHTML = ''; } catch (_) { }
+    try { if (filterBar) filterBar.innerHTML = ''; } catch (_) { }
 
     // Mark layout on container for styling overrides
     try {
       grid.classList.toggle('list', layout === 'list');
-    } catch (_) {}
+    } catch (_) { }
 
     // Keep filter bar hidden for reveal-in animation
     if (filterBar) filterBar.classList.add('initial-hide');
@@ -90,7 +91,7 @@
       return;
     }
 
-    const visibleItems = items.filter(isPublic);
+    const visibleItems = items.filter(isVisible);
 
     // Build categories
     const categorySet = new Set();
@@ -334,7 +335,7 @@
       });
       // Keep two columns on desktop; mobile single-column handled by CSS media queries
       if (typeof updateFocus === 'function') {
-        try { updateFocus(); } catch (_) {}
+        try { updateFocus(); } catch (_) { }
       }
     };
     applyFilterRef.fn = applyFilter;
@@ -348,7 +349,7 @@
         if (window.Loader && typeof window.Loader.setProgress === 'function') {
           window.Loader.setProgress(p || 0);
         }
-      } catch (_) {}
+      } catch (_) { }
     };
     const coverUrls = visibleItems.slice(0, 2).map(w => (w && w.cover ? w.cover : null)).filter(Boolean);
     await preloadImages(coverUrls, (p) => updateLoaderProgress(p));
@@ -357,7 +358,7 @@
         await window.Loader.waitUntilComplete(1000);
         await window.Loader.hide();
       }
-    } catch (_) {}
+    } catch (_) { }
 
     // Reveal filter bar and cards
     try {
@@ -366,7 +367,7 @@
       cards.forEach(({ el }, idx) => {
         setTimeout(() => { el.classList.remove('initial-hide'); }, baseDelay * idx);
       });
-    } catch (_) {}
+    } catch (_) { }
 
     // Track subscriptions for cleanup on re-render
     const cleanupFns = [];
@@ -388,9 +389,9 @@
               return;
             }
             const finalize = () => {
-              try { coverWrap.classList.remove('skeleton'); } catch (_) {}
-              try { img.style.opacity = '1'; } catch (_) {}
-              try { delete img.dataset.src; } catch (_) {}
+              try { coverWrap.classList.remove('skeleton'); } catch (_) { }
+              try { img.style.opacity = '1'; } catch (_) { }
+              try { delete img.dataset.src; } catch (_) { }
               observer.unobserve(target);
               lazyMap.delete(target);
             };
@@ -400,9 +401,9 @@
           });
         }, { root: null, rootMargin: '200px', threshold: 0.1 });
         lazyMap.forEach((_, cardEl) => observer.observe(cardEl));
-        cleanupFns.push(() => { try { observer.disconnect(); } catch (_) {} });
+        cleanupFns.push(() => { try { observer.disconnect(); } catch (_) { } });
       }
-    } catch (_) {}
+    } catch (_) { }
 
     // Mobile focus
     (function initMobileCardFocus() {
@@ -448,13 +449,13 @@
       };
       window.addEventListener('scroll', onScroll, { passive: true });
       window.addEventListener('resize', onScroll);
-      cleanupFns.push(() => { try { window.removeEventListener('scroll', onScroll); } catch (_) {} });
-      cleanupFns.push(() => { try { window.removeEventListener('resize', onScroll); } catch (_) {} });
+      cleanupFns.push(() => { try { window.removeEventListener('scroll', onScroll); } catch (_) { } });
+      cleanupFns.push(() => { try { window.removeEventListener('resize', onScroll); } catch (_) { } });
       setTimeout(onScroll, 200);
     })();
 
     // Register cleanup for this render
-    currentCleanup = () => { try { cleanupFns.forEach(fn => fn()); } catch (_) {} };
+    currentCleanup = () => { try { cleanupFns.forEach(fn => fn()); } catch (_) { } };
   }
 
   // Auto-boot on listing pages to eliminate per-page initializers
@@ -468,12 +469,12 @@
       let filterBarSelector = '#filter-bar';
       let layout = 'grid';
       if (page === 'works') {
-        dataUrl = 'works.json';
+        dataUrl = 'works_list.json';
         detailsPage = 'work.html';
         gridSelector = '#works-grid';
         layout = 'grid';
       } else if (page === 'goodies') {
-        dataUrl = 'goodies.json';
+        dataUrl = 'goodies_list.json';
         detailsPage = 'goodie.html';
         gridSelector = '#goodies-grid';
         layout = 'list';
@@ -483,12 +484,12 @@
       const gridEl = document.querySelector(gridSelector);
       if (!gridEl) return;
       // Register service worker (safe to call multiple times)
-      try { if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js'); } catch (_) {}
+      try { if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js'); } catch (_) { }
       // Allow simple code-based override via GridBuilderConfig.layout[page]
       try {
         const cfgLayout = window.GridBuilderConfig && window.GridBuilderConfig.layout ? window.GridBuilderConfig.layout[page] : null;
         if (cfgLayout) layout = String(cfgLayout).toLowerCase();
-      } catch (_) {}
+      } catch (_) { }
       renderGrid({ dataUrl, detailsPage, gridSelector, filterBarSelector, layout });
 
       // Re-render on viewport changes when requested layout is 'list'
@@ -509,9 +510,9 @@
             mmHoverNone.addEventListener('change', onChange);
           } else { mmHoverNone.onchange = onChange; }
         }
-      } catch (_) {}
+      } catch (_) { }
     } catch (err) {
-      try { console.error('GridBuilder auto-boot failed', err); } catch (_) {}
+      try { console.error('GridBuilder auto-boot failed', err); } catch (_) { }
     }
   }
   if (!window.GridBuilderConfig || !window.GridBuilderConfig.disableAutoBoot) {

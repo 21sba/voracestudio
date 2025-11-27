@@ -31,10 +31,15 @@
   --gap: 25px;
 }
 
-* { box-sizing: border-box; }
-html, body {
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
   background-color: var(--color2);
 }
+
 body {
   margin: 0;
   font-family: var(--font-sans);
@@ -43,7 +48,8 @@ body {
 }
 
 /* Prevent scrolling while loader is visible */
-html.no-scroll, body.no-scroll {
+html.no-scroll,
+body.no-scroll {
   overflow: hidden !important;
   height: 100%;
 }
@@ -76,7 +82,10 @@ body::before {
 }
 
 /* Ensure app content sits above the overlay */
-#app { position: relative; z-index: 1; }
+#app {
+  position: relative;
+  z-index: 1;
+}
 
 .space-mono-regular {
   font-family: "Space Mono", monospace;
@@ -101,6 +110,7 @@ body::before {
   font-weight: 700;
   font-style: italic;
 }
+
 /* Keep two columns on desktop; mobile rules in gridbuilder.css */
 
 .bubble-box {

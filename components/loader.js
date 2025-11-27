@@ -138,7 +138,7 @@
     if (!state.loaderLottie) return;
 
     // Destroy any previous animation to avoid stale state across navigations
-    try { if (state.loaderAnim && typeof state.loaderAnim.destroy === 'function') { state.loaderAnim.destroy(); } } catch (_) {}
+    try { if (state.loaderAnim && typeof state.loaderAnim.destroy === 'function') { state.loaderAnim.destroy(); } } catch (_) { }
     state.loaderAnim = null;
 
     // Ensure lottie-web is available; if already loaded, use it directly
@@ -207,7 +207,7 @@
         await new Promise((r) => setTimeout(r, 320));
         state.loader.remove();
         // Clean up animation and references to ensure fresh init next time
-        try { if (state.loaderAnim && typeof state.loaderAnim.destroy === 'function') { state.loaderAnim.destroy(); } } catch (_) {}
+        try { if (state.loaderAnim && typeof state.loaderAnim.destroy === 'function') { state.loaderAnim.destroy(); } } catch (_) { }
         state.loaderAnim = null;
         state.loaderLottie = null;
         state.loader = null;
