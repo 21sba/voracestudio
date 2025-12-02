@@ -5,7 +5,10 @@
         "title": "Mouthiverse",
         "date": "2025",
         "price": "free",
-        "categories": ["After Effects", "Script"],
+        "categories": [
+            "After Effects",
+            "Script"
+        ],
         "origin": "Personal",
         "type": "case-study",
         "cover": "assets/images/previews/preview-mouthiverse.gif",
@@ -68,7 +71,7 @@
             {
                 "type": "download",
                 "title": "Download the Script",
-                "button": [
+                "buttons": [
                     {
                         "text": "↓ Mouthiverse 1.11",
                         "url": "assets/goodies/mouthiverse/mouthiverse1.11-𓆦vorace.zip"
@@ -82,5 +85,3 @@
         }
     }
 ]
-
-  

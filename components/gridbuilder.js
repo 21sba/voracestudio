@@ -273,6 +273,19 @@
 
         card.appendChild(title);
         card.appendChild(coverLink || coverWrap);
+
+        // Description (only for goodies on mobile-like viewports)
+        const isGoodiesPage = String(opts.detailsPage || '').toLowerCase().includes('goodie');
+        if (isGoodiesPage && isMobileLike) {
+          const dText = dash(work && work.description);
+          if (dText) {
+            const desc = document.createElement('p');
+            desc.className = 'description';
+            desc.textContent = dText;
+            card.appendChild(desc);
+          }
+        }
+
         card.appendChild(meta);
 
         grid.appendChild(card);
