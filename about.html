@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -12,6 +13,7 @@
   <meta property="og:title" content="Vorace - About" />
   <meta property="og:image" content="assets/images/og-image.jpg" />
 </head>
+
 <body data-page="about">
   <div id="app">
     <div class="about-wrap">
@@ -24,14 +26,15 @@
         </section>
         <!-- Text column -->
         <section class="about-block" aria-label="About Content">
-          <h1 class="title">Tommaso Tabacchi</h1>
-          <div class="bio-text bubble-box">
-            <p>I make visual stuff. Mostly moving, sometimes still.</p>
-            <p>I like learning things, all sort of things. I like understanding how things work and how to make them work.</p>
-            <p>I use After Effects, and a lot of expressions.</p>
-            <p>I loooove keeping (digital) things in order. My project files are neat as hell (unless you catch me mid-rush).</p>
-            <p>I don’t do soulless, cookie-cutter work. If you’re looking for something with personality, we’ll probably get along.</p>
-          </div>
+          <section class="about-section" aria-label="Vorace Studio">
+            <h1 class="title">Vorace Studio</h1>
+            <div class="bio-text bubble-box" style="margin-bottom: var(--gap);">
+              <p>Vorace Studio is a one-person creative studio focused on Motion Graphics run by Tommaso Tabacchi.</p>
+            </div>
+            <div class="bio-text bubble-box" style="margin-bottom: var(--gap);">
+              <p>I make visual stuff. Mostly moving, sometimes still.</p>
+            </div>
+          </section>
 
           <div class="about-sections">
             <section class="about-section" aria-label="Education">
@@ -50,17 +53,20 @@
                 <li class="entry bubble-box">
                   <span class="period">2023–Present</span>
                   <span class="role">Freelance Motion & Graphic Designer</span>
-                  <span class="details">Occasional collaborations with clients on motion design, branding, social content, and visual communication.</span>
+                  <span class="details">Occasional collaborations with clients on motion design, branding, social
+                    content, and visual communication.</span>
                 </li>
                 <li class="entry bubble-box">
                   <span class="period">May–Jun 2025</span>
                   <span class="role">Motion & Graphic Designer — Watermelon, Morbegno (Internship)</span>
-                  <span class="details">Studio specialized in animation and high‑impact video content. 2D animation, compositing, and graphic support.</span>
+                  <span class="details">Studio specialized in animation and high‑impact video content. 2D animation,
+                    compositing, and graphic support.</span>
                 </li>
                 <li class="entry bubble-box">
                   <span class="period">Feb–Mar 2024</span>
                   <span class="role">Motion & Graphic Designer — E507 Studio, Lecco (Internship)</span>
-                  <span class="details">Multidisciplinary studio (art direction, events, visual identity). Contributed to video and graphic materials for events and social communication.</span>
+                  <span class="details">Multidisciplinary studio (art direction, events, visual identity). Contributed
+                    to video and graphic materials for events and social communication.</span>
                 </li>
               </ul>
             </section>
@@ -74,8 +80,9 @@
   <script>
     // Register service worker for consistency
     if ('serviceWorker' in navigator) {
-      try { navigator.serviceWorker.register('sw.js'); } catch (_) {}
+      try { navigator.serviceWorker.register('sw.js'); } catch (_) { }
     }
   </script>
 </body>
+
 </html>

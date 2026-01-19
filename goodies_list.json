@@ -12,7 +12,7 @@
         "origin": "Personal",
         "type": "case-study",
         "cover": "assets/images/previews/preview-mouthiverse.gif",
-        "description": "Mouthiverse is a script developed by Vorace to simplify state switching in Adobe After Effects.",
+        "description": "Mouthiverse is a script for After Effects that simplifies state switching.",
         "blocks": [
             {
                 "type": "image-text",
