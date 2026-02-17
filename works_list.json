@@ -1,5 +1,30 @@
 [
     {
+        "id": "libraesva-services",
+        "visibility": "visible",
+        "title": "Libraesva Services",
+        "date": "2026",
+        "categories": [
+            "Motion Design"
+        ],
+        "origin": "Client Work",
+        "type": "single-video",
+        "cover": "assets/images/previews/preview-libraesva-services.gif",
+        "description": "E507 Studio commissioned me to create a video for Libraesva, a company that focuses on email security services. The video illustrates the four main services provided by the company in a fun and engaging way.",
+        "video": {
+            "source": "youtube",
+            "embedId": "aeJy1WBPDKs"
+        },
+        "credits": {
+            "Client": "Libraesva",
+            "Agency": [
+                "E507 Studio",
+                "https://e507.it/"
+            ],
+            "Motion Design, Illustrations, Sound Design": "Tommaso Tabacchi"
+        }
+    },
+    {
         "id": "football-society-intro",
         "visibility": "visible",
         "title": "Football Society Intro",
