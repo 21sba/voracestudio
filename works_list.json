@@ -11,18 +11,20 @@
         "origin": "Client Work",
         "type": "single-video",
         "cover": "assets/images/previews/preview-libraesva-services.gif",
-        "description": "E507 Studio commissioned me to create a video for Libraesva, a company that focuses on email security services. The video illustrates the four main services provided by the company in a fun and engaging way.",
+        "description": "[E507 Studio](https://e507.it/) commissioned me to create a video for Libraesva, a company that focuses on email security services. The video illustrates the four main services provided by the company in a fun and engaging way.",
         "video": {
             "source": "youtube",
             "embedId": "aeJy1WBPDKs"
         },
         "credits": {
             "Client": "Libraesva",
-            "Agency": [
-                "E507 Studio",
-                "https://e507.it/"
-            ],
+            "Agency": "[E507 Studio](https://e507.it/)",
             "Motion Design, Illustrations, Sound Design": "Tommaso Tabacchi"
+        },
+        "colors": {
+            "accentColor": "#6AC670",
+            "accentAlt": "#1F1F1F",
+            "smartInvert": true
         }
     },
     {
@@ -36,17 +38,19 @@
         "origin": "Client Work",
         "type": "single-video",
         "cover": "assets/images/previews/preview-football-society.gif",
-        "description": "E507 Studio commissioned me to create an intro for Football Society, a podcast dedicated to a romantic vision of football, including passion, anecdotes, and football culture. The style had to stand out from typical football shows and reflect the podcast’s unique character.\nI worked on bringing the client’s core idea to life (a mug being hit by a football) as well as adding sound effects and selecting the music.",
+        "description": "[E507 Studio](https://e507.it/) commissioned me to create an intro for Football Society, a podcast dedicated to a romantic vision of football, including passion, anecdotes, and football culture. The style had to stand out from typical football shows and reflect the podcast’s unique character.\nI worked on bringing the client’s core idea to life (a mug being hit by a football) as well as adding sound effects and selecting the music.",
         "video": {
             "source": "youtube",
             "embedId": "W7KQruFRnEc"
         },
         "credits": {
-            "Client": [
-                "E507 Studio",
-                "https://e507.it/"
-            ],
+            "Client": "[E507 Studio](https://e507.it/)",
             "Motion Design, Sound Design": "Tommaso Tabacchi"
+        },
+        "colors": {
+            "accentColor": "#f698c3",
+            "accentAlt": "#243581",
+            "smartInvert": true
         }
     },
     {
@@ -61,7 +65,7 @@
         "origin": "Client Work",
         "type": "case-study-video",
         "cover": "assets/images/previews/preview-growermetal.gif",
-        "description": "E507 Studio commissioned me to create a short video for Growermetal, a major company producing washers. The video was made for an Open Day, when the workers’ families were invited to visit the factory. It’s a fun and easy explanation of what Growermetal does and how washers are made.\nI took care of the illustrations and animations, while the client provided the script.",
+        "description": "[E507 Studio](https://e507.it/) commissioned me to create a short video for Growermetal, a major company producing washers. The video was made for an Open Day, when the workers’ families were invited to visit the factory. It’s a fun and easy explanation of what Growermetal does and how washers are made.\nI took care of the illustrations and animations, while the client provided the script.",
         "video": {
             "source": "youtube",
             "embedId": "_DqZCZb2Lys"
@@ -75,11 +79,13 @@
         ],
         "credits": {
             "Client": "Growermetal",
-            "Agency": [
-                "E507 Studio",
-                "https://e507.it/"
-            ],
+            "Agency": "[E507 Studio](https://e507.it/)",
             "Motion Design, Illustrations": "Tommaso Tabacchi"
+        },
+        "colors": {
+            "accentColor": "#0DB674",
+            "accentAlt": "#1B1610",
+            "smartInvert": true
         }
     },
     {
@@ -94,17 +100,19 @@
         "origin": "Intership",
         "type": "single-video",
         "cover": "assets/images/previews/preview-billy-bruco.gif",
-        "description": "During my university internship at Watermelon, I created a series of three animated video loops as a playful symbol of our collaboration. Designed for Instagram, the project features Billy Bruco, a cheerful little caterpillar with a big appetite.\nI developed the concept, illustrations, motion design, and sound design independently, with valuable feedback and support from the studio.",
+        "description": "During my university internship at [Watermelon](https://watermelon.it/), I created a series of three animated video loops as a playful symbol of our collaboration. Designed for Instagram, the project features Billy Bruco, a cheerful little caterpillar with a big appetite.\nI developed the concept, illustrations, motion design, and sound design independently, with valuable feedback and support from the studio.",
         "video": {
             "source": "youtube",
             "embedId": "Upd_ukY_oxE"
         },
         "credits": {
-            "Intership @": [
-                "Watermelon",
-                "https://watermelon.it/"
-            ],
+            "Intership @": "[Watermelon](https://watermelon.it/)",
             "Motion Design, Illustrations, Sound Design": "Tommaso Tabacchi"
+        },
+        "colors": {
+            "accentColor": "#BFE62D",
+            "accentAlt": "#9A033C",
+            "smartInvert": true
         }
     },
     {
@@ -140,10 +148,26 @@
                 "type": "iframe",
                 "title": "Website",
                 "src": "assets/works/atnm/site/index.html"
+            },
+            {
+                "type": "button",
+                "kind": "regular",
+                "buttons": [
+                    {
+                        "text": "→ Visit Website",
+                        "url": "https://voracestudio.com/assets/works/atnm/site/index.html",
+                        "target": "_blank"
+                    }
+                ]
             }
         ],
         "credits": {
             "Everything Made By": "Tommaso Tabacchi"
+        },
+        "colors": {
+            "accentColor": "#f95651",
+            "accentAlt": "#000000",
+            "smartInvert": true
         }
     },
     {
@@ -183,6 +207,10 @@
         "credits": {
             "Client": "Flor.es",
             "Graphic Design, UI": "Tommaso Tabacchi"
+        },
+        "colors": {
+            "accentColor": "#7AAF1E",
+            "accentAlt": "#EFEBA5"
         }
     },
     {
@@ -206,6 +234,11 @@
             "Model": "Veronica Pizzi",
             "MUA": "Andrea Diana Piccaluga",
             "Special Thanks to": "Multiset Mecenate, Francesco di Biase, Davide Vanini, Alexandro, Alice e Giorgia"
+        },
+        "colors": {
+            "accentColor": "#96BCA6",
+            "accentAlt": "#000000",
+            "smartInvert": true
         }
     },
     {
@@ -241,6 +274,10 @@
         ],
         "credits": {
             "Everything Made By": "Tommaso Tabacchi"
+        },
+        "colors": {
+            "accentColor": "#D6741B",
+            "accentAlt": "#EFD8BD"
         }
     },
     {
@@ -299,6 +336,11 @@
         ],
         "credits": {
             "Everything Made By": "Tommaso Tabacchi"
+        },
+        "colors": {
+            "accentColor": "#F94B68",
+            "accentAlt": "#000000",
+            "smartInvert": true
         }
     },
     {
@@ -313,18 +355,18 @@
         "origin": "Client Work",
         "type": "single-video",
         "cover": "assets/images/previews/preview-quinoa.gif",
-        "description": "E507 Studio commissioned me to create the presentation video for Quinoa, an AI chatbot tool developed by Sesamo Srl.\nThe client provided the base audio and a general storyline.",
+        "description": "[E507 Studio](https://e507.it/) commissioned me to create the presentation video for Quinoa, an AI chatbot tool developed by Sesamo Srl.\nThe client provided the base audio and a general storyline.",
         "video": {
             "source": "youtube",
             "embedId": "kkdWgjbC5AU"
         },
         "credits": {
             "Client": "Quinoa",
-            "Agency": [
-                "E507 Studio",
-                "https://e507.it/"
-            ],
+            "Agency": "[E507 Studio](https://e507.it/)",
             "Motion Design": "Tommaso Tabacchi"
+        },
+        "colors": {
+            "accentColor": "#8F51FF"
         }
     },
     {
@@ -338,7 +380,7 @@
         "origin": "Client Work",
         "type": "case-study-video",
         "cover": "assets/images/previews/preview-scenario.gif",
-        "description": "A conceptual design project exploring the cultural suppression of silence through a speculative dystopia.\n(Against) The Noise Machine blends video, editorial design, web and audio to question the normalization of constant noise.",
+        "description": "[E507 Studio](https://e507.it/) commissioned me to create six videos for Scenario Festival, a music festival in Lecco, to promote the event on socials.",
         "video": {
             "source": "youtube",
             "embedId": "6JrMkuquqYk"
@@ -352,11 +394,11 @@
             }
         ],
         "credits": {
-            "Client": [
-                "E507 Studio",
-                "https://e507.it/"
-            ],
+            "Client": "[E507 Studio](https://e507.it/)",
             "Motion Design": "Tommaso Tabacchi"
+        },
+        "colors": {
+            "accentColor": "#4155E2"
         }
     },
     {
@@ -378,6 +420,10 @@
         },
         "credits": {
             "Everything Made By": "Tommaso Tabacchi"
+        },
+        "colors": {
+            "accentColor": "#1A7EBB",
+            "accentAlt": "#FAAECF"
         }
     },
     {
@@ -391,17 +437,19 @@
         "origin": "Intership",
         "type": "single-video",
         "cover": "assets/images/previews/preview-mentalisti.gif",
-        "description": "E507 Studio commissioned me to create motion videos for the second and third episodes of ‘Mentalisti,’ an event series hosted by the studio.\nEach video highlights a distinct element inspired by the evening’s featured artist, with the studio providing the base promotional poster design and general graphic style.",
+        "description": "[E507 Studio](https://e507.it/) commissioned me to create motion videos for the second and third episodes of ‘Mentalisti,’ an event series hosted by the studio.\nEach video highlights a distinct element inspired by the evening’s featured artist, with the studio providing the base promotional poster design and general graphic style.",
         "video": {
             "source": "youtube",
             "embedId": "NDLiKlkz9ac"
         },
         "credits": {
-            "Intership @": [
-                "E507 Studio",
-                "https://e507.it/"
-            ],
+            "Intership @": "[E507 Studio](https://e507.it/)",
             "Motion Design": "Tommaso Tabacchi"
+        },
+        "colors": {
+            "accentColor": "#686CF7",
+            "accentAlt": "#000000",
+            "smartInvert": true
         }
     }
 ]

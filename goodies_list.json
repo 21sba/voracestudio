@@ -12,13 +12,13 @@
         "origin": "Personal",
         "type": "case-study",
         "cover": "assets/images/previews/preview-mouthiverse.gif",
-        "description": "Mouthiverse is a script for After Effects that simplifies state switching.",
+        "description": "**Mouthiverse** is a script for After Effects that **simplifies state switching**.",
         "blocks": [
             {
                 "type": "image-text",
                 "title": "⁘ Welcome to the Mouthiverse ⁘",
                 "src": "assets/goodies/mouthiverse/mouthiverse-ui.jpg",
-                "content": "Mouthiverse makes it easier to switch between the various states of an object by using labeled buttons in a dockable panel, avoiding the need to manually adjust a Slider Control.\n\nIt allows you to create and manage Mouthiverses: compositions containing multiple layers, each representing a different state of a visual element (e.g., mouth shapes for lip-syncing or other visual states).\n\nIt controls the visibility of each state through Opacity instead of Time Remapping for better performance and reliability."
+                "content": "Mouthiverse makes it easier to switch between the various states of an object by using labeled buttons in a dockable panel, avoiding the need to manually adjust a Slider Control.\n\nIt allows you to create and manage Mouthiverses: compositions containing multiple layers, each representing a different state of a visual element (e.g., mouth shapes for lip-syncing or other visual states).\n\nIt controls the visibility of each state through **Opacity** instead of Time Remapping for better performance and reliability."
             },
             {
                 "type": "image",
@@ -69,7 +69,8 @@
                 ]
             },
             {
-                "type": "download",
+                "type": "button",
+                "kind": "download",
                 "title": "Download the Script",
                 "buttons": [
                     {
@@ -82,6 +83,9 @@
         "credits": {
             "Script": "Tommaso Tabacchi",
             "Made with the help of": "Claude AI"
+        },
+        "colors": {
+            "accentColor": "#4A4ADE"
         }
     }
 ]

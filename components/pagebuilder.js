@@ -8,6 +8,15 @@
     return s ? s : (fallback !== undefined ? fallback : '');
   }
 
+  function parseMD(val) {
+    if (typeof val !== 'string') return '';
+    return val
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/_(.*?)_/g, '<em>$1</em>')
+      .replace(/==([^=]+)==/g, '<span class="md-highlight">$1</span>')
+      .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+  }
+
   const isVisible = (item) => String((item && item.visibility) ? item.visibility : 'visible').toLowerCase() === 'visible';
 
   // Lightweight dataset cache (works/goodies) to resolve cross-references
@@ -180,7 +189,7 @@
     if (dash(item.description)) {
       const p = document.createElement('p');
       p.className = 'description';
-      p.textContent = dash(item.description);
+      p.innerHTML = parseMD(dash(item.description));
       infoPanel.appendChild(p);
     }
 
@@ -218,7 +227,7 @@
         itemEl.className = 'credit-item';
         const r = document.createElement('span');
         r.className = 'credit-role';
-        r.textContent = String(role);
+        r.innerHTML = parseMD(String(role));
         const n = document.createElement('span');
         n.className = 'credit-name';
 
@@ -230,10 +239,10 @@
             a.href = String(url);
             a.target = '_blank';
             a.rel = 'noopener noreferrer';
-            a.textContent = String(text || url);
+            a.innerHTML = parseMD(String(text || url));
             n.appendChild(a);
           } else {
-            n.textContent = String(text);
+            n.innerHTML = parseMD(String(text));
           }
         } else if (typeof name === 'object' && name) {
           const text = name.name || name.text || '';
@@ -243,13 +252,13 @@
             a.href = String(url);
             a.target = '_blank';
             a.rel = 'noopener noreferrer';
-            a.textContent = String(text || url);
+            a.innerHTML = parseMD(String(text || url));
             n.appendChild(a);
           } else {
-            n.textContent = String(text || dash(name));
+            n.innerHTML = parseMD(String(text || dash(name)));
           }
         } else {
-          n.textContent = String(name);
+          n.innerHTML = parseMD(String(name));
         }
 
         itemEl.appendChild(r);
@@ -286,7 +295,7 @@
     if (dash(item.description)) {
       const p = document.createElement('p');
       p.className = 'description';
-      p.textContent = dash(item.description);
+      p.innerHTML = parseMD(dash(item.description));
       infoPanel2.appendChild(p);
     }
 
@@ -324,7 +333,7 @@
         itemEl.className = 'credit-item';
         const r = document.createElement('span');
         r.className = 'credit-role';
-        r.textContent = String(role);
+        r.innerHTML = parseMD(String(role));
         const n = document.createElement('span');
         n.className = 'credit-name';
 
@@ -336,10 +345,10 @@
             a.href = String(url);
             a.target = '_blank';
             a.rel = 'noopener noreferrer';
-            a.textContent = String(text || url);
+            a.innerHTML = parseMD(String(text || url));
             n.appendChild(a);
           } else {
-            n.textContent = String(text);
+            n.innerHTML = parseMD(String(text));
           }
         } else if (typeof name === 'object' && name) {
           const text = name.name || name.text || '';
@@ -349,13 +358,13 @@
             a.href = String(url);
             a.target = '_blank';
             a.rel = 'noopener noreferrer';
-            a.textContent = String(text || url);
+            a.innerHTML = parseMD(String(text || url));
             n.appendChild(a);
           } else {
-            n.textContent = String(text || dash(name));
+            n.innerHTML = parseMD(String(text || dash(name)));
           }
         } else {
-          n.textContent = String(name);
+          n.innerHTML = parseMD(String(name));
         }
 
         itemEl.appendChild(r);
@@ -396,7 +405,7 @@
     if (dash(item.description)) {
       const p = document.createElement('p');
       p.className = 'description';
-      p.textContent = dash(item.description);
+      p.innerHTML = parseMD(dash(item.description));
       infoPanel3.appendChild(p);
     }
 
@@ -434,7 +443,7 @@
         itemEl.className = 'credit-item';
         const r = document.createElement('span');
         r.className = 'credit-role';
-        r.textContent = String(role);
+        r.innerHTML = parseMD(String(role));
         const n = document.createElement('span');
         n.className = 'credit-name';
 
@@ -446,10 +455,10 @@
             a.href = String(url);
             a.target = '_blank';
             a.rel = 'noopener noreferrer';
-            a.textContent = String(text || url);
+            a.innerHTML = parseMD(String(text || url));
             n.appendChild(a);
           } else {
-            n.textContent = String(text);
+            n.innerHTML = parseMD(String(text));
           }
         } else if (typeof name === 'object' && name) {
           const text = name.name || name.text || '';
@@ -459,13 +468,13 @@
             a.href = String(url);
             a.target = '_blank';
             a.rel = 'noopener noreferrer';
-            a.textContent = String(text || url);
+            a.innerHTML = parseMD(String(text || url));
             n.appendChild(a);
           } else {
-            n.textContent = String(text || dash(name));
+            n.innerHTML = parseMD(String(text || dash(name)));
           }
         } else {
-          n.textContent = String(name);
+          n.innerHTML = parseMD(String(name));
         }
 
         itemEl.appendChild(r);
@@ -559,10 +568,10 @@
             a.href = String(url);
             a.target = '_blank';
             a.rel = 'noopener noreferrer';
-            a.textContent = String(text || url);
+            a.innerHTML = parseMD(String(text || url));
             n.appendChild(a);
           } else {
-            n.textContent = String(text);
+            n.innerHTML = parseMD(String(text));
           }
         } else if (typeof name === 'object' && name) {
           const text = name.name || name.text || '';
@@ -572,13 +581,13 @@
             a.href = String(url);
             a.target = '_blank';
             a.rel = 'noopener noreferrer';
-            a.textContent = String(text || url);
+            a.innerHTML = parseMD(String(text || url));
             n.appendChild(a);
           } else {
-            n.textContent = String(text || dash(name));
+            n.innerHTML = parseMD(String(text || dash(name)));
           }
         } else {
-          n.textContent = String(name);
+          n.innerHTML = parseMD(String(name));
         }
 
         itemEl.appendChild(r);
@@ -662,7 +671,7 @@
         if (b.content) {
           const caption = document.createElement('p');
           caption.className = 'caption';
-          caption.textContent = String(b.content);
+          caption.innerHTML = parseMD(String(b.content));
           blockEl.appendChild(caption);
         }
 
@@ -691,7 +700,7 @@
         const content = String(b.content || '');
         content.split('\n\n').forEach((para) => {
           const p = document.createElement('p');
-          p.textContent = para;
+          p.innerHTML = parseMD(para);
           text.appendChild(p);
         });
         grid.appendChild(media);
@@ -954,7 +963,7 @@
           if (item.description) {
             const d = document.createElement('p');
             d.className = 'description';
-            d.textContent = String(item.description);
+            d.innerHTML = parseMD(String(item.description));
             infoPanel.appendChild(d);
           }
 
@@ -1023,7 +1032,7 @@
         const content = String(b.content || '');
         content.split('\n\n').forEach((para) => {
           const p = document.createElement('p');
-          p.textContent = para;
+          p.innerHTML = parseMD(para);
           caption.appendChild(p);
         });
         blockEl.appendChild(caption);
@@ -1043,7 +1052,7 @@
           const content = String(t.content || '');
           content.split('\n\n').forEach((para) => {
             const p = document.createElement('p');
-            p.textContent = para;
+            p.innerHTML = parseMD(para);
             panel.appendChild(p);
           });
           header.querySelectorAll('button').forEach((btn, idx) => {
@@ -1066,25 +1075,48 @@
         setActive(0);
         blockEl.appendChild(wrapTabs);
 
-      } else if (type === 'download') {
+      } else if (type === 'button') {
         const dl = document.createElement('div');
-        dl.className = 'download-wrap';
+        dl.className = 'button-wrap bubble-box';
         const buttons = Array.isArray(b.buttons) ? b.buttons : [];
+        const defaultKind = String(b.kind || 'regular').toLowerCase();
+        const defaultIsDownload = defaultKind === 'download';
         if (buttons.length) {
           buttons.forEach((btn) => {
             const a = document.createElement('a');
-            a.className = 'download-btn';
+            a.className = 'action-btn';
             a.href = String(btn.url || '');
-            a.textContent = String(btn.text || dash(b.title) || 'Download');
-            a.setAttribute('download', '');
+            const btnKind = String(btn.kind || '').toLowerCase();
+            let isDownload = btnKind ? (btnKind === 'download') : defaultIsDownload;
+            if (btn.download === true) isDownload = true;
+            if (btn.download === false) isDownload = false;
+            a.textContent = String(btn.text || dash(b.title) || (isDownload ? 'Download' : 'Open'));
+            if (isDownload) {
+              a.setAttribute('download', '');
+            }
+            const target = String(btn.target || '').trim();
+            if (target) {
+              a.setAttribute('target', target);
+              if (target === '_blank') a.setAttribute('rel', 'noopener noreferrer');
+            }
             dl.appendChild(a);
           });
         } else if (b.url) {
           const a = document.createElement('a');
-          a.className = 'download-btn';
+          a.className = 'action-btn';
           a.href = String(b.url);
-          a.textContent = dash(b.title) || 'Download';
-          a.setAttribute('download', '');
+          let isDownload = defaultIsDownload;
+          if (b.download === true) isDownload = true;
+          if (b.download === false) isDownload = false;
+          a.textContent = dash(b.title) || (isDownload ? 'Download' : 'Open');
+          if (isDownload) {
+            a.setAttribute('download', '');
+          }
+          const target = String(b.target || '').trim();
+          if (target) {
+            a.setAttribute('target', target);
+            if (target === '_blank') a.setAttribute('rel', 'noopener noreferrer');
+          }
           dl.appendChild(a);
         }
         blockEl.appendChild(dl);
@@ -1096,7 +1128,7 @@
     root.appendChild(wrap);
   }
 
-  function renderPager(items, currentId, detailsPage) {
+  function renderPager(items, currentId, detailsPage, label) {
     const currentIndex = items.findIndex(w => String(w.id) === String(currentId));
     const visibleIndexes = items.map((w, i) => isVisible(w) ? i : -1).filter(i => i >= 0);
     if (currentIndex < 0 || visibleIndexes.length <= 1) return null;
@@ -1104,32 +1136,53 @@
       for (let i = visibleIndexes.length - 1; i >= 0; i--) {
         if (visibleIndexes[i] < currentIndex) return visibleIndexes[i];
       }
-      return visibleIndexes[visibleIndexes.length - 1];
+      return -1;
     })();
     const nextVisibleIndex = (() => {
       for (let i = 0; i < visibleIndexes.length; i++) {
         if (visibleIndexes[i] > currentIndex) return visibleIndexes[i];
       }
-      return visibleIndexes[0];
+      return -1;
     })();
-    const prevItem = items[prevVisibleIndex];
-    const nextItem = items[nextVisibleIndex];
+
+    const prevItem = prevVisibleIndex >= 0 ? items[prevVisibleIndex] : null;
+    const nextItem = nextVisibleIndex >= 0 ? items[nextVisibleIndex] : null;
+
     const pager = document.createElement('nav');
     pager.className = 'work-pager';
     pager.setAttribute('aria-label', 'Item navigation');
     const inner = document.createElement('div');
     inner.className = 'pager-inner';
+
     const prevBtn = document.createElement('a');
     prevBtn.className = 'pager-btn prev';
-    prevBtn.href = `${detailsPage}?id=${encodeURIComponent(prevItem.id)}`;
-    prevBtn.textContent = '< PREV';
-    prevBtn.setAttribute('aria-label', `Previous: ${dash(prevItem.title || prevItem.id)}`);
+    if (prevItem) {
+      prevBtn.href = `${detailsPage}?id=${encodeURIComponent(prevItem.id)}`;
+      prevBtn.textContent = '←PREV';
+      prevBtn.setAttribute('aria-label', `Previous: ${dash(prevItem.title || prevItem.id)}`);
+    } else {
+      prevBtn.style.visibility = 'hidden';
+      prevBtn.style.pointerEvents = 'none';
+    }
+
+    // Center label (e.g. WORKS / GOODIES)
+    const labelEl = document.createElement('span');
+    labelEl.className = 'pager-label';
+    labelEl.textContent = label || '';
+
     const nextBtn = document.createElement('a');
     nextBtn.className = 'pager-btn next';
-    nextBtn.href = `${detailsPage}?id=${encodeURIComponent(nextItem.id)}`;
-    nextBtn.textContent = 'NEXT >';
-    nextBtn.setAttribute('aria-label', `Next: ${dash(nextItem.title || nextItem.id)}`);
+    if (nextItem) {
+      nextBtn.href = `${detailsPage}?id=${encodeURIComponent(nextItem.id)}`;
+      nextBtn.textContent = 'NEXT→';
+      nextBtn.setAttribute('aria-label', `Next: ${dash(nextItem.title || nextItem.id)}`);
+    } else {
+      nextBtn.style.visibility = 'hidden';
+      nextBtn.style.pointerEvents = 'none';
+    }
+
     inner.appendChild(prevBtn);
+    inner.appendChild(labelEl);
     inner.appendChild(nextBtn);
     pager.appendChild(inner);
     return pager;
@@ -1166,6 +1219,29 @@
     try {
       const t = dash(item.title);
       if (t) document.title = `Vorace - ${t}`;
+
+      const pC = item.colors || {};
+      const c3 = String(pC.accentColor || '').trim();
+      const alt = String(pC.accentAlt || '').trim();
+      if (c3) {
+        document.documentElement.style.setProperty('--color3', c3);
+        document.documentElement.style.setProperty('--global-color3', c3);
+        let finalC4 = alt;
+        try {
+          if (!finalC4 && typeof window.chroma === 'function') finalC4 = window.chroma(c3).mix('white', 0.5).hex();
+        } catch (e) { }
+        if (finalC4) {
+          document.documentElement.style.setProperty('--color4', finalC4);
+          document.documentElement.style.setProperty('--global-color4', finalC4);
+        }
+
+        if (pC.smartInvert) {
+          document.body.classList.add('smart-invert');
+        } else {
+          document.body.classList.remove('smart-invert');
+        }
+      }
+
       // Update OG tags for detail pages (work/goodie)
       if (t) setOgMeta('og:title', t);
       const d = dash(item.description);
@@ -1214,7 +1290,7 @@
     // Pager
     try {
       if (pager && pager.detailsPage) {
-        const nav = renderPager(items, id, pager.detailsPage);
+        const nav = renderPager(items, id, pager.detailsPage, pager.label);
         if (nav) document.body.appendChild(nav);
       }
     } catch (err) { console.error('Failed to render pager', err); }
@@ -1334,7 +1410,7 @@
         dataUrl,
         getId: getIdFromQuery,
         containerSelector: '#work-root',
-        pager: { detailsPage, publicOnly: true },
+        pager: { detailsPage, publicOnly: true, label: page === 'work' ? 'WORKS' : 'GOODIES' },
         cta: null
       });
     } catch (err) {

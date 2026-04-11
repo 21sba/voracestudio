@@ -45,10 +45,10 @@ export function animatePathAndTiles(pathEl, points, tiles) {
                 const dy = p.y - target.y;
                 const d2 = dx * dx + dy * dy;
                 if (d2 < bestD2) { bestD2 = d2; bestL = l; }
-                if (d2 < 1) { break; }
+                else if (l > bestL + sampleStep * 3 && bestD2 < 1000) { break; }
             }
             milestones.push(bestL);
-            searchL = bestL;
+            searchL = Math.max(0, bestL - sampleStep * 2); // backtrack a bit for intersecting loops
         }
     }
     recomputeMilestones();
@@ -147,13 +147,17 @@ export function animatePathAndTiles(pathEl, points, tiles) {
     function rebuild() {
         const d = buildSmoothPath(points);
         pathEl.setAttribute('d', d);
-        total = pathEl.getTotalLength();
+        const newTotal = pathEl.getTotalLength();
+        if (total > 0) {
+            currentLen = (currentLen / total) * newTotal;
+        } else {
+            currentLen = newTotal;
+        }
+        total = newTotal;
         pathEl.style.strokeDasharray = `${total}`;
-        sampleStep = Math.max(2, total / 1500);
-        // Preserve already-popped tiles and anchor currentLen accordingly
+        sampleStep = Math.max(10, total / 300);
         poppedIdx = tiles.reduce((acc, t) => acc + (t.classList.contains('popped') ? 1 : 0), 0);
         recomputeMilestones();
-        currentLen = Math.min(total, poppedIdx > 0 ? milestones[poppedIdx - 1] : 0);
         pathEl.style.strokeDashoffset = `${total - currentLen}`;
         stopLen = milestones[getStopIndex()];
     }
@@ -161,7 +165,14 @@ export function animatePathAndTiles(pathEl, points, tiles) {
     function softRebuild() {
         const d = buildSmoothPath(points);
         pathEl.setAttribute('d', d);
-        // Keep total and dash lengths; just update the visual stroke offset
+        const newTotal = pathEl.getTotalLength();
+        if (total > 0) {
+            currentLen = (currentLen / total) * newTotal;
+        } else {
+            currentLen = newTotal;
+        }
+        total = newTotal;
+        pathEl.style.strokeDasharray = `${total}`;
         pathEl.style.strokeDashoffset = `${total - currentLen}`;
     }
 

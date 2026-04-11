@@ -6,15 +6,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Vorace — About</title>
   <link rel="icon" type="image/png" href="assets/images/vorace-doodle-red-favicon.png" />
+  <link rel="stylesheet" href="components/loader.css" />
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="about.css" />
   <meta name="description" content="Motion & Graphic Designer. Bio, education, and experience." />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Vorace - About" />
   <meta property="og:image" content="assets/images/og-image.jpg" />
+  <script src="js/chroma.min.js" defer></script>
 </head>
 
 <body data-page="about">
+  <div class="loading-overlay" aria-hidden="true"
+    style="position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; background: #0f0f0f; z-index: 2001;">
+    <div id="loader-lottie" class="loader-lottie" aria-label="Loading animation"></div>
+    <div class="loading-text"
+      style="font-size: clamp(0.8rem, 1.3vw, 0.9rem); color: #f1eee9; text-transform: uppercase;">loading...</div>
+  </div>
   <div id="app">
     <div class="about-wrap">
       <div class="about-grid">
@@ -32,7 +40,7 @@
               <p>Vorace Studio is a one-person creative studio focused on Motion Graphics run by Tommaso Tabacchi.</p>
             </div>
             <div class="bio-text bubble-box" style="margin-bottom: var(--gap);">
-              <p>I make visual stuff. Mostly moving, sometimes still.</p>
+              <p>Different problems, different approaches. Always figured out from scratch.</p>
             </div>
           </section>
 
@@ -41,7 +49,7 @@
               <h2 class="section-title">Education</h2>
               <ul class="entries">
                 <li class="entry bubble-box">
-                  <span class="period">2022–2025</span>
+                  <span class="period">2022 → 2025</span>
                   <span class="role">ISGMD Design Academy</span>
                   <span class="details">Certificate of Competence in Creative Communication — 110/110 with honors</span>
                 </li>
@@ -51,20 +59,29 @@
               <h2 class="section-title">Experience</h2>
               <ul class="entries">
                 <li class="entry bubble-box">
-                  <span class="period">2023–Present</span>
+                  <span class="period">2023 → Present</span>
                   <span class="role">Freelance Motion & Graphic Designer</span>
                   <span class="details">Occasional collaborations with clients on motion design, branding, social
                     content, and visual communication.</span>
                 </li>
                 <li class="entry bubble-box">
-                  <span class="period">May–Jun 2025</span>
-                  <span class="role">Motion & Graphic Designer — Watermelon, Morbegno (Internship)</span>
+                  <span class="period">Nov 2025 → Present</span>
+                  <span class="role">Motion Designer — <a href="https://watermelon.it/" target="_blank"
+                      rel="noopener noreferrer">Watermelon</a>, Morbegno</span>
+                  <span class="details">Studio specialized in animation and high‑impact video content. 2D
+                    animation.</span>
+                </li>
+                <li class="entry bubble-box">
+                  <span class="period">May → Jun 2025</span>
+                  <span class="role">Motion & Graphic Designer — <a href="https://watermelon.it/" target="_blank"
+                      rel="noopener noreferrer">Watermelon</a>, Morbegno (Internship)</span>
                   <span class="details">Studio specialized in animation and high‑impact video content. 2D animation,
                     compositing, and graphic support.</span>
                 </li>
                 <li class="entry bubble-box">
-                  <span class="period">Feb–Mar 2024</span>
-                  <span class="role">Motion & Graphic Designer — E507 Studio, Lecco (Internship)</span>
+                  <span class="period">Feb → Mar 2024</span>
+                  <span class="role">Motion & Graphic Designer — <a href="https://e507.it/" target="_blank"
+                      rel="noopener noreferrer">E507 Studio</a>, Lecco (Internship)</span>
                   <span class="details">Multidisciplinary studio (art direction, events, visual identity). Contributed
                     to video and graphic materials for events and social communication.</span>
                 </li>
@@ -75,7 +92,11 @@
       </div>
     </div>
   </div>
-  <script src="components/bootstrap.js" defer></script>
+
+  <script src="components/loader.js" defer></script>
+  <script src="components/menu.js" defer></script>
+  <script src="components/footer.js" defer></script>
+  <script src="components/copy.js" defer></script>
   <script src="about.js" defer></script>
   <script>
     // Register service worker for consistency

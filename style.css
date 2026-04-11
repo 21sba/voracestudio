@@ -111,10 +111,70 @@ body::before {
   font-style: italic;
 }
 
+::selection {
+  background: var(--color3);
+  color: var(--color2);
+}
+
+.md-highlight {
+  color: var(--color4);
+  font-weight: var(--weight-bold);
+}
+
+body.smart-invert .md-highlight {
+  color: var(--color3);
+}
+
 /* Keep two columns on desktop; mobile rules in gridbuilder.css */
 
 .bubble-box {
   background: var(--color6);
   border-radius: var(--outer-radius);
   padding: var(--padding);
+}
+
+.description a,
+.bio a,
+.bio .copy-email,
+.caption a,
+.tabs-panel a,
+.text-wrap a,
+.about-block a,
+.credit-item a,
+.credits a,
+.site-footer .footer-email a {
+  color: var(--color4);
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+  transition: opacity 150ms ease, color 150ms ease;
+  cursor: pointer;
+}
+
+.description a:hover,
+.bio a:hover,
+.bio .copy-email:hover,
+.caption a:hover,
+.tabs-panel a:hover,
+.text-wrap a:hover,
+.about-block a:hover,
+.credit-item a:hover,
+.credits a:hover,
+.site-footer .footer-email a:hover {
+  opacity: 0.7;
+}
+
+/* Smart Invert for content links */
+/* (We purposefully exclude the footer link here 
+   because .site-footer automatically flips the variables locally) */
+body.smart-invert .description a,
+body.smart-invert .bio a,
+body.smart-invert .bio .copy-email,
+body.smart-invert .caption a,
+body.smart-invert .tabs-panel a,
+body.smart-invert .text-wrap a,
+body.smart-invert .about-block a,
+body.smart-invert .credit-item a,
+body.smart-invert .credits a {
+  color: var(--color3);
 }

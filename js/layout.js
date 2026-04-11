@@ -112,6 +112,14 @@ export function layout(scatter, works, brandEl, stickerTimers) {
         tile.className = 'tile';
         tile.href = `work.html?id=${encodeURIComponent(work.id)}`;
         tile.style.setProperty('--size', `${size}px`);
+        const pC = work.colors || {};
+        if (pC.accentColor) {
+            tile.style.setProperty('--color3', pC.accentColor);
+            try {
+                const alt = pC.accentAlt || window.chroma(pC.accentColor).mix('white', 0.5).hex();
+                tile.style.setProperty('--color4', alt);
+            } catch (err) { }
+        }
 
         const rot = rand(-20, 20);
         const visual = document.createElement('div');

@@ -21,6 +21,28 @@
       const footer = wrapper.firstElementChild;
       if (!footer) return;
       document.body.appendChild(footer);
+
+      // Dynamically inline SVGs so they inherit CSS variables
+      async function replaceDynamicSVGs(container) {
+        const imgs = container.querySelectorAll('img[data-replace-svg]');
+        for (let img of imgs) {
+          try {
+            const r = await fetch(img.src, { cache: 'no-cache' });
+            let text = await r.text();
+            text = text.replace(/#(ee204c|ed1e4c|ee2222)/gi, 'var(--color3, #ee2222)');
+            text = text.replace(/#(f7b1bd|f6b0bc|f75555)/gi, 'var(--color4, #f75555)');
+            const w = document.createElement('div');
+            w.innerHTML = text;
+            const svg = w.querySelector('svg');
+            if (svg) {
+              if (img.className) svg.setAttribute('class', (svg.getAttribute('class') || '') + ' ' + img.className);
+              img.replaceWith(svg);
+            }
+          } catch (e) { }
+        }
+      }
+      replaceDynamicSVGs(footer);
+
       // Set current year
       const yearEl = footer.querySelector('[data-year]');
       if (yearEl) yearEl.textContent = String(new Date().getFullYear());

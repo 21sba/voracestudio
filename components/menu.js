@@ -43,7 +43,7 @@
       if (btnHome && isHome) btnHome.classList.add('is-current');
       if (btnPortfolio && isPortfolio) btnPortfolio.classList.add('is-current');
       if (btnAbout && isAbout) btnAbout.classList.add('is-current');
-    } catch (_) {}
+    } catch (_) { }
   };
 
   const injectMenu = async () => {
@@ -58,6 +58,28 @@
       const cornerUI = wrapper.firstElementChild;
       if (!cornerUI) return;
       document.body.appendChild(cornerUI);
+
+      // Dynamically inline SVGs so they inherit CSS variables
+      async function replaceDynamicSVGs(container) {
+        const imgs = container.querySelectorAll('img[data-replace-svg]');
+        for (let img of imgs) {
+          try {
+            const r = await fetch(img.src, { cache: 'no-cache' });
+            let text = await r.text();
+            text = text.replace(/#(ee204c|ed1e4c|ee2222)/gi, 'var(--color3, #ee2222)');
+            text = text.replace(/#(f7b1bd|f6b0bc|f75555)/gi, 'var(--color4, #f75555)');
+            const w = document.createElement('div');
+            w.innerHTML = text;
+            const svg = w.querySelector('svg');
+            if (svg) {
+              if (img.className) svg.setAttribute('class', (svg.getAttribute('class') || '') + ' ' + img.className);
+              img.replaceWith(svg);
+            }
+          } catch (e) { }
+        }
+      }
+      replaceDynamicSVGs(cornerUI);
+
       setupInteractions(cornerUI);
       // Programmatically assign offsets and stagger delays to reduce CSS repetition
       (function applyDynamicStyles(root) {

@@ -55,6 +55,7 @@ export function initBrandScrollEffect(brandEl) {
         const opacity = 1 - 1 * progress;  // down to 0.5
         brandEl.style.setProperty('--scale', scale.toFixed(3));
         brandEl.style.setProperty('--opacity', opacity.toFixed(3));
+        brandEl.style.pointerEvents = opacity < 0.05 ? 'none' : 'auto';
     };
     const onScroll = () => {
         if (!ticking) {

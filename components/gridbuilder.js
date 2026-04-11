@@ -8,6 +8,15 @@
     return s ? s : (fallback !== undefined ? fallback : '');
   }
 
+  function parseMD(val) {
+    if (typeof val !== 'string') return '';
+    return val
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/_(.*?)_/g, '<em>$1</em>')
+      .replace(/==([^=]+)==/g, '<span class="md-highlight">$1</span>')
+      .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+  }
+
   async function preloadImages(urls, onProgress) {
     const list = Array.isArray(urls) ? urls.filter(Boolean) : [];
     const total = list.length;
@@ -169,7 +178,7 @@
         if (dText) {
           const d = document.createElement('p');
           d.className = 'description';
-          d.textContent = dText;
+          d.innerHTML = parseMD(dText);
           infoPanel.appendChild(d);
         }
         right.appendChild(infoPanel);
@@ -281,7 +290,7 @@
           if (dText) {
             const desc = document.createElement('p');
             desc.className = 'description';
-            desc.textContent = dText;
+            desc.innerHTML = parseMD(dText);
             card.appendChild(desc);
           }
         }

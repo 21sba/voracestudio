@@ -31,34 +31,35 @@
 
   const ensureOverlay = async () => {
     if (state.loader && document.contains(state.loader)) return state.loader;
-    // Create overlay synchronously to avoid fetch latency causing a visual flash
-    const overlay = document.createElement('div');
-    overlay.className = 'loading-overlay';
-    overlay.setAttribute('aria-hidden', 'true');
-    // Minimal inline styles to ensure instant full-screen cover before CSS loads
-    overlay.style.position = 'fixed';
-    overlay.style.inset = '0';
-    overlay.style.zIndex = '2001';
-    overlay.style.background = getComputedStyle(document.documentElement).getPropertyValue('--color2') || '#000';
-    overlay.style.opacity = '1';
-    overlay.style.display = 'flex';
-    overlay.style.alignItems = 'center';
-    overlay.style.justifyContent = 'center';
-    overlay.style.gap = '12px';
+    let overlay = document.querySelector('.loading-overlay');
+    if (!overlay) {
+      overlay = document.createElement('div');
+      overlay.className = 'loading-overlay';
+      overlay.setAttribute('aria-hidden', 'true');
+      overlay.style.position = 'fixed';
+      overlay.style.inset = '0';
+      overlay.style.zIndex = '2001';
+      overlay.style.background = getComputedStyle(document.documentElement).getPropertyValue('--color2') || '#000';
+      overlay.style.opacity = '1';
+      overlay.style.display = 'flex';
+      overlay.style.alignItems = 'center';
+      overlay.style.justifyContent = 'center';
+      overlay.style.gap = '12px';
 
-    const lottie = document.createElement('div');
-    lottie.id = 'loader-lottie';
-    lottie.className = 'loader-lottie';
-    overlay.appendChild(lottie);
+      const lottie = document.createElement('div');
+      lottie.id = 'loader-lottie';
+      lottie.className = 'loader-lottie';
+      overlay.appendChild(lottie);
 
-    const text = document.createElement('div');
-    text.className = 'loading-text';
-    text.textContent = 'loading...';
-    overlay.appendChild(text);
+      const text = document.createElement('div');
+      text.className = 'loading-text';
+      text.textContent = 'loading...';
+      overlay.appendChild(text);
 
-    document.body.appendChild(overlay);
+      document.body.appendChild(overlay);
+    }
     state.loader = overlay;
-    state.loaderLottie = lottie;
+    state.loaderLottie = overlay.querySelector('.loader-lottie');
     if (state.loaderLottie) {
       state.loaderLottie.style.setProperty('--rot', `${Math.round(rand(0, 0))}deg`);
     }
@@ -111,16 +112,21 @@
     return [0, 0, 0, 1];
   };
 
-  const patchBlackFills = (data, rgba) => {
+  const patchFills = (data) => {
     const walk = (node) => {
       if (!node) return;
       if (Array.isArray(node)) { node.forEach(walk); return; }
       if (typeof node === 'object') {
         if (node.ty === 'fl' && node.c && node.c.a === 0 && Array.isArray(node.c.k)) {
           const k = node.c.k;
-          const isBlack = (k[0] === 0 && k[1] === 0 && k[2] === 0);
-          if (isBlack) {
-            node.c.k = [rgba[0], rgba[1], rgba[2], (rgba.length > 3 ? rgba[3] : 1)];
+          if (k[0] === 0 && k[1] === 0 && k[2] === 0) { // Black -> --color2
+            node.cl = "lottie-color2";
+          }
+          else if (k[0] > 0.8 && k[1] < 0.4 && k[2] < 0.5) { // Red -> --color3
+            node.cl = "lottie-color3";
+          }
+          else if (k[0] > 0.9 && k[1] > 0.5) { // Pink -> --color4
+            node.cl = "lottie-color4";
           }
         }
         if (node.it) walk(node.it);
@@ -158,11 +164,10 @@
     const lottieLib = await ensureLottie();
     if (!lottieLib) return;
 
-    const colorRGBA = getCssVarRGBA('--color2');
     try {
       const res = await fetch('assets/lotties/vorace-logo-loading-animation-v2.json');
       const json = await res.json();
-      patchBlackFills(json, colorRGBA);
+      patchFills(json);
       state.loaderAnim = lottieLib.loadAnimation({
         container: state.loaderLottie,
         renderer: 'svg',

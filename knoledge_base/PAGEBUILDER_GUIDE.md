@@ -22,6 +22,11 @@ Each project is a JSON object in the list. Here is the minimal structure:
   "type": "case-study",
   "cover": "assets/images/previews/preview-my-project.jpg",
   "description": "A short description of the project.",
+  "colors": {
+    "accentColor": "#EE204C",
+    "accentAlt": "#F7B1BD",
+    "smartInvert": false
+  },
   "credits": {
     "Client": "Acme Corp",
     "My Role": "Motion Designer"
@@ -32,6 +37,10 @@ Each project is a JSON object in the list. Here is the minimal structure:
 ### Key Fields
 *   **`id`**: Unique identifier (used in URL: `work.html?id=my-new-project`).
 *   **`visibility`**: `"visible"` (shown on homepage) or `"hidden"` (accessible via link only).
+*   **`colors`**: (Optional) Styling dictionary.
+    *   **`accentColor`**: Primary brand color for this project.
+    *   **`accentAlt`**: (Optional) Secondary brand color. If omitted, the system will automatically generate a harmonious secondary color.
+    *   **`smartInvert`**: (Optional) Set to `true` to invert the primary/secondary colors inside the footer and in content hyperlinks.
 *   **`type`**: Controls the header layout.
     *   `"case-study"`: Standard header with cover image.
     *   `"single-video"`: Header with a YouTube video instead of a cover image.
@@ -187,14 +196,27 @@ Creates a tabbed interface for text content.
 }
 ```
 
-#### 12. Download Block
-Creates download buttons.
+#### 12. Button Block
+Creates one or more action buttons. You can set the kind to "regular" (default) or "download".
+
+Single button:
 ```json
 {
-  "type": "download",
+  "type": "button",
+  "title": "Visit Website",
+  "url": "https://example.com"
+}
+```
+
+Multiple buttons with download behavior:
+```json
+{
+  "type": "button",
+  "kind": "download",
+  "title": "Downloads",
   "buttons": [
-    { "text": "Download PDF", "url": "assets/files/doc.pdf" },
-    { "text": "Download Zip", "url": "assets/files/archive.zip" }
+    { "text": "Download PDF", "url": "assets/files/doc.pdf", "target": "_blank" },
+    { "text": "Download Zip", "url": "assets/files/archive.zip", "target": "_self" }
   ]
 }
 ```
@@ -210,12 +232,23 @@ Individual blocks can be hidden without removing them from the data:
 ```
 
 ## 4. Credits
-The `credits` object appears in the sidebar. You can use simple strings or arrays for links.
+The `credits` object appears in the sidebar. You can write strings or use markdown formatted URLs `[Text](URL)` for hyperlinks.
 
 ```json
 "credits": {
   "Role": "Designer",
-  "Client": ["Acme Corp", "https://acme.com"],
-  "Team": { "name": "John Doe", "url": "https://johndoe.com" }
+  "Client": "[Acme Corp](https://acme.com)",
+  "Team": "[John Doe](https://johndoe.com)"
 }
 ```
+
+### 5. Dynamic Colors & SVGs
+
+The site automatically recolors specific assets based on your project's `accentColor`.
+
+### How it works:
+1.  **CSS Variables**: The colors are injected as `--color3` (Primary) and `--color4` (Secondary).
+2.  **SVG Recoloring**: To make an SVG dynamic, add `data-replace-svg`. The system will fetch the SVG and replace specific colors:
+    *   Pure Red (`#EE204C` or similar) -> `--color3`
+    *   Pink/Light-Red (`#F7B1BD` or similar) -> `--color4`
+3.  **Lottie Animations**: The loading logo automatically patches its internal JSON structure to match your project colors during transitions.
