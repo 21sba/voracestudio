@@ -167,14 +167,14 @@ body.smart-invert .md-highlight {
 /* Smart Invert for content links */
 /* (We purposefully exclude the footer link here 
    because .site-footer automatically flips the variables locally) */
-body.smart-invert .description a,
-body.smart-invert .bio a,
-body.smart-invert .bio .copy-email,
-body.smart-invert .caption a,
-body.smart-invert .tabs-panel a,
-body.smart-invert .text-wrap a,
-body.smart-invert .about-block a,
-body.smart-invert .credit-item a,
+body.smart-invert .description a:hover,
+body.smart-invert .bio a:hover,
+body.smart-invert .bio .copy-email:hover,
+body.smart-invert .caption a:hover,
+body.smart-invert .tabs-panel a:hover,
+body.smart-invert .text-wrap a:hover,
+body.smart-invert .about-block a:hover,
+body.smart-invert .credit-item a:hover,
 body.smart-invert .credits a:hover {
   color: var(--color3);
 }
