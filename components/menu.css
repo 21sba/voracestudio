@@ -26,26 +26,38 @@
   transition: filter 160ms ease;
 }
 
-.corner-logo:hover {
-  transform: rotate(6deg);
+@media (hover: hover) {
+  .corner-logo:hover {
+    transform: rotate(6deg);
+  }
 }
 
-.corner-logo:hover img,
-.corner-logo:hover svg {
-  filter: grayscale(0);
+@media (hover: hover) {
+  .corner-logo:hover img,
+  .corner-logo:hover svg {
+    filter: grayscale(0);
+  }
 }
 
 /* Keep logo in hovered state while hovering the unified area */
-.corner-ui.menu-open .corner-logo,
-.corner-ui:hover .corner-logo {
+.corner-ui.menu-open .corner-logo {
   transform: rotate(6deg);
+}
+@media (hover: hover) {
+  .corner-ui:hover .corner-logo {
+    transform: rotate(6deg);
+  }
 }
 
 .corner-ui.menu-open .corner-logo img,
-.corner-ui:hover .corner-logo img,
-.corner-ui.menu-open .corner-logo svg,
-.corner-ui:hover .corner-logo svg {
+.corner-ui.menu-open .corner-logo svg {
   filter: grayscale(0);
+}
+@media (hover: hover) {
+  .corner-ui:hover .corner-logo img,
+  .corner-ui:hover .corner-logo svg {
+    filter: grayscale(0);
+  }
 }
 
 /* Pop-up menu behind the corner logo */

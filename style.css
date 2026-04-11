@@ -143,7 +143,7 @@ body.smart-invert .md-highlight {
 .credit-item a,
 .credits a,
 .site-footer .footer-email a {
-  color: var(--color4);
+  color: var(--color-text);
   text-decoration: underline;
   text-decoration-thickness: 1.5px;
   text-underline-offset: 3px;
@@ -161,7 +161,7 @@ body.smart-invert .md-highlight {
 .credit-item a:hover,
 .credits a:hover,
 .site-footer .footer-email a:hover {
-  opacity: 0.7;
+  color: var(--color4);
 }
 
 /* Smart Invert for content links */
@@ -175,6 +175,6 @@ body.smart-invert .tabs-panel a,
 body.smart-invert .text-wrap a,
 body.smart-invert .about-block a,
 body.smart-invert .credit-item a,
-body.smart-invert .credits a {
+body.smart-invert .credits a:hover {
   color: var(--color3);
 }

@@ -1160,9 +1160,15 @@
       prevBtn.href = `${detailsPage}?id=${encodeURIComponent(prevItem.id)}`;
       prevBtn.textContent = '←PREV';
       prevBtn.setAttribute('aria-label', `Previous: ${dash(prevItem.title || prevItem.id)}`);
+      prevBtn.classList.remove('disabled');
+      prevBtn.removeAttribute('aria-disabled');
+      prevBtn.tabIndex = 0;
     } else {
-      prevBtn.style.visibility = 'hidden';
-      prevBtn.style.pointerEvents = 'none';
+      prevBtn.textContent = '←PREV';
+      prevBtn.classList.add('disabled');
+      prevBtn.setAttribute('aria-disabled', 'true');
+      prevBtn.removeAttribute('href');
+      prevBtn.tabIndex = -1;
     }
 
     // Center label (e.g. WORKS / GOODIES)
@@ -1176,9 +1182,15 @@
       nextBtn.href = `${detailsPage}?id=${encodeURIComponent(nextItem.id)}`;
       nextBtn.textContent = 'NEXT→';
       nextBtn.setAttribute('aria-label', `Next: ${dash(nextItem.title || nextItem.id)}`);
+      nextBtn.classList.remove('disabled');
+      nextBtn.removeAttribute('aria-disabled');
+      nextBtn.tabIndex = 0;
     } else {
-      nextBtn.style.visibility = 'hidden';
-      nextBtn.style.pointerEvents = 'none';
+      nextBtn.textContent = 'NEXT→';
+      nextBtn.classList.add('disabled');
+      nextBtn.setAttribute('aria-disabled', 'true');
+      nextBtn.removeAttribute('href');
+      nextBtn.tabIndex = -1;
     }
 
     inner.appendChild(prevBtn);

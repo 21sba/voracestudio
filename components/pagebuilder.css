@@ -529,6 +529,7 @@
   gap: 12px;
   background: var(--color6);
   border-radius: var(--outer-radius);
+  border: 1px solid var(--color2);
 }
 
 .work-pager .pager-label {
@@ -560,6 +561,13 @@
   text-decoration: none;
 }
 
+.work-pager .pager-btn.disabled {
+  background: var(--color2);
+  color: var(--color6);
+  pointer-events: none;
+  filter: grayscale(1);
+}
+
 .work-pager .pager-btn:focus-visible {
   outline: 2px solid var(--color1);
   outline-offset: 2px;
@@ -568,7 +576,7 @@
 @media (max-width: 640px) {
   .work-pager {
     top: auto;
-    bottom: 17px;
+    bottom: 16px;
   }
 
   .work-pager .pager-inner {
