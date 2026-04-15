@@ -1,7 +1,7 @@
 [
     {
         "id": "libraesva-services",
-        "visibility": "visible",
+        "visibility": "hidden",
         "title": "Libraesva Services",
         "date": "2026",
         "categories": [
