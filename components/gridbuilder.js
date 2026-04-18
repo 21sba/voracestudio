@@ -328,30 +328,17 @@
       let matchCount = 0;
       cards.forEach(({ el, cats }) => {
         const match = !currentFilter || cats.includes(currentFilter);
-        if (match) matchCount++;
         if (match) {
-          if (el.classList.contains('hidden')) {
-            el.classList.remove('hidden');
-            el.classList.add('animating-in');
-            void el.offsetWidth;
-            el.classList.remove('animating-in');
-          }
+          matchCount++;
+          // Always clear animation/hidden classes for matching cards,
+          // regardless of their current state — this prevents race conditions
+          // when filters are switched quickly while cards are mid-animation.
+          el.classList.remove('hidden', 'animating-out', 'animating-in');
         } else {
           if (!el.classList.contains('hidden')) {
-            const onEnd = (ev) => {
-              if (ev.propertyName !== 'opacity') return;
-              el.removeEventListener('transitionend', onEnd);
-              el.classList.remove('animating-out');
-              el.classList.add('hidden');
-            };
-            el.addEventListener('transitionend', onEnd);
-            el.classList.add('animating-out');
-            setTimeout(() => {
-              if (!el.classList.contains('hidden')) {
-                el.classList.remove('animating-out');
-                el.classList.add('hidden');
-              }
-            }, 260);
+            // Skip transition and hide immediately to prevent stale animation state
+            el.classList.remove('animating-out', 'animating-in');
+            el.classList.add('hidden');
           }
         }
       });

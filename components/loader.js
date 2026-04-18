@@ -8,7 +8,8 @@
     pageName === 'work' ||
     pageName === 'about' ||
     pageName === 'goodies' ||
-    pageName === 'goodie'
+    pageName === 'goodie' ||
+    pageName === '404'
   );
 
   const state = {

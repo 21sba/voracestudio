@@ -83,7 +83,15 @@
     scatter.style.height = `${targetH}px`;
     const canvasH = scatter.clientHeight || targetH;
 
-    // Reveal the hero once canvas sizing is in place (no loader on 404)
+    // Dismiss the loader overlay
+    try {
+      if (window.Loader) {
+        await window.Loader.waitUntilComplete(1000);
+        await window.Loader.hide();
+      }
+    } catch (_) { }
+
+    // Reveal the hero once canvas sizing is in place
     revealTitleAndBio();
 
     // Sticker cycles and placement (mirrors manageStickers from home.js)
