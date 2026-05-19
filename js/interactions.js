@@ -143,10 +143,61 @@ export function enableDrag(tile, scatter, tileRefs, pathPoints, getSplineCtl, sc
         if (!tile.classList.contains('dragging')) return;
         tile.classList.remove('dragging');
         tile.releasePointerCapture && tile.releasePointerCapture(e.pointerId);
-        // Heavy rebuild once at the end of drag to recompute milestones
-        const splineCtl = getSplineCtl();
-        if (splineCtl && typeof splineCtl.rebuild === 'function') {
-            splineCtl.rebuild();
+
+        if (moved) {
+            let vx = 0;
+            let vy = 0;
+            const k = 0.35; // spring stiffness
+            const damp = 0.65; // damping
+
+            let currX = parseFloat(tile.style.left) || 0;
+            let currY = parseFloat(tile.style.top) || 0;
+
+            const animateBounce = () => {
+                if (tile.classList.contains('dragging')) return;
+
+                const dx = startLeft - currX;
+                const dy = startTop - currY;
+
+                vx += dx * k;
+                vy += dy * k;
+                vx *= damp;
+                vy *= damp;
+
+                currX += vx;
+                currY += vy;
+
+                tile.style.left = `${currX}px`;
+                tile.style.top = `${currY}px`;
+
+                const cx = currX + tileW / 2;
+                const cy = currY + tileH / 2;
+                const i = tileRefs.indexOf(tile);
+                if (i >= 0) {
+                    pathPoints[i] = { x: cx, y: cy };
+                }
+                scheduleRebuild();
+
+                if (Math.abs(dx) < 0.5 && Math.abs(dy) < 0.5 && Math.abs(vx) < 0.5 && Math.abs(vy) < 0.5) {
+                    tile.style.left = `${startLeft}px`;
+                    tile.style.top = `${startTop}px`;
+                    if (i >= 0) {
+                        pathPoints[i] = { x: startLeft + tileW / 2, y: startTop + tileH / 2 };
+                    }
+                    const splineCtl = getSplineCtl();
+                    if (splineCtl && typeof splineCtl.rebuild === 'function') {
+                        splineCtl.rebuild();
+                    }
+                    return;
+                }
+                requestAnimationFrame(animateBounce);
+            };
+            requestAnimationFrame(animateBounce);
+        } else {
+            const splineCtl = getSplineCtl();
+            if (splineCtl && typeof splineCtl.rebuild === 'function') {
+                splineCtl.rebuild();
+            }
         }
         e.preventDefault();
     };
@@ -155,6 +206,14 @@ export function enableDrag(tile, scatter, tileRefs, pathPoints, getSplineCtl, sc
         if (!tile.classList.contains('dragging')) return;
         tile.classList.remove('dragging');
         tile.releasePointerCapture && tile.releasePointerCapture(e.pointerId);
+        if (moved) {
+            tile.style.left = `${startLeft}px`;
+            tile.style.top = `${startTop}px`;
+            const i = tileRefs.indexOf(tile);
+            if (i >= 0) {
+                pathPoints[i] = { x: startLeft + tileW / 2, y: startTop + tileH / 2 };
+            }
+        }
         const splineCtl = getSplineCtl();
         if (splineCtl && typeof splineCtl.rebuild === 'function') {
             splineCtl.rebuild();
