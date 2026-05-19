@@ -147,8 +147,8 @@ export function enableDrag(tile, scatter, tileRefs, pathPoints, getSplineCtl, sc
         if (moved) {
             let vx = 0;
             let vy = 0;
-            const k = 0.35; // spring stiffness
-            const damp = 0.65; // damping
+            const k = 0.07; // spring stiffness
+            const damp = 0.82; // damping
 
             let currX = parseFloat(tile.style.left) || 0;
             let currY = parseFloat(tile.style.top) || 0;
