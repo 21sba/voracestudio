@@ -35,6 +35,24 @@ body {
   user-select: text;
 }
 
+.subtitle {
+  margin: 0 0 10px;
+  font-size: var(--size-caption);
+  font-weight: var(--weight-bold);
+  color: var(--color5);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  opacity: 0;
+  transform: translateY(-15px);
+  transition: transform 550ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity 550ms ease;
+  will-change: transform, opacity;
+}
+
+.subtitle.reveal {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 .title {
   margin: 0 0 var(--spacing-title-bottom);
 }

@@ -26,8 +26,15 @@ export function wrapTitleLetters(brandEl) {
 export function revealTitleAndBio(brandEl) {
     const titleEl = brandEl && brandEl.querySelector('.title');
     const bioEl = brandEl && brandEl.querySelector('.bio');
+    const subtitleEl = brandEl && brandEl.querySelector('.subtitle');
     // Prevent double-run if already revealed
     if (titleEl && titleEl.classList.contains('reveal')) return;
+    
+    if (subtitleEl) {
+        subtitleEl.style.transitionDelay = `0ms`;
+        subtitleEl.classList.add('reveal');
+    }
+
     let letterCount = 0;
     if (titleEl) {
         const letters = Array.from(titleEl.querySelectorAll('.letter'));
