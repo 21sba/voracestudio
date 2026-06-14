@@ -11,13 +11,23 @@ export function wrapTitleLetters(brandEl) {
         const text = node.nodeValue || '';
         if (!text.trim()) continue;
         const frag = document.createDocumentFragment();
-        for (let i = 0; i < text.length; i++) {
-            const ch = text[i];
-            if (ch === ' ') { frag.appendChild(document.createTextNode(' ')); continue; }
-            const span = document.createElement('span');
-            span.className = 'letter';
-            span.textContent = ch;
-            frag.appendChild(span);
+        const words = text.split(/(\s+)/);
+        for (const w of words) {
+            if (!w) continue;
+            if (/^\s+$/.test(w)) {
+                frag.appendChild(document.createTextNode(w));
+            } else {
+                const wordSpan = document.createElement('span');
+                wordSpan.className = 'word';
+                wordSpan.style.display = 'inline-block';
+                for (let i = 0; i < w.length; i++) {
+                    const span = document.createElement('span');
+                    span.className = 'letter';
+                    span.textContent = w[i];
+                    wordSpan.appendChild(span);
+                }
+                frag.appendChild(wordSpan);
+            }
         }
         node.parentNode && node.parentNode.replaceChild(frag, node);
     }
