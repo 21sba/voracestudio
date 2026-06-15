@@ -133,6 +133,14 @@ body.smart-invert .md-highlight {
   padding: var(--padding);
 }
 
+.bubble-box > :first-child {
+  margin-top: 0 !important;
+}
+
+.bubble-box > :last-child {
+  margin-bottom: 0 !important;
+}
+
 .description a,
 .bio a,
 .bio .copy-email,
