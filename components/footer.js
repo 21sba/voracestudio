@@ -52,6 +52,43 @@
       const idCardLink = footer.querySelector('.id-card-link');
       if (cta) cta.href = `mailto:${email}`;
       if (idCardLink) idCardLink.href = `mailto:${email}`;
+
+      // Mobile scroll-based ID card rotation
+      const idCard3d = footer.querySelector('.id-card-3d');
+      if (idCard3d) {
+        let ticking = false;
+        const updateRotation = () => {
+          if (window.innerWidth > 860) {
+            idCard3d.style.transform = '';
+            idCard3d.style.transition = '';
+            return;
+          }
+          const rect = footer.getBoundingClientRect();
+          const vh = window.innerHeight;
+          const footerH = rect.height || 1;
+          
+          // Progress from 0 (top enters viewport) to 1 (bottom enters viewport)
+          let progress = (vh - rect.top) / footerH;
+          progress = Math.max(0, Math.min(1, progress));
+          
+          const angle = progress * 180;
+          idCard3d.style.transition = 'none';
+          idCard3d.style.transform = `rotateY(${angle}deg)`;
+        };
+
+        window.addEventListener('scroll', () => {
+          if (!ticking) {
+            window.requestAnimationFrame(() => {
+              updateRotation();
+              ticking = false;
+            });
+            ticking = true;
+          }
+        }, { passive: true });
+        window.addEventListener('resize', updateRotation);
+        // Small delay to ensure layout is ready
+        setTimeout(updateRotation, 100);
+      }
     } catch (err) {
       console.warn('Failed to load footer component', err);
     }
