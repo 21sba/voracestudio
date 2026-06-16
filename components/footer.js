@@ -54,26 +54,31 @@
       if (idCardLink) idCardLink.href = `mailto:${email}`;
 
       // Mobile scroll-based ID card rotation
-      const idCard3d = footer.querySelector('.id-card-3d');
-      if (idCard3d) {
+      const idCardLinkMobile = footer.querySelector('.id-card-link');
+      if (idCardLinkMobile) {
         let ticking = false;
+        const idCard3d = idCardLinkMobile.querySelector('.id-card-3d');
+        if (idCard3d) {
+          // Clean up any inline styles from previous continuous rotation logic
+          idCard3d.style.transition = '';
+          idCard3d.style.transform = '';
+        }
+
         const updateRotation = () => {
           if (window.innerWidth > 860) {
-            idCard3d.style.transform = '';
-            idCard3d.style.transition = '';
+            idCardLinkMobile.classList.remove('mobile-flip');
             return;
           }
           const rect = footer.getBoundingClientRect();
           const vh = window.innerHeight;
           const footerH = rect.height || 1;
-          
-          // Progress from 0 (top enters viewport) to 1 (bottom enters viewport)
-          let progress = (vh - rect.top) / footerH;
-          progress = Math.max(0, Math.min(1, progress));
-          
-          const angle = progress * 180;
-          idCard3d.style.transition = 'none';
-          idCard3d.style.transform = `rotateY(${angle}deg)`;
+
+          // Trigger the flip animation when the footer is 3/4 revealed
+          if (rect.top < vh - (footerH * 0.85)) {
+            idCardLinkMobile.classList.add('mobile-flip');
+          } else {
+            idCardLinkMobile.classList.remove('mobile-flip');
+          }
         };
 
         window.addEventListener('scroll', () => {
