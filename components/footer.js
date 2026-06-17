@@ -47,7 +47,7 @@
       const yearEl = footer.querySelector('[data-year]');
       if (yearEl) yearEl.textContent = String(new Date().getFullYear());
       // Ensure mailto links are correct
-      const email = 'tommasotabacchi7@gmail.com';
+      const email = 'hello@voracestudio.com';
       const cta = footer.querySelector('.footer-cta');
       const idCardLink = footer.querySelector('.id-card-link');
       if (cta) cta.href = `mailto:${email}`;
