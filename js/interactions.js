@@ -65,6 +65,12 @@ export function initBrandScrollEffect(brandEl) {
     if (!brandEl) return;
     let ticking = false;
     const apply = () => {
+        if (isMobileLike()) {
+            brandEl.style.setProperty('--scale', '1');
+            brandEl.style.setProperty('--opacity', '1');
+            brandEl.style.pointerEvents = 'auto';
+            return;
+        }
         const vh = window.innerHeight || 1;
         const y = window.scrollY || window.pageYOffset || 0;
         const progress = Math.min(1, Math.max(0, y / (vh / 2)));

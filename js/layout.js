@@ -26,8 +26,8 @@ export function layout(scatter, works, brandEl, stickerTimers) {
     const margin = Config.layout.MARGIN;
     const SIZE = Config.layout.SIZE;
     const CAPTION_H = Config.layout.CAPTION_H;
-    const CTA_GAP_BELOW_BRAND = Config.layout.CTA_GAP_BELOW_BRAND;
-    const CTA_TO_FIRST_PROJECT_GAP = Config.layout.CTA_TO_FIRST_PROJECT_GAP;
+    const CTA_GAP_BELOW_BRAND = isMobileLike() ? Config.layout.CTA_GAP_BELOW_BRAND + 120 : Config.layout.CTA_GAP_BELOW_BRAND;
+    const CTA_TO_FIRST_PROJECT_GAP = isMobileLike() ? Config.layout.CTA_TO_FIRST_PROJECT_GAP + 120 : Config.layout.CTA_TO_FIRST_PROJECT_GAP;
     const brandBottomY = center.y + center.h;
 
     // Measure CTA height to compute accurate spacing on mobile
@@ -53,8 +53,9 @@ export function layout(scatter, works, brandEl, stickerTimers) {
     const PROJECTS_Y_OFFSET_DESKTOP = Config.layout.PROJECTS_Y_OFFSET_DESKTOP;
     const ROW_GAP = Config.layout.ROW_GAP;
 
-    // Show only first 9 works on homepage
-    const orderedWorks = works.slice(0, 9);
+    // Show only first 6 works on mobile, 9 on desktop
+    const limit = isMobileLike() ? 6 : 9;
+    const orderedWorks = works.slice(0, limit);
 
     // Make the scatter canvas taller than the viewport to enable scrolling
     const unitHeight = Math.round(SIZE * 1.3) + CAPTION_H + margin * 3;
@@ -503,6 +504,7 @@ export function layout(scatter, works, brandEl, stickerTimers) {
 
         const stickerRects = []; // active sticker rects for collision control
         const activeStickerEls = []; // current DOM nodes
+        const lastGeneratedUrls = []; // track to prevent 3 consecutive identical stickers
 
         function randomSample(list, count) {
             const pool = list.slice();
@@ -530,6 +532,7 @@ export function layout(scatter, works, brandEl, stickerTimers) {
             const rotEnd = baseRot;
             el.style.setProperty('--rot', `${rotEnd}deg`);
             el.style.backgroundImage = `url(${url})`;
+            el.dataset.band = preferredBand;
 
             const box = { w: size, h: size };
             let attempts = 0;
@@ -623,8 +626,41 @@ export function layout(scatter, works, brandEl, stickerTimers) {
 
             // Enable dragging for stickers (desktop and mobile)
             (function enableStickerDrag() {
-                // Disable sticker dragging on mobile-like devices
-                if (isMobileLike()) return;
+                // Disable sticker dragging on mobile-like devices, instead jump on click
+                if (isMobileLike()) {
+                    el.addEventListener('click', (e) => {
+                        const targetBand = el.dataset.band === 'top' ? 'gap' : 'top';
+                        const newY = pickMobileY(targetBand) || Math.round(rand(margin, Math.max(margin, canvasH - box.h - margin)));
+                        const vwNow = window.innerWidth || 1024;
+                        const newX = Math.round(rand(margin, Math.max(margin, vwNow - box.w - margin)));
+
+                        el.style.transition = 'left 450ms cubic-bezier(0.25, 0, 0, 1), top 450ms cubic-bezier(0.25, 0, 0, 1), transform 225ms cubic-bezier(0.34, 1.56, 0.64, 1)';
+                        el.style.left = `${newX}px`;
+                        el.style.top = `${newY}px`;
+                        el.style.setProperty('--scale', '1.3');
+
+                        const i = activeStickerEls.indexOf(el);
+                        if (i >= 0) {
+                            stickerRects[i] = { x: newX, y: newY, w: box.w, h: box.h };
+                        }
+
+                        setTimeout(() => {
+                            el.style.setProperty('--scale', '1');
+                        }, 225);
+
+                        setTimeout(() => {
+                            el.style.transition = '';
+                        }, 450);
+
+                        // Clear sticky from all other stickers and make THIS one sticky
+                        activeStickerEls.forEach(st => delete st.dataset.sticky);
+                        el.dataset.sticky = '1';
+                        el.dataset.band = targetBand;
+
+                        e.preventDefault();
+                    });
+                    return;
+                }
                 let startX = 0, startY = 0;
                 let startLeft = 0, startTop = 0;
                 let scLeft = 0, scTop = 0, scWidth = 0, scHeight = 0;
@@ -686,14 +722,40 @@ export function layout(scatter, works, brandEl, stickerTimers) {
         }
 
         function spawnBatch() {
-            // Pick stickers with replacement so duplicates are possible in a batch.
-            const urls = (stickers && stickers.length > 0)
-                ? Array.from({ length: BATCH_SIZE }, () => stickers[Math.floor(Math.random() * stickers.length)])
-                : [];
+            // Calculate how many stickers to spawn
+            let spawnCount = BATCH_SIZE;
+            if (IS_MOBILE) {
+                const stickyCount = activeStickerEls.filter(st => st.dataset.sticky === '1').length;
+                spawnCount = Math.max(0, BATCH_SIZE - stickyCount);
+            }
+
+            // Pick stickers ensuring no more than 2 consecutive are identical.
+            const urls = [];
+            if (stickers && stickers.length > 0) {
+                for (let i = 0; i < spawnCount; i++) {
+                    let candidate;
+                    let attempts = 0;
+                    do {
+                        candidate = stickers[Math.floor(Math.random() * stickers.length)];
+                        attempts++;
+                    } while (
+                        attempts < 10 &&
+                        stickers.length > 1 &&
+                        lastGeneratedUrls.length >= 2 &&
+                        lastGeneratedUrls[lastGeneratedUrls.length - 1] === candidate &&
+                        lastGeneratedUrls[lastGeneratedUrls.length - 2] === candidate
+                    );
+                    urls.push(candidate);
+                    lastGeneratedUrls.push(candidate);
+                    if (lastGeneratedUrls.length > 2) {
+                        lastGeneratedUrls.shift();
+                    }
+                }
+            }
             let bandPlan = null;
             if (IS_MOBILE) {
-                const topCount = Math.floor(BATCH_SIZE / 2);
-                const gapCount = BATCH_SIZE - topCount;
+                const topCount = Math.floor(spawnCount / 2);
+                const gapCount = spawnCount - topCount;
                 bandPlan = [];
                 for (let i = 0; i < topCount; i++) bandPlan.push('top');
                 for (let i = 0; i < gapCount; i++) bandPlan.push('gap');
