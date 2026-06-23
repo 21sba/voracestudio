@@ -36,12 +36,15 @@
       const path = (location.pathname || '').toLowerCase();
       const isHome = path.endsWith('/') || path.endsWith('/index.html') || path === '';
       const isPortfolio = path.endsWith('/works.html') || path.includes('/work.html');
+      const isGoodies = path.endsWith('/goodies.html') || path.includes('/goodie.html');
       const isAbout = path.endsWith('/about.html');
       const btnHome = root.querySelector('.menu-button.home');
       const btnPortfolio = root.querySelector('.menu-button.portfolio');
+      const btnGoodies = root.querySelector('.menu-button.goodies');
       const btnAbout = root.querySelector('.menu-button.about');
       if (btnHome && isHome) btnHome.classList.add('is-current');
       if (btnPortfolio && isPortfolio) btnPortfolio.classList.add('is-current');
+      if (btnGoodies && isGoodies) btnGoodies.classList.add('is-current');
       if (btnAbout && isAbout) btnAbout.classList.add('is-current');
     } catch (_) { }
   };

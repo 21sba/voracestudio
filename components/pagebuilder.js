@@ -732,8 +732,7 @@
         let index = 0;
         let autoId = null;
         const AUTOPLAY_MS = 4000;
-        const INTERACTION_PAUSE_MS = 6000;
-        let interactionTimeout = null;
+        let manualMode = false;
 
         const images = b.src.map((url, i) => {
           const s = document.createElement('img');
@@ -772,12 +771,12 @@
         prev.type = 'button';
         prev.className = 'arrow prev';
         prev.setAttribute('aria-label', 'Previous slide');
-        prev.textContent = '<';
+        prev.textContent = '←';
         const next = document.createElement('button');
         next.type = 'button';
         next.className = 'arrow next';
         next.setAttribute('aria-label', 'Next slide');
-        next.textContent = '>';
+        next.textContent = '→';
 
         const dotsWrap = document.createElement('div');
         dotsWrap.className = 'dots';
@@ -787,7 +786,7 @@
           d.className = 'dot';
           d.setAttribute('aria-label', `Go to slide ${i + 1}`);
           d.addEventListener('click', () => {
-            pauseAutoplayTemporarily();
+            stopAutoplayPermanently();
             setActive(i);
           });
           dotsWrap.appendChild(d);
@@ -814,6 +813,7 @@
         };
 
         const startAutoplay = () => {
+          if (manualMode) return;
           if (autoId) return;
           if (total <= 1) return;
           autoId = setInterval(() => step(1), AUTOPLAY_MS);
@@ -826,25 +826,22 @@
           }
         };
 
-        const pauseAutoplayTemporarily = () => {
+        const stopAutoplayPermanently = () => {
+          manualMode = true;
           clearAutoplay();
-          if (interactionTimeout) clearTimeout(interactionTimeout);
-          interactionTimeout = setTimeout(() => startAutoplay(), INTERACTION_PAUSE_MS);
+          blockEl.classList.add('manual-mode');
         };
 
         prev.addEventListener('click', () => {
-          pauseAutoplayTemporarily();
+          stopAutoplayPermanently();
           step(-1);
         });
         next.addEventListener('click', () => {
-          pauseAutoplayTemporarily();
+          stopAutoplayPermanently();
           step(1);
         });
 
-        // Hover / touch pause/resume
-        media.addEventListener('mouseenter', () => clearAutoplay());
-        media.addEventListener('mouseleave', () => startAutoplay());
-        media.addEventListener('touchstart', () => clearAutoplay(), { passive: true });
+
 
         // Pause when tab is hidden
         const onVisibility = () => {
@@ -870,7 +867,7 @@
           tracking = false;
           const dx = e.clientX - startX;
           if (Math.abs(dx) > SWIPE_THRESHOLD) {
-            pauseAutoplayTemporarily();
+            stopAutoplayPermanently();
             step(dx < 0 ? 1 : -1);
           }
         };
@@ -883,7 +880,7 @@
           tracking = false;
           const dx = (e.changedTouches && e.changedTouches[0]?.clientX || startX) - startX;
           if (Math.abs(dx) > SWIPE_THRESHOLD) {
-            pauseAutoplayTemporarily();
+            stopAutoplayPermanently();
             step(dx < 0 ? 1 : -1);
           }
         };
@@ -894,10 +891,19 @@
         slides.addEventListener('touchend', onTouchEnd, { passive: true });
 
         media.appendChild(slides);
-        media.appendChild(prev);
-        media.appendChild(next);
-        media.appendChild(dotsWrap);
-        blockEl.appendChild(media);
+
+        const controlsWrap = document.createElement('div');
+        controlsWrap.className = 'slideshow-controls';
+        controlsWrap.appendChild(prev);
+        controlsWrap.appendChild(dotsWrap);
+        controlsWrap.appendChild(next);
+
+        const outerWrap = document.createElement('div');
+        outerWrap.className = 'slideshow-wrap bubble-box';
+        outerWrap.appendChild(media);
+        outerWrap.appendChild(controlsWrap);
+
+        blockEl.appendChild(outerWrap);
 
         // Initial state
         setActive(0);

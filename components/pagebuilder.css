@@ -7,11 +7,11 @@
 
 .work-hero {
   min-height: 100vh;
-  display: grid;
-  grid-template-columns: 1fr;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 50px 0 60px;
   gap: var(--gap);
-  /* match spacing between blocks */
-  align-content: center;
 }
 
 .work-hero .title {
@@ -28,14 +28,8 @@
 }
 
 .cover-wrap {
-  position: relative;
-  width: 100%;
-  /* Do not force a 16:9 ratio for images */
-  aspect-ratio: auto;
   border-radius: var(--outer-radius);
-  /* Allow image to define height naturally */
   overflow: visible;
-  background: var(--color5);
 }
 
 .video-frame {
@@ -45,7 +39,6 @@
 }
 
 .cover-wrap img {
-  position: static;
   width: 100%;
   height: auto;
   object-fit: contain;
@@ -62,42 +55,7 @@
   /* remove default paragraph top margin */
 }
 
-.meta {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.tag {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--color3);
-  color: var(--color4);
-  border-radius: var(--radius);
-  padding: 2px 8px;
-  text-transform: uppercase;
-  font-size: var(--size-caption);
-  font-weight: var(--weight-bold);
-}
-
-.origin-date {
-  font-size: var(--size-caption);
-  color: var(--color5);
-  text-align: right;
-  line-height: 1.1;
-}
-
-.origin-date .origin,
-.origin-date .date {
-  display: block;
-}
+/* Meta and Tags are handled globally in style.css */
 
 .credits {
   margin-top: 48px;
@@ -420,8 +378,23 @@
 }
 
 /* Slideshow block */
+.block.slideshow .slideshow-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
 .block.slideshow .media-wrap {
   position: relative;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.block.slideshow .slideshow-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .block.slideshow .slides {
@@ -450,63 +423,76 @@
 }
 
 .block.slideshow .arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: var(--color1);
-  color: var(--color5);
+  background: var(--color3);
+  color: var(--color4);
+  font-family: var(--font-sans);
   border: 0;
   border-radius: var(--radius);
-  padding: 6px 10px;
-  font-size: var(--size-body);
+  padding: 2px 8px;
+  font-size: var(--size-caption);
   font-weight: var(--weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-}
-
-.block.slideshow .arrow.prev {
-  left: 8px;
-}
-
-.block.slideshow .arrow.next {
-  right: 8px;
+  transition: background-color 150ms ease, color 150ms ease;
 }
 
 .block.slideshow .arrow:hover {
-  background: var(--color5);
-  color: var(--color1);
+  background: var(--color4);
+  color: var(--color3);
 }
 
 .block.slideshow .dots {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 8px;
   display: flex;
   justify-content: center;
-  gap: 6px;
+  gap: 8px;
 }
 
 .block.slideshow .dot {
-  width: 8px;
-  height: 8px;
-  min-width: 0;
-  min-height: 0;
-  border-radius: 50%;
+  width: 32px;
+  height: 4px;
+  border-radius: 2px;
   border: 0;
   padding: 0;
-  display: inline-block;
-  box-sizing: border-box;
-  line-height: 0;
   background: var(--color5);
-  opacity: 0.55;
+  opacity: 0.3;
   cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
+  position: relative;
+  overflow: hidden;
+  transition: opacity 150ms ease;
+}
+
+.block.slideshow .dot::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 0%;
+  background: var(--color1);
 }
 
 .block.slideshow .dot.active {
   opacity: 1;
-  background: var(--color1);
+}
+
+.block.slideshow .dot.active::after {
+  animation: fill-progress 4000ms linear forwards;
+}
+
+.block.slideshow.manual-mode .dot.active::after {
+  animation: none;
+  width: 100%;
+}
+
+@keyframes fill-progress {
+  from {
+    width: 0%;
+  }
+
+  to {
+    width: 100%;
+  }
 }
 
 .work-pager {
@@ -597,8 +583,8 @@
   bottom: 25px;
   transform: translateX(-50%) translateY(100%);
   opacity: 0;
-  background: var(--color6);
-  color: var(--color5);
+  background: var(--color3);
+  color: var(--color4);
   font-family: var(--font-sans);
   border: 0;
   border-radius: var(--radius);
@@ -608,7 +594,7 @@
   text-transform: uppercase;
   cursor: pointer;
   z-index: 1000;
-  transition: transform 220ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity 160ms ease;
+  transition: transform 220ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity 160ms ease, background-color 150ms ease, color 150ms ease;
 }
 
 .work-cta.show {

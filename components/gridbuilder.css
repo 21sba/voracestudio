@@ -103,21 +103,7 @@
 }
 
 .cover-wrap {
-  width: 100%;
   aspect-ratio: 16 / 9;
-  border-radius: var(--radius);
-  overflow: hidden;
-  background: rgba(255, 255, 255, 0.06);
-}
-
-.cover-wrap.skeleton {
-  background: linear-gradient(105deg, #d0d0d0 25%, #e3e3e3 30%, #e3e3e3 35%, #d0d0d0 40%);
-  background-size: 200% 100%;
-  animation: skeleton-shimmer 1.4s linear infinite;
-}
-
-.cover-wrap.skeleton .cover-img {
-  opacity: 0;
 }
 
 .cover-link {
@@ -125,8 +111,6 @@
 }
 
 .cover-img {
-  display: block;
-  width: 100%;
   height: 100%;
   object-fit: cover;
   filter: grayscale(1);
@@ -135,63 +119,6 @@
 
 .work-card:hover .cover-img {
   filter: grayscale(0);
-}
-
-@keyframes skeleton-shimmer {
-  0% {
-    background-position: 200% 0;
-  }
-
-  100% {
-    background-position: -200% 0;
-  }
-}
-
-.meta {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 8px;
-}
-
-.tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.tag {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--color3);
-  color: var(--color4);
-  border-radius: var(--radius);
-  padding: 2px 8px;
-  text-transform: uppercase;
-  font-size: var(--size-caption);
-  font-weight: var(--weight-bold);
-  transition: transform 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.tag:hover {
-  background: var(--color4);
-  color: var(--color3);
-  transform: scale(1.06);
-}
-
-.origin-date {
-  font-size: var(--size-caption);
-  color: var(--color5);
-  text-align: right;
-  line-height: 1.1;
-  /* tighter spacing between lines */
-}
-
-/* Stack origin and date on two lines */
-.origin-date .origin,
-.origin-date .date {
-  display: block;
 }
 
 @media (max-width: 860px) {
@@ -308,27 +235,16 @@
   margin-top: auto;
 }
 
-.list-card .cover-wrap {
-  position: relative;
-  width: 100%;
-  aspect-ratio: auto;
-  border-radius: var(--radius);
-  overflow: visible;
-  background: var(--color5);
+.list-card .info .meta {
+  margin-top: auto;
 }
 
-.list-card .cover-wrap img {
-  position: static;
-  width: 100%;
-  height: auto;
-  object-fit: contain;
-  display: block;
-  border-radius: var(--radius);
+.list-card .cover-img {
   filter: grayscale(1);
   transition: filter 160ms ease;
 }
 
-.list-card .project-link:hover .cover-wrap img {
+.list-card .project-link:hover .cover-img {
   filter: grayscale(0);
 }
 

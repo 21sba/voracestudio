@@ -45,6 +45,9 @@ body {
   font-family: var(--font-sans);
   color: var(--color-text);
   position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Prevent scrolling while loader is visible */
@@ -85,6 +88,7 @@ body::before {
 #app {
   position: relative;
   z-index: 1;
+  flex: 1;
 }
 
 .space-mono-regular {
@@ -181,8 +185,102 @@ body.smart-invert .bio .copy-email:hover,
 body.smart-invert .caption a:hover,
 body.smart-invert .tabs-panel a:hover,
 body.smart-invert .text-wrap a:hover,
-body.smart-invert .about-block a:hover,
 body.smart-invert .credit-item a:hover,
 body.smart-invert .credits a:hover {
   color: var(--color3);
+}
+
+/* =========================================
+   Global Typographic Helpers
+   ========================================= */
+
+.subtitle,
+.section-title {
+  margin: 16px 0 var(--spacing-title-bottom);
+  font-size: var(--size-title-h2);
+  line-height: 1.1;
+  color: var(--color1);
+  font-weight: var(--weight-bold);
+  text-transform: uppercase;
+}
+
+/* =========================================
+   Global Shared Components (Cards & Meta)
+   ========================================= */
+
+/* Generic Cover Wrappers */
+.cover-wrap {
+  position: relative;
+  width: 100%;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--color5);
+}
+
+.cover-link {
+  display: block;
+}
+
+.cover-img {
+  display: block;
+  width: 100%;
+  border-radius: var(--radius);
+}
+
+/* Projects Meta Block (Tags & Origin) */
+.meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8px;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color3);
+  color: var(--color4);
+  border-radius: var(--radius);
+  padding: 2px 8px;
+  text-transform: uppercase;
+  font-size: var(--size-caption);
+  font-weight: var(--weight-bold);
+  transition: transform 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.tag:hover {
+  background: var(--color4);
+  color: var(--color3);
+  transform: scale(1.06);
+}
+
+.origin-date {
+  font-size: var(--size-caption);
+  color: var(--color5);
+  text-align: right;
+  line-height: 1.1;
+}
+
+.origin-date .origin,
+.origin-date .date {
+  display: block;
+}
+
+/* Global skeleton shimmer */
+@keyframes skeleton-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.skeleton {
+  background-image: linear-gradient(105deg, #d0d0d0 25%, #e3e3e3 30%, #e3e3e3 35%, #d0d0d0 40%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.4s linear infinite;
 }
