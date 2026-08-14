@@ -4,5 +4,11 @@
         "url": "https://voracestudio.com/goodies/relative-copy",
         "message": "A new version of Relative Copy is available!",
         "button_text": "Update"
+    },
+    "lunch_box": {
+        "version": "1.2",
+        "url": "https://voracestudio.com/goodies/lunch-box",
+        "message": "A new version of Lunch Box is available!",
+        "button_text": "Update"
     }
 }
