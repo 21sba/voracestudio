@@ -22,7 +22,7 @@
   const rand = (min, max) => Math.random() * (max - min) + min;
 
   const injectStylesheet = () => {
-    const href = 'components/loader.css';
+    const href = '/components/loader.css';
     if ([...document.styleSheets].some(ss => ss.href && ss.href.includes(href))) return;
     const link = document.createElement('link');
     link.rel = 'stylesheet';
@@ -166,7 +166,7 @@
     if (!lottieLib) return;
 
     try {
-      const res = await fetch('assets/lotties/vorace-logo-loading-animation-v2.json');
+      const res = await fetch('/assets/lotties/vorace-logo-loading-animation-v2.json');
       const json = await res.json();
       patchFills(json);
       state.loaderAnim = lottieLib.loadAnimation({
@@ -184,7 +184,7 @@
         renderer: 'svg',
         loop: true,
         autoplay: true,
-        path: 'assets/lotties/vorace-logo-loading-animation-v2.json',
+        path: '/assets/lotties/vorace-logo-loading-animation-v2.json',
         name: 'vorace-loader-v2'
       });
     }

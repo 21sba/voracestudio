@@ -1,7 +1,7 @@
 // Inject corner menu markup and styles into every page
 (function () {
   const injectStylesheet = () => {
-    const href = 'components/menu.css';
+    const href = '/components/menu.css';
     if ([...document.styleSheets].some(ss => ss.href && ss.href.includes(href))) return;
     const link = document.createElement('link');
     link.rel = 'stylesheet';
@@ -54,7 +54,7 @@
     try {
       // Avoid duplicate injection
       if (document.querySelector('.corner-ui')) return;
-      const res = await fetch('components/menu.html', { cache: 'no-cache' });
+      const res = await fetch('/components/menu.html', { cache: 'no-cache' });
       const html = await res.text();
       const wrapper = document.createElement('div');
       wrapper.innerHTML = html;

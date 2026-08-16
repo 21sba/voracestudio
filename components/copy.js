@@ -1,7 +1,7 @@
 // Copy-to-clipboard for email elements with a mouse-position toast
 (function () {
   function injectCopyCss() {
-    var href = 'components/copy.css';
+    var href = '/components/copy.css';
     var exists = Array.from(document.querySelectorAll('link[rel="stylesheet"]'))
       .some(function (l) { return (l.getAttribute('href') || '').includes(href); });
     if (!exists) {

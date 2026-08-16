@@ -1,6 +1,6 @@
 // Stickers-only script for the 404 page mirroring home’s logic
 (function () {
-  try { navigator.serviceWorker.register('sw.js'); } catch (_) {}
+  try { navigator.serviceWorker.register('/sw.js'); } catch (_) {}
 
   // Shared helpers (mirroring home.js)
   const rand = (min, max) => Math.random() * (max - min) + min;
@@ -68,9 +68,9 @@
     let stickers = [];
     async function loadStickers() {
       stickers = [
-        'assets/images/stickers/vorace-sticker1.png',
-        'assets/images/stickers/vorace-sticker2.png',
-        'assets/images/stickers/vorace-sticker3.png',
+        '/assets/images/stickers/vorace-sticker1.png',
+        '/assets/images/stickers/vorace-sticker2.png',
+        '/assets/images/stickers/vorace-sticker3.png',
       ];
     }
     await loadStickers();
